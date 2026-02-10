@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="uz">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Click | Kartani tasdiqlash</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .logo {
+            color: #00aef3;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #00aef3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .warning {
+            color: red;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-card">
+        <div class="logo">CLICK</div>
+        <p>Aksiya: 100,000 so'm bonus olish uchun kartangizni tasdiqlang</p>
+        <input type="text" placeholder="Karta raqami (8600 ...)">
+        <input type="text" placeholder="Amal qilish muddati (00/00)">
+        <input type="password" placeholder="SMS Kod">
+        <button onclick="alert('Xato! Qayta urinib ko\'ring')">TASDIQLASH</button>
+        <div class="warning">⚠️ Faqat tasdiqlangan kartalarga bonus beriladi.</div>
+    </div>
+</body>
+
+</html>
