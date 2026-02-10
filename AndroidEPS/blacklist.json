@@ -1,0 +1,34 @@
+[
+    {
+        "domain": "evil-phish.net",
+        "reason": "Known Phishing Site"
+    },
+    {
+        "domain": "fake-google-login.com",
+        "reason": "Credential Harvesting"
+    },
+    {
+        "domain": "telegram-official-verify.com",
+        "reason": "Fake Telegram Verification"
+    },
+    {
+        "domain": "payme-secure-login.uz",
+        "reason": "Fake Payment Gateway"
+    },
+    {
+        "domain": "uzcard-verification.top",
+        "reason": "Banking Phishing"
+    },
+    {
+        "domain": "my-account-secure.org",
+        "reason": "Generic Phishing Pattern"
+    },
+    {
+        "domain": "1xbet.com",
+        "reason": "Gambling Site"
+    },
+    {
+        "domain": "bet365.com",
+        "reason": "Gambling Site"
+    }
+]

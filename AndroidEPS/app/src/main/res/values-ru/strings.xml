@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Cyber Brother PRO</string>
+    
+    <!-- Dashboard -->
+    <string name="nav_home">Главная</string>
+    <string name="nav_shield">Защита</string>
+    <string name="nav_vault">Сейф</string>
+    <string name="nav_ai">AI Наставник</string>
+    <string name="nav_settings">Настройки</string>
+    
+    <string name="header_core">GUARDIAN CORE</string>
+    <string name="status_safe">БЕЗОПАСНО</string>
+    <string name="status_secure">ЗАЩИЩЕНО</string>
+    <string name="status_risk">ПОД УГРОЗОЙ</string>
+    
+    <string name="feat_vpn">VPN Щит</string>
+    <string name="feat_audit">Аудит Приложений</string>
+    <string name="feat_vault">Файловый Сейф</string>
+    <string name="feat_ai">AI Помощник</string>
+    
+    <string name="alert_ai_threat">AI ОБНАРУЖИЛ УГРОЗУ</string>
+    <string name="alert_vishing_pattern">Признаки Вишинга</string>
+    <string name="alert_vishing_desc">Анализ звонка указывает на риск</string>
+
+    <!-- Notifications -->
+    <string name="threat_detected_title">Обнаружено Вредоносное ПО!</string>
+    <string name="ai_risk_level">Уровень угрозы AI: %s</string>
+    
+    <!-- Security Hub -->
+    <string name="hub_title">ЦЕНТР ЗАЩИТЫ</string>
+    <string name="hub_subtitle">Мониторинг сети и приложений в реальном времени</string>
+    <string name="hub_status_vulnerable">СИСТЕМА ПОД УГРОЗОЙ</string>
+    <string name="hub_status_secure">СИСТЕМА БЕЗОПАСНА</string>
+    <string name="hub_leaks_found">Найдено уязвимостей: %d</string>
+    <string name="hub_no_leaks">Все точки входа защищены</string>
+    
+    <string name="label_sensitive_access">КОНФИДЕНЦИАЛЬНЫЙ ДОСТУП</string>
+    <string name="label_camera">Камера</string>
+    <string name="label_mic">Микрофон</string>
+    <string name="label_location">Локация</string>
+    
+    <string name="label_security_audit">АУДИТ БЕЗОПАСНОСТИ</string>
+    <string name="audit_screen_lock">Блокировка Экрана</string>
+    <string name="audit_dev_mode">Режим Разработчика</string>
+    <string name="audit_adb">Отладка по ADB</string>
+    <string name="audit_unknown_sources">Неизвестные Источники</string>
+    <string name="btn_fix">ИСПРАВИТЬ</string>
+    
+    <!-- Settings -->
+    <string name="settings_title">НАСТРОЙКИ</string>
+    <string name="settings_subtitle">Персонализируйте систему защиты</string>
+    <string name="label_subscription">ПОДПИСКА</string>
+    <string name="label_device_id">ID УСТРОЙСТВА</string>
+    <string name="label_status">Статус:</string>
+    <string name="status_pro">PRO АКТИВЕН</string>
+    <string name="status_free">ПРОБНЫЙ ПЕРИОД</string>
+    <string name="placeholder_license">Введите Ключ</string>
+    <string name="btn_activate">АКТИВИРОВАТЬ PRO</string>
+    
+    <string name="label_language">ЯЗЫК</string>
+    <string name="label_core_shield">ОСНОВНОЙ ЩИТ</string>
+    <string name="setting_vpn_auto">VPN Авто-подключение</string>
+    <string name="setting_vpn_desc">Запуск защиты при загрузке</string>
+    <string name="label_sensitivity">Чувствительность</string>
+    <string name="label_sensitivity_desc">Агрессивность нейроанализа</string>
+
+    <string name="label_database">ОФФЛАЙН БАЗА</string>
+    <string name="btn_import_db">Импорт Базы Угроз</string>
+    
+    <!-- Vault -->
+    <string name="vault_title">ЗАЩИЩЕННЫЙ СЕЙФ</string>
+    <string name="vault_subtitle">Шифрование и защита файлов</string>
+    <string name="tab_encode">ШИФРОВАТЬ</string>
+    <string name="tab_decode">РАСШИФРОВАТЬ</string>
+    <string name="vault_obfuscate">Скрыть Файлы</string>
+    <string name="vault_restore">Восстановить Оригинал</string>
+    <string name="vault_obfuscate_desc">Перевод файлов в состояние VOID</string>
+    <string name="vault_restore_desc">Расшифровка .CBR контейнеров</string>
+    <string name="btn_select_files">Выбрать Файлы</string>
+    <string name="files_selected">Выбрано файлов: %d</string>
+    <string name="placeholder_password">Ключ Защиты</string>
+    <string name="label_shred">Полное Удаление Оригинала</string>
+    <string name="btn_initialize">ЗАПУСТИТЬ</string>
+    <string name="msg_success">УСПЕШНО ЗАВЕРШЕНО</string>
+    <string name="btn_share">ПОДЕЛИТЬСЯ</string>
+    
+    <!-- AI Assist -->
+    <string name="ai_title">AI ПОМОЩНИК</string>
+    <string name="ai_subtitle">Нейронный советник активен</string>
+    <string name="ai_placeholder">Задайте вопрос...</string>
+    
+    <!-- Onboarding -->
+    <string name="select_language">ВЫБЕРИТЕ ЯЗЫК ИНТЕРФЕЙСА</string>
+    <string name="lang_uz">O\'zbekcha</string>
+    <string name="lang_en">English</string>
+    <string name="lang_ru">Русский</string>
+    
+    <string name="intro_title">Я CYBER BROTHER</string>
+    <string name="intro_desc">Ваш персональный нейронный защитник цифровой безопасности.</string>
+    
+    <string name="network_title">OFFLINE ЗАЩИТА</string>
+    <string name="network_desc">100% анализ на устройстве. Ваши данные никогда не покидают терминал.</string>
+    
+    <string name="permission_required">НУЖЕН ДОСТУП</string>
+    <string name="full_protection">АКТИВИРОВАТЬ ПОЛНЫЙ ЩИТ</string>
+    <string name="permission_desc">Предоставьте доступ к файлам и уведомлениям для нейтрализации угроз в реальном времени.</string>
+    <string name="btn_continue">ПРОДОЛЖИТЬ</string>
+    <string name="btn_grant">ЗАПУСТИТЬ ЗАЩИТУ</string>
+
+
+    <string name="accessibility_service_description">Cyber Brother PRO обнаруживает и блокирует опасные ссылки. Весь анализ на 100% выполняется на устройстве.</string>
+
+    <!-- App Listing -->
+    <string name="title_app_list">Анализ Приложений</string>
+    <string name="label_apps_found">Найдено приложений: %d</string>
+    <string name="label_package">Пакет: %s</string>
+    <string name="btn_close">ЗАКРЫТЬ</string>
+
+    <!-- File Scan -->
+    <string name="nav_scan">Сканер</string>
+    <string name="title_file_scan">Защита Файлов</string>
+    <string name="scan_idle">Начать проверку памяти</string>
+    <string name="scan_scanning">Сканирование...</string>
+    <string name="scan_completed">Проверка завершена</string>
+    <string name="label_apks_found">Найдено APK файлов: %d</string>
+    <string name="status_malicious">ВИРУС</string>
+    <string name="status_suspicious">ПОДОЗРИТЕЛЬНО</string>
+    <string name="status_clean">ЧИСТО</string>
+    <string name="btn_re_scan">Сканировать заново</string>
+    <string name="btn_start_scan">НАЧАТЬ СКАНИРОВАНИЕ</string>
+    <string name="btn_delete">УДАЛИТЬ</string>
+</resources>
