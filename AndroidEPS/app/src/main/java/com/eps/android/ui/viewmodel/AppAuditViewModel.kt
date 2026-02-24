@@ -20,8 +20,34 @@ import javax.inject.Inject
 class AppAuditViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val auditor: AppRiskAuditor,
-    private val threatEventDao: com.eps.android.data.ThreatEventDao
+    private val threatEventDao: com.eps.android.data.ThreatEventDao,
+    private val trustedAppDao: com.eps.android.data.TrustedAppDao
 ) : ViewModel() {
+
+    fun trustApp(packageName: String) {
+        viewModelScope.launch {
+            trustedAppDao.addTrustedApp(com.eps.android.data.TrustedApp(packageName))
+            // Refresh scan to reflect change
+            scanApps()
+        }
+    }
+
+    fun uninstallApp(packageName: String) {
+        try {
+            val intent = android.content.Intent(android.content.Intent.ACTION_DELETE).apply {
+                data = android.net.Uri.fromParts("package", packageName, null)
+                flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+            }
+            context.startActivity(intent)
+            // Re-scan after a short delay to allow uninstall to complete
+            viewModelScope.launch {
+                kotlinx.coroutines.delay(3000)
+                scanApps()
+            }
+        } catch (e: Exception) {
+            timber.log.Timber.e(e, "Failed to start uninstall for $packageName")
+        }
+    }
 
     data class AppAuditInfo(
         val name: String,

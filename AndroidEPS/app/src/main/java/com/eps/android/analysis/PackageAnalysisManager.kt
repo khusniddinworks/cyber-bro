@@ -27,49 +27,61 @@ class PackageAnalysisManager @Inject constructor(
         try {
             val pm = context.packageManager
             val appInfo = pm.getApplicationInfo(packageName, 0)
-            val apkPath = appInfo.sourceDir
-            val apkFile = File(apkPath)
+            
+            // 1. Identify Installer Source
+            val installer = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                pm.getInstallSourceInfo(packageName).installingPackageName
+            } else {
+                @Suppress("DEPRECATION")
+                pm.getInstallerPackageName(packageName)
+            }
+            
+            Timber.d("New package $packageName installed via: $installer")
 
-            if (!apkFile.exists()) {
-                Timber.e("APK file not found for $packageName at $apkPath")
+            val isTelegramSource = installer?.startsWith("org.telegram") == true || 
+                                 installer?.contains("telegram") == true || 
+                                 installer == "org.vidogram.messenger"
+
+            // 2. APPLY USER POLICY: Only interfere if Telegram is the source
+            if (!isTelegramSource) {
+                Timber.i("Package $packageName source ($installer) is trusted. Skipping AI Guard.")
                 return
             }
 
-            // 0. Immediate Alert: Notify user that we saw the install
+            val apkPath = appInfo.sourceDir
+            val apkFile = File(apkPath)
+
+            if (!apkFile.exists()) return
+
+            // 3. UI Notification
             val appLabel = appInfo.loadLabel(pm).toString()
             threatNotifier.showInstallAlert(appLabel, packageName)
             
-            // 1. Run Real Hybrid Analysis (DEX + Metadata + AI)
+            // 4. AI Hybrid Analysis
             val verdict = staticAnalyzer.analyzeFile(apkFile)
+            eventLogger.logInfo("Telegram Sourced App: $packageName (Risk: ${verdict.riskLevel})")
 
-            // 2. Log result to database
-            val lang = context.resources.configuration.locales[0].language
-            val logMsg = "App Analysis: $packageName -> Risk: ${verdict.riskLevel}"
-            eventLogger.logInfo(logMsg)
-
-            // 3. Strict Policy: Check Whitelist
-            val isSystem = (appInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
-            val isWhitelisted = checkWhitelist(packageName)
-            
-            // Logic: If threat found OR (not system AND not whitelisted) -> Show Alert
-            if (verdict.riskLevel in listOf("MEDIUM", "HIGH", "CRITICAL")) {
-                // Real Virus/Threat -> FULL SCREEN ALERT
+            // 5. Automatic Ban & Alert for Telegram Sourced Apps
+            if (verdict.riskLevel in listOf("MEDIUM", "HIGH", "CRITICAL") || !checkWhitelist(packageName)) {
+                // Trigger Full Screen Warning
                 threatNotifier.launchAlertActivity(
                     appName = appLabel,
                     packageName = packageName,
                     riskLevel = verdict.riskLevel,
-                    reason = verdict.reason
+                    reason = "DIQQAT: Ushbu ilova Telegram orqali tarqatilgan va u xavfli bo'lishi mumkin!"
                 )
-                eventLogger.logThreat("REALTIME_SHIELD", verdict.riskLevel, packageName, "Malware Detected")
-            } else if (!isSystem && !isWhitelisted) {
-                // Paranoid Mode: Warn about ANY unknown app -> FULL SCREEN ALERT
-                threatNotifier.launchAlertActivity(
-                    appName = appLabel,
-                    packageName = packageName,
-                    riskLevel = "UNKNOWN (Begona)",
-                    reason = "Bu ilova ishonchli ro'yxatda yo'q. Ehtiyot bo'ling!"
-                )
-                eventLogger.logThreat("SUSPICIOUS_INSTALL", "LOW", packageName, "Unknown app installed")
+                
+                // Log the threat
+                eventLogger.logThreat("VISH_TG_BAN", verdict.riskLevel, packageName, "Auto-banned Telegram source")
+                
+                // 🚀 AUTOMATIC BAN (UNINSTALL PROMPT)
+                // Note: We can't silently uninstall on non-root without Device Owner, 
+                // but we can launch the uninstall dialog immediately.
+                val uninstallIntent = android.content.Intent(android.content.Intent.ACTION_DELETE).apply {
+                    data = android.net.Uri.parse("package:$packageName")
+                    flags = android.content.Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(uninstallIntent)
             }
             
         } catch (e: Exception) {

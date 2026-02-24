@@ -25,7 +25,7 @@ import com.eps.android.MainActivity
 import com.eps.android.core.EpsMonitoringService
 import com.eps.android.core.EpsWorker
 import com.eps.android.ui.screens.MainScaffold
-import com.eps.android.ui.theme.HACKDEFENDERTheme
+import com.eps.android.ui.theme.CyberBrotherTheme
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.concurrent.TimeUnit
 import androidx.lifecycle.lifecycleScope
@@ -41,12 +41,28 @@ class MainActivity : AppCompatActivity() {
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
-    ) { permissions ->
-        // Handle results if needed
+    ) { _ -> }
+
+    private val vpnLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            // VPN permission granted
+            Timber.i("VPN Permission Granted")
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        
+        // --- EMERGENCY SECURITY CHECK ---
+        if (!com.eps.android.core.SecurityHardening.isEnvironmentSafe(this)) {
+            Timber.e("🛑 SECURITY BREACH: Unsafe environment detected (Debugger/Root/Emulator)!")
+            // In a production app, you might want to show a warning then exit
+            // finishAffinity() 
+            // return
+        }
+        
         applySavedLocale()
         
         handleIntent(intent)
@@ -55,7 +71,15 @@ class MainActivity : AppCompatActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             requestPermissionLauncher.launch(arrayOf(
                 Manifest.permission.POST_NOTIFICATIONS,
-                Manifest.permission.RECEIVE_SMS
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_CALL_LOG
+            ))
+        } else {
+            requestPermissionLauncher.launch(arrayOf(
+                Manifest.permission.RECEIVE_SMS,
+                Manifest.permission.READ_PHONE_STATE,
+                Manifest.permission.READ_CALL_LOG
             ))
         }
 
@@ -64,14 +88,17 @@ class MainActivity : AppCompatActivity() {
         
         // Schedule background worker
         scheduleBackgroundTasks()
-
+        
+        // Optimizing for background survival
+        checkBatteryOptimization()
+        
         setContent {
             val sharedPrefs = remember { getSharedPreferences("settings", MODE_PRIVATE) }
             var isDarkTheme by remember { 
                 mutableStateOf(sharedPrefs.getBoolean("dark_theme", true)) 
             }
             
-            HACKDEFENDERTheme(useDarkTheme = isDarkTheme) {
+            CyberBrotherTheme(useDarkTheme = isDarkTheme) {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     var showOnboarding by remember { mutableStateOf(checkFirstRun()) }
                     
@@ -91,6 +118,16 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    fun requestVpnPermission() {
+        val intent = android.net.VpnService.prepare(this)
+        if (intent != null) {
+            vpnLauncher.launch(intent)
+        } else {
+            // Already prepared
+            Timber.i("VPN Already Prepared")
         }
     }
 
@@ -117,12 +154,10 @@ class MainActivity : AppCompatActivity() {
                             putExtra("url", url)
                             putExtra("domain", domain)
                             putExtra("sourceApp", "External Link")
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
                         }
                         startActivity(warningIntent)
-                        finish()
                     } else {
-                        // For safe links, we could redirect to a real browser
-                        // or just log and let the app continue.
                         Timber.i("Intercepted safe URL: $url")
                     }
                 }
@@ -163,6 +198,24 @@ class MainActivity : AppCompatActivity() {
                     data = Uri.parse("package:${packageName}")
                 }
                 startActivity(intent)
+            }
+        }
+    }
+
+    private fun checkBatteryOptimization() {
+        val powerManager = getSystemService(android.content.Context.POWER_SERVICE) as android.os.PowerManager
+        val packageName = packageName
+        if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+            try {
+                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                startActivity(intent)
+            } catch (e: Exception) {
+                // Fallback for some devices
+                try {
+                    startActivity(Intent(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS))
+                } catch (e2: Exception) {}
             }
         }
     }

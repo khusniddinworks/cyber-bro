@@ -10,14 +10,24 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class SmsReceiver : BroadcastReceiver() {
 
     @Inject
+    lateinit var nlpEngine: com.eps.android.analysis.SmartPhishingNLP
+
+    @Inject
     lateinit var eventLogger: EventLogger
 
+    @Inject
+    lateinit var urlScanRepository: com.eps.android.analysis.network.UrlScanRepository
+ 
+    @Inject
+    lateinit var threatNotifier: ThreatNotifier
+ 
     private val scope = CoroutineScope(Dispatchers.IO)
 
     override fun onReceive(context: Context, intent: Intent) {
@@ -27,72 +37,64 @@ class SmsReceiver : BroadcastReceiver() {
                 val body = msg.messageBody
                 val sender = msg.originatingAddress ?: "Unknown"
                 
-                // Check if user is currently on a phone call
+                // Get TelephonyManager
                 val telephonyManager = context.getSystemService(Context.TELEPHONY_SERVICE) as android.telephony.TelephonyManager
                 val isOnCall = telephonyManager.callState != android.telephony.TelephonyManager.CALL_STATE_IDLE
 
                 analyzeSms(context, body, sender, isOnCall)
+                extractAndCheckUrls(body, sender)
             }
         }
     }
 
     private fun analyzeSms(context: Context, body: String, sender: String, isOnCall: Boolean) {
-        val otpPattern = "\\b\\d{4,8}\\b".toRegex() // Matches 4-8 digit numbers
+        val result = nlpEngine.analyzeText(body, isOnCall)
+        val otpPattern = Regex("\\b\\d{4,8}\\b")
         val hasOtp = otpPattern.containsMatchIn(body)
         
-        // Context keywords (Must be present to consider it a threat while on call)
-        val financialKeywords = listOf("karta", "blok", "xavfsizlik", "card", "bank", "security", "plastic", "plastik", "account")
-        val urgencyKeywords = listOf("shoshiling", "tezda", "urgent", "blocked", "bloklandi", "hujum", "attack", "suspicious")
-        val codeKeywords = listOf("kod", "tasdiqlash", "parol", "code", "verify", "password")
+        val lastKeywordTime = com.eps.android.analysis.VishingPatternMatcher.lastDetectionTimestamp
+        val timeSinceKeyword = System.currentTimeMillis() - lastKeywordTime
+        val isKeywordRecent = timeSinceKeyword < 120000 // 2 minutes
 
-        val lowerBody = body.lowercase()
-        val hasFinancial = financialKeywords.any { lowerBody.contains(it) }
-        val hasUrgency = urgencyKeywords.any { lowerBody.contains(it) }
-        val hasCode = codeKeywords.any { lowerBody.contains(it) }
-
-        // Vishing Logic:
-        // 1. User is on a call
-        // 2. Message contains a Code/OTP
-        // 3. Message ALSO contains Financial OR Urgency keywords (Context)
-        // This prevents false positives like "Your Telegram login code is 12345" from triggering Vishing alert just because you are on a call.
-        if (isOnCall && hasOtp && (hasFinancial || hasUrgency)) {
-            // HIGH PROBABILITY Vishing
-            triggerVishingAlarm(context, sender, body)
-        } else if (isOnCall && hasCode && hasFinancial) {
-            // MEDIUM PROBABILITY (No digits, but asks for code + financial)
-             triggerVishingAlarm(context, sender, body)
-        } else {
-            // Standard phishing check (Links, known bad domains)
-            val phishingPatterns = listOf("bit.ly", "tinyurl", "ngrok", "gift", "yutuq", "prize", "login-", "secure-")
-            val foundPatterns = phishingPatterns.filter { lowerBody.contains(it) }
-            
-            if (foundPatterns.isNotEmpty() && lowerBody.contains("http")) {
-                logThreat(sender, "Shubhali SMS/Link: Phishing belgilari topildi.")
-            }
+        if (isOnCall && hasOtp && isKeywordRecent) {
+            Timber.w("🔥 CRITICAL COMBO: Call + Recent Keywords + SMS Code! Triggering Alarm.")
+            threatNotifier.showVishingAlert(sender, isOtp = true)
+        } else if (result.isCritical && !isOnCall) {
+            // Standard phishing SMS push
+            logThreat(sender, "Zararli SMS: Ma'lumotlarni o'g'rilashga urinish aniqlandi.")
+            threatNotifier.showThreatAlert("SHUBHALI SMS", "Yuboruvchi: $sender\n$body", null, null)
+        } else if (result.score > 35) {
+            logThreat(sender, "Shubhali SMS (Score: ${result.score})")
         }
-    }
-
-    private fun triggerVishingAlarm(context: Context, sender: String, body: String) {
-        scope.launch {
-            eventLogger.logThreat(
-                type = "VISHING_GUARD",
-                severity = "CRITICAL",
-                source = sender,
-                details = "DIQQAT: Kimdir sizdan kodni so'ragan bo'lishi mumkin! Xabarni MUTLAQO AYTMANG!"
-            )
-        }
-        
-        // Launch the Panic Activity
-        val intent = Intent(context, VishingAlertActivity::class.java).apply {
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-            putExtra("sender", sender)
-        }
-        context.startActivity(intent)
     }
 
     private fun logThreat(sender: String, details: String) {
         scope.launch {
             eventLogger.logThreat("SMS_GUARD", "HIGH", sender, details)
+        }
+    }
+
+    private fun extractAndCheckUrls(text: String, sender: String) {
+        val urlPattern = android.util.Patterns.WEB_URL
+        val matcher = urlPattern.matcher(text)
+        
+        while (matcher.find()) {
+            val url = matcher.group()
+            scope.launch {
+                Timber.d("Checking URL from SMS: $url")
+                val result = urlScanRepository.checkUrl(url)
+                if (!result.isSecure && !result.isUnknown) {
+                    val detail = if (result.isHeuristicResult) "SMS orqali kelgan shubhali havola: $url"
+                                 else "SMS orqali kelgan zararli havola: $url (UrlScan tahlili)"
+                    
+                    eventLogger.logThreat(
+                        type = "URL_SMS_GUARD",
+                        severity = "CRITICAL",
+                        source = sender,
+                        details = detail
+                    )
+                }
+            }
         }
     }
 }

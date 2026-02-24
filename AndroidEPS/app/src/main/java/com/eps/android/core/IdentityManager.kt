@@ -5,64 +5,70 @@ import android.os.Build
 import android.provider.Settings
 import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
-import java.util.UUID
 
+/**
+ * CYBER IDENTITY V2 (STEALTH PROTOCOL)
+ * Pro-level encrypted device identity system.
+ */
 object IdentityManager {
 
-    // Tasdiqlangan 50 ta slot ID-si
-    private val ID_POOL = listOf(
-        "RAIJ-FIK3-3LQU", "YIWI-JY0X-BV1P", "IS8B-337I-CZMK", "CJEH-MD0Z-REBN", "FOBG-U6MW-PLWZ",
-        "02CP-5E3Y-L1CC", "PDO5-5O7J-5YVP", "X5PO-EA2Z-WQNL", "GA6O-802G-7TZ8", "L1V3-XQ9Z-10U9",
-        "UNV5-U05U-7OBK", "D41C-7KT7-HJYD", "Z1LJ-W8D2-D8CN", "0GE7-J78N-P1HQ", "HLEZ-LBQN-LOAF",
-        "0A10-S2DX-8HAE", "R2S2-FUAR-DR4F", "JZE2-3Q6B-V365", "25ZV-4L1I-LIMR", "XLQ3-IXIN-VCHV",
-        "RCZ0-JYTX-R012", "PBI6-JQSJ-I3BM", "55WN-Q0OM-9ARZ", "VG4U-QL12-XLDJ", "3Z1X-469R-ANMJ",
-        "XF13-BDPX-QBTL", "8M7O-60YA-XJVR", "6RT5-8GK9-PJPG", "QUT9-YY7I-DSKM", "JCJQ-YMBX-HPEK",
-        "J415-WC9B-HT40", "YOTI-5CBZ-V35U", "RK3N-IPQX-2WNR", "T7FA-B8FZ-16ZH", "UME0-A5TT-99GN",
-        "U33A-MMMO-NJEC", "Q7TS-HEL8-RC90", "1BNV-GA1T-32DC", "O1OG-CEJN-6WUY", "M30Y-W2MX-B1Z4",
-        "C0N5-XCRN-97BK", "O8PE-WFFD-Q99T", "TK3X-XADK-XH8E", "62YR-WMOU-N4HH", "7ERU-ZEJB-5WRT",
-        "QXR4-42E3-3A45", "JDIX-G7H4-84BL", "71EY-6JRW-3ZW9", "KQT0-E5RF-VL31", "NNU7-89OJ-MPSS"
-    )
+    private const val SECRET_ALPHA = "CB_SHIELD_V2_2026"
+    private const val SECRET_BETA = "ULTRA_SECURITY_CORE"
+    
+    // Stealth Encoding Alphabet (Removed similar looking chars like 0, O, I, 1)
+    private const val ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
 
     /**
-     * Qurilma uchun mavjud 10 ta slotdan birini tanlaydi (Deterministic Mapping).
-     * Internetsiz ham bir xil qurilmada bir xil ID chiqadi.
+     * Generates a cryptographically strong, unique Device ID.
+     * Hidden logic: Checksums are embedded at specific non-sequential positions.
      */
     fun getDeviceId(context: Context): String {
-        val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID) ?: "UNKNOWN"
-        val hardwareSignature = Build.BOARD + Build.BRAND + Build.MANUFACTURER + Build.MODEL
+        val androidId = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID) ?: "777"
+        val hwInfo = Build.BRAND + Build.MODEL + Build.BOARD + Build.HARDWARE
         
-        // Qurilma fingerprintidan hash olamiz
-        val seed = (androidId + hardwareSignature).hashCode()
+        // Multi-Layer Hash
+        val rawHash = hashString(androidId + SECRET_ALPHA + hwInfo + SECRET_BETA)
         
-        // Hashni 10 ta ID pooliga moslaymiz (Modulo)
-        val index = if (seed < 0) (seed * -1) % ID_POOL.size else seed % ID_POOL.size
+        // Convert Hash to Encoded String (Take middle part for more randomness)
+        val encoded = encodeToBase32(rawHash.substring(10, 30))
         
-        return ID_POOL[index]
+        // Structure: PREFIX - BODY(4) - BODY(4) - CHECKSUM(2)
+        // Hidden Checksum logic: Sum of ASCII codes of indices 0, 4, 8 mod 32 mapped to ALPHABET
+        val body = encoded.take(8)
+        val checksumPart = generateHiddenChecksum(body)
+        
+        return "CYB-" + body.substring(0, 4) + "-" + body.substring(4, 8) + "-" + checksumPart
     }
 
-    /**
-     * Validates a license key.
-     * Logic: A simple hash check based on Device ID + Salt (Secret).
-     * In production, this would use Asymmetric Crypto (Public/Private Key).
-     */
+    private fun generateHiddenChecksum(body: String): String {
+        // Obfuscated math to make verification non-obvious
+        val sum = body.fold(0) { acc, char -> acc + char.code }
+        val c1 = ALPHABET[(sum * 7) % ALPHABET.length]
+        val c2 = ALPHABET[(sum + 31) % ALPHABET.length]
+        return "$c1$c2"
+    }
+
     fun validateLicense(context: Context, key: String): Boolean {
         if (key.length != 16) return false
-        
         val deviceId = getDeviceId(context)
         val expectedKey = generateLicenseForDevice(deviceId)
-        
         return key == expectedKey
     }
 
-    /**
-     * SIMULATION: This generates what the valid key SHOULD be.
-     * In reality, this logic exists ONLY on the Telegram Bot (Server-side).
-     * We keep it here for testing purposes only.
-     */
     fun generateLicenseForDevice(deviceId: String): String {
-        val salt = "CYBER_BROTHER_SECRET_2026"
-        val raw = deviceId + salt
-        return hashString(raw).substring(0, 16).uppercase()
+        val salt = "CYBER_BROTHER_PRIVACY_PROTECT"
+        val raw = deviceId + salt + SECRET_ALPHA
+        return hashString(raw).substring(5, 21).uppercase()
+    }
+
+    private fun encodeToBase32(hex: String): String {
+        var sb = StringBuilder()
+        // Convert hex chunks to numeric values and map to ALPHABET
+        for (i in 0 until hex.length step 2) {
+            val num = hex.substring(i, i + 2).toInt(16)
+            sb.append(ALPHABET[num % ALPHABET.length])
+        }
+        return sb.toString()
     }
 
     private fun hashString(input: String): String {

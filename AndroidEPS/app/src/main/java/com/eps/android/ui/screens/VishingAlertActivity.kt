@@ -22,12 +22,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.eps.android.ui.theme.HACKDEFENDERTheme
+import com.eps.android.ui.theme.CyberBrotherTheme
 import com.eps.android.ui.theme.LaserRed
 import com.eps.android.ui.theme.VoidBlack
 import kotlinx.coroutines.delay
 
 class VishingAlertActivity : ComponentActivity() {
+    
+    private var vibrator: android.os.Vibrator? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         
@@ -36,28 +39,74 @@ class VishingAlertActivity : ComponentActivity() {
             setShowWhenLocked(true)
             setTurnScreenOn(true)
         }
+
+        // --- VIBRATION LOGIC ---
+        vibrator = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            val vibratorManager = getSystemService(android.content.Context.VIBRATOR_MANAGER_SERVICE) as android.os.VibratorManager
+            vibratorManager.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            getSystemService(android.content.Context.VIBRATOR_SERVICE) as android.os.Vibrator
+        }
+
+        val pattern = longArrayOf(0, 500, 200, 500, 200, 800)
+        if (vibrator?.hasVibrator() == true) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                vibrator?.vibrate(android.os.VibrationEffect.createWaveform(pattern, 0))
+            } else {
+                @Suppress("DEPRECATION")
+                vibrator?.vibrate(pattern, 0)
+            }
+        }
         
-        // Play Alarm Sound
+        // Play Alarm Sound at MAX volume
+        val audioManager = getSystemService(android.content.Context.AUDIO_SERVICE) as android.media.AudioManager
+        
+        // Force Max Volume
+        val maxVolume = audioManager.getStreamMaxVolume(android.media.AudioManager.STREAM_ALARM)
+        audioManager.setStreamVolume(android.media.AudioManager.STREAM_ALARM, maxVolume, 0)
+
         val alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM)
         val ringtone = RingtoneManager.getRingtone(applicationContext, alarmUri)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+            ringtone.isLooping = true
+        }
         ringtone.play()
 
         setContent {
-            HACKDEFENDERTheme {
-                VishingAlertScreen(
-                    sender = intent.getStringExtra("sender") ?: "Noma'lum",
-                    onClose = {
-                        ringtone.stop()
-                        finish()
-                    }
-                )
+            CyberBrotherTheme {
+                // CAP FONT SCALE for Emergency Screen
+                val density = androidx.compose.ui.platform.LocalDensity.current
+                val cappedDensity = remember(density) {
+                    androidx.compose.ui.unit.Density(
+                        density = density.density,
+                        fontScale = density.fontScale.coerceAtMost(1.3f)
+                    )
+                }
+
+                CompositionLocalProvider(androidx.compose.ui.platform.LocalDensity provides cappedDensity) {
+                    VishingAlertScreen(
+                        sender = intent.getStringExtra("sender") ?: "Noma'lum",
+                        reason = intent.getStringExtra("reason") ?: "Qo'ng'iroq paytida SMS-kod keldi!\nBu odam sizni aldayapti!",
+                        onClose = {
+                            ringtone.stop()
+                            vibrator?.cancel()
+                            finish()
+                        }
+                    )
+                }
             }
         }
+    }
+
+    override fun onDestroy() {
+        vibrator?.cancel()
+        super.onDestroy()
     }
 }
 
 @Composable
-fun VishingAlertScreen(sender: String, onClose: () -> Unit) {
+fun VishingAlertScreen(sender: String, reason: String, onClose: () -> Unit) {
     val infiniteTransition = rememberInfiniteTransition(label = "panic")
     val alpha by infiniteTransition.animateFloat(
         initialValue = 0.4f,
@@ -131,7 +180,7 @@ fun VishingAlertScreen(sender: String, onClose: () -> Unit) {
                 modifier = Modifier.border(2.dp, Color.White, RoundedCornerShape(16.dp))
             ) {
                 Text(
-                    text = "Qo'ng'iroq paytida SMS-kod keldi!\nBu odam sizni aldayapti!",
+                    text = reason,
                     color = Color.White,
                     modifier = Modifier.padding(16.dp),
                     textAlign = TextAlign.Center,

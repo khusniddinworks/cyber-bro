@@ -51,11 +51,20 @@ fun OnboardingScreen(
         }
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(OnyxBlack)
-    ) {
+    val density = androidx.compose.ui.platform.LocalDensity.current
+    val cappedDensity = remember(density) {
+        androidx.compose.ui.unit.Density(
+            density = density.density,
+            fontScale = density.fontScale.coerceAtMost(1.15f)
+        )
+    }
+
+    CompositionLocalProvider(androidx.compose.ui.platform.LocalDensity provides cappedDensity) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(OnyxBlack)
+        ) {
         AnimatedContent(
             targetState = currentStep,
             label = "Onboarding",
@@ -112,6 +121,7 @@ fun OnboardingScreen(
             }
         }
     }
+}
 }
 
 @Composable

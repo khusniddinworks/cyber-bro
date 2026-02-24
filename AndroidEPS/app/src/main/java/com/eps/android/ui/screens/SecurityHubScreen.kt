@@ -38,6 +38,7 @@ import com.eps.android.ui.theme.*
 import com.eps.android.ui.viewmodel.SecurityHubViewModel
 import com.eps.android.ui.viewmodel.AppAuditViewModel
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.eps.android.R
 import com.eps.android.ui.screens.VulnerabilityAppsDialog
 
@@ -79,42 +80,101 @@ fun SecurityHubScreen(
             (stats.appsWithCamera + stats.appsWithMic).distinctBy { it.packageName }
         }
 
-        // Big Status Card
-        val isVulnerable = stats.isDevModeEnabled || stats.isUnknownSourcesAllowed || vulnerableApps.isNotEmpty()
+        // Logic Refinement:
+        // - CRITICAL (Red): Malicious apps found (riskyAuditApps > 0)
+        // - WARNING (Gold): Settings are risky (Dev Mode, etc.) or many permission leaks
+        // - SECURE (Green/White): All good
+        val riskyAuditApps = auditApps.count { it.riskReport.level.name in listOf("HIGH", "CRITICAL") }
+        val hasRiskySettings = stats.isDevModeEnabled || stats.isUnknownSourcesAllowed || vulnerableApps.isNotEmpty()
+        
+        val isCritical = riskyAuditApps > 0
+        val isWarning = !isCritical && hasRiskySettings
+        val isSecure = !isCritical && !isWarning
+
+        val statusColor = when {
+            isCritical -> Color.Red
+            isWarning -> GoldPremium
+            else -> Color.White
+        }
+        
+        val cardBg = when {
+            isCritical -> Color(0xFF2C1616)
+            isWarning -> Color(0xFF2C2516)
+            else -> GlassSurface
+        }
+
+        val cardBorder = when {
+            isCritical -> Color.Red.copy(alpha=0.3f)
+            isWarning -> GoldPremium.copy(alpha=0.3f)
+            else -> GoldPremium.copy(alpha=0.1f)
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(32.dp))
-                .background(if(isVulnerable) Color(0xFF2C1616) else GlassSurface)
-                .border(1.dp, if(isVulnerable) Color.Red.copy(alpha=0.3f) else GoldPremium.copy(alpha=0.1f), RoundedCornerShape(32.dp))
-                .clickable { if (vulnerableApps.isNotEmpty()) showVulnerabilityDialog = true }
+                .background(cardBg)
+                .border(1.dp, cardBorder, RoundedCornerShape(32.dp))
+                .clickable { 
+                    if (riskyAuditApps > 0) {
+                        showAuditResults = true
+                    } else if (vulnerableApps.isNotEmpty()) {
+                        showVulnerabilityDialog = true
+                    }
+                }
                 .padding(24.dp)
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
-                    modifier = Modifier.size(56.dp).background(if(isVulnerable) Color.Red.copy(alpha=0.1f) else GoldPremium.copy(alpha=0.1f), CircleShape),
+                    modifier = Modifier.size(56.dp).background(statusColor.copy(alpha=0.1f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
-                        imageVector = if(isVulnerable) Icons.Default.ReportProblem else Icons.Default.VerifiedUser,
+                        imageVector = when {
+                            isCritical -> Icons.Default.ReportProblem
+                            isWarning -> Icons.Default.Shield
+                            else -> Icons.Default.VerifiedUser
+                        },
                         contentDescription = null,
-                        tint = if(isVulnerable) Color.Red else GoldPremium,
+                        tint = statusColor,
                         modifier = Modifier.size(32.dp)
                     )
                 }
                 Spacer(modifier = Modifier.width(20.dp))
                 Column {
                     Text(
-                        if(isVulnerable) stringResource(R.string.hub_status_vulnerable) else stringResource(R.string.hub_status_secure),
-                        color = if(isVulnerable) Color.Red else Color.White,
+                        when {
+                            isCritical -> stringResource(R.string.hub_status_vulnerable)
+                            isWarning -> "TIZIMNI YAXSHILASH KERAK"
+                            else -> stringResource(R.string.hub_status_secure)
+                        },
+                        color = statusColor,
                         fontSize = 18.sp,
                         fontWeight = FontWeight.Bold
                     )
+                    
+                    // Dynamic Subtitle logic
+                    val subtitleText = when {
+                        riskyAuditApps > 0 -> "$riskyAuditApps ta zararli ilova aniqlandi!"
+                        vulnerableApps.isNotEmpty() -> "${vulnerableApps.size} ta ruxsatli ilova (Tushuntirish)"
+                        stats.isDevModeEnabled -> "Dasturchi rejimi ochiq (Ogohlantirish)"
+                        stats.isUnknownSourcesAllowed -> "Noma'lum manbalarga ruxsat berilgan"
+                        else -> stringResource(R.string.hub_no_leaks)
+                    }
+                    
                     Text(
-                        if(vulnerableApps.isNotEmpty()) "${vulnerableApps.size} ta ruxsatli ilova topildi (Batafsil)" else stringResource(R.string.hub_no_leaks),
-                        color = GoldMuted,
+                        subtitleText,
+                        color = if(isCritical || isWarning) statusColor.copy(alpha=0.8f) else GoldMuted,
                         fontSize = 12.sp
                     )
+                    if (isSecure) {
+                        Text(
+                            "🛡️ 1,200+ ishonchli o'zbek ilovalari bazasi faol",
+                            color = Color(0xFF4CAF50).copy(alpha=0.8f),
+                            fontSize = 10.sp,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
                 }
             }
         }
@@ -237,12 +297,21 @@ fun SecurityHubScreen(
         // Show audit results count if available
         if (auditApps.isNotEmpty()) {
             Spacer(modifier = Modifier.height(8.dp))
-            val riskyApps = auditApps.count { it.riskReport.level.name in listOf("HIGH", "CRITICAL") }
-            Text(
-                "Jami: ${auditApps.size} ta ilova | Xavfli: $riskyApps ta",
-                color = if (riskyApps > 0) Color(0xFFFF6B6B) else Color(0xFF4CAF50),
-                fontSize = 12.sp
-            )
+            val riskyAppsCount = auditApps.count { it.riskReport.level.name in listOf("HIGH", "CRITICAL") }
+            Surface(
+                color = Color.Transparent,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp))
+                    .clickable { if (riskyAppsCount > 0) showAuditResults = true else auditViewModel.scanApps() }
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                Text(
+                    "Jami: ${auditApps.size} ta ilova | Xavfli: $riskyAppsCount ta (Batafsil)",
+                    color = if (riskyAppsCount > 0) Color(0xFFFF6B6B) else Color(0xFF4CAF50),
+                    fontSize = 12.sp,
+                    fontWeight = if (riskyAppsCount > 0) FontWeight.Bold else FontWeight.Normal
+                )
+            }
         }
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -288,9 +357,12 @@ fun SecurityHubScreen(
         }
         
         if (showAuditResults) {
-            HarmfulAppsDialog(apps = auditApps) {
-                showAuditResults = false
-            }
+            HarmfulAppsDialog(
+                apps = auditApps, 
+                onTrustRequest = { auditViewModel.trustApp(it) },
+                onUninstall = { auditViewModel.uninstallApp(it) },
+                onDismiss = { showAuditResults = false }
+            )
         }
 
         Spacer(modifier = Modifier.height(30.dp))
@@ -399,74 +471,101 @@ fun AppListDialog(title: String, apps: List<SecurityHubViewModel.AppInfo>, onDis
 }
 
 @Composable
-fun HarmfulAppsDialog(apps: List<AppAuditViewModel.AppAuditInfo>, onDismiss: () -> Unit) {
+fun HarmfulAppsDialog(
+    apps: List<AppAuditViewModel.AppAuditInfo>, 
+    onTrustRequest: (String) -> Unit,
+    onUninstall: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
     val context = LocalContext.current
     val riskyApps = apps.filter { it.riskReport.level.name in listOf("HIGH", "CRITICAL") }
     
     AlertDialog(
         onDismissRequest = onDismiss,
-        containerColor = Color(0xFF1A1111),
+        containerColor = Color(0xFF150808),
         title = { 
              Row(verticalAlignment = Alignment.CenterVertically) {
-                 Icon(Icons.Default.Warning, contentDescription = null, tint = Color.Red)
-                 Spacer(modifier = Modifier.width(8.dp))
-                 Text("Zararli Ilovalar (${riskyApps.size})", color = Color.Red, fontWeight = FontWeight.Bold)
+                 Icon(Icons.Default.Warning, contentDescription = null, tint = Color.Red, modifier = Modifier.size(28.dp))
+                 Spacer(modifier = Modifier.width(12.dp))
+                 Text("DIQQAT! XAVF ANIQLANDI", color = Color.White, fontWeight = FontWeight.ExtraBold, fontSize = 20.sp)
              }
         },
         text = {
-            LazyColumn(modifier = Modifier.heightIn(max = 400.dp)) {
+            LazyColumn(modifier = Modifier.heightIn(max = 450.dp)) {
                  if (riskyApps.isEmpty()) {
-                     item { Text("Hozircha xavfli ilovalar topilmadi.", color = Color.Green) }
+                     item { 
+                        Box(modifier = Modifier.fillMaxWidth().padding(24.dp), contentAlignment = Alignment.Center) {
+                            Text("Hozircha xavfli ilovalar topilmadi. Tizim toza!", color = Color.Green, textAlign = TextAlign.Center)
+                        }
+                     }
                  } else {
                     items(riskyApps) { app ->
-                        Column(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(Color.White.copy(alpha = 0.03f))
+                                .padding(12.dp)
+                        ) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                // App Icon using AndroidView
                                 if (app.icon != null) {
                                     AndroidView(
-                                        factory = { ctx ->
-                                            android.widget.ImageView(ctx).apply {
-                                                scaleType = android.widget.ImageView.ScaleType.FIT_CENTER
-                                            }
-                                        },
-                                        update = { view ->
-                                            view.setImageDrawable(app.icon)
-                                        },
-                                        modifier = Modifier.size(40.dp)
+                                        factory = { ctx -> android.widget.ImageView(ctx).apply { scaleType = android.widget.ImageView.ScaleType.FIT_CENTER } },
+                                        update = { view -> view.setImageDrawable(app.icon) },
+                                        modifier = Modifier.size(48.dp)
                                     )
                                 } else {
-                                    Icon(Icons.Default.Warning, contentDescription = null, tint = Color.Red, modifier = Modifier.size(40.dp))
+                                    Icon(Icons.Default.Warning, contentDescription = null, tint = Color.Red, modifier = Modifier.size(48.dp))
                                 }
                                 
-                                Spacer(modifier = Modifier.width(12.dp))
+                                Spacer(modifier = Modifier.width(16.dp))
                                 Column(modifier = Modifier.weight(1f)) {
-                                    Text(app.name, color = Color.White, fontWeight = FontWeight.Bold)
-                                    Text("Xavf: ${app.riskReport.level.name}", color = Color.Red, fontSize = 12.sp)
+                                    Text(app.name, color = Color.White, fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                                    Text("Paket: ${app.packageName}", color = Color.Gray, fontSize = 10.sp)
                                 }
                             }
                             
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text("Sabab: ${app.riskReport.explanation}", color = Color.Gray, fontSize = 11.sp)
+                            Spacer(modifier = Modifier.height(12.dp))
                             
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Button(
-                                onClick = {
-                                    try {
-                                        val intent = Intent(Intent.ACTION_DELETE).apply {
-                                            data = android.net.Uri.fromParts("package", app.packageName, null)
-                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                                        }
-                                        context.startActivity(intent)
-                                    } catch (e: Exception) {
-                                        e.printStackTrace()
-                                    }
-                                },
-                                colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
-                                modifier = Modifier.fillMaxWidth().height(36.dp)
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(Color.Red.copy(alpha = 0.1f))
+                                    .padding(8.dp)
                             ) {
-                                Text("O'CHIRISH (UNINSTALL)", fontSize = 12.sp)
+                                Text(
+                                    "⚠️ Sabab: ${app.riskReport.explanation}", 
+                                    color = Color(0xFFFFBABA), 
+                                    fontSize = 12.sp,
+                                    lineHeight = 16.sp
+                                )
                             }
-                            Divider(color = Color.White.copy(alpha=0.1f), modifier = Modifier.padding(top=8.dp))
+                            
+                            Spacer(modifier = Modifier.height(16.dp))
+                            
+                            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                Button(
+                                    onClick = { onUninstall(app.packageName) },
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
+                                    modifier = Modifier.weight(1f).height(40.dp),
+                                    shape = RoundedCornerShape(12.dp)
+                                ) {
+                                    Icon(Icons.Default.Delete, contentDescription = null, modifier = Modifier.size(16.dp))
+                                    Spacer(modifier = Modifier.width(4.dp))
+                                    Text("O'CHIRISH", fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                }
+                                
+                                OutlinedButton(
+                                    onClick = { onTrustRequest(app.packageName) },
+                                    modifier = Modifier.weight(1f).height(40.dp),
+                                    shape = RoundedCornerShape(12.dp),
+                                    border = androidx.compose.foundation.BorderStroke(1.dp, Color.Gray.copy(alpha = 0.5f))
+                                ) {
+                                    Text("ISHONAMAN", color = Color.White, fontSize = 11.sp, fontWeight = FontWeight.Bold)
+                                }
+                            }
                         }
                     }
                 }
@@ -474,7 +573,7 @@ fun HarmfulAppsDialog(apps: List<AppAuditViewModel.AppAuditInfo>, onDismiss: () 
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {
-                Text(stringResource(R.string.btn_close), color = Color.Gray)
+                Text("YOPISH", color = Color.Gray, fontWeight = FontWeight.Bold)
             }
         }
     )

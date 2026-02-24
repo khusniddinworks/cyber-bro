@@ -71,6 +71,38 @@ fun SettingsScreen(viewModel: DashboardViewModel) {
                  Text(deviceId, color = Color.White, fontSize = 12.sp, fontWeight = FontWeight.Bold)
                  
                  if (!isPremium) {
+                     val trialDays by viewModel.trialDaysRemaining.collectAsState()
+                     Spacer(modifier = Modifier.height(16.dp))
+                     Row(
+                         modifier = Modifier
+                             .fillMaxWidth()
+                             .clip(RoundedCornerShape(12.dp))
+                             .background(if (trialDays > 0) GoldPremium.copy(alpha = 0.1f) else LaserRed.copy(alpha = 0.1f))
+                             .padding(12.dp),
+                         verticalAlignment = Alignment.CenterVertically
+                     ) {
+                         Icon(
+                             imageVector = if (trialDays > 0) Icons.Default.Timer else Icons.Default.Lock,
+                             contentDescription = null,
+                             tint = if (trialDays > 0) GoldPremium else LaserRed,
+                             modifier = Modifier.size(20.dp)
+                         )
+                         Spacer(modifier = Modifier.width(12.dp))
+                         Column {
+                             Text(
+                                 text = if (trialDays > 0) "Bepul PRO muddati" else "Sinov muddati tugadi",
+                                 color = Color.White,
+                                 fontSize = 12.sp,
+                                 fontWeight = FontWeight.Bold
+                             )
+                             Text(
+                                 text = if (trialDays > 0) "$trialDays kun qoldi" else "Premium xizmatlar qulflangan",
+                                 color = if (trialDays > 0) GoldPremium else LaserRed,
+                                 fontSize = 11.sp
+                             )
+                         }
+                     }
+
                      Spacer(modifier = Modifier.height(24.dp))
                      OutlinedTextField(
                          value = licenseInput,
@@ -176,17 +208,95 @@ fun SettingsScreen(viewModel: DashboardViewModel) {
         
         Spacer(modifier = Modifier.height(24.dp))
         
-        // Engine Info
+        Spacer(modifier = Modifier.height(30.dp))
+
+        // Scan History Section
+        val events by viewModel.events.collectAsState()
+        Text("TEKSHIRUV TARIXI", color = GoldPremium, fontSize = 11.sp, fontWeight = FontWeight.Black)
+        Spacer(modifier = Modifier.height(12.dp))
+        
+        if (events.isEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(20.dp))
+                    .background(GlassSurface)
+                    .padding(20.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Hozircha tarix mavjud emas", color = Color.Gray, fontSize = 12.sp)
+            }
+        } else {
+            events.take(10).forEach { event ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 8.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(GlassSurface)
+                        .border(1.dp, Color.White.copy(alpha=0.05f), RoundedCornerShape(16.dp))
+                        .padding(16.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(
+                            imageVector = when(event.severity) {
+                                "CRITICAL", "HIGH" -> Icons.Default.GppBad
+                                else -> Icons.Default.Security
+                            },
+                            contentDescription = null,
+                            tint = if (event.severity == "CRITICAL" || event.severity == "HIGH") LaserRed else GoldPremium,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Column {
+                            Text(event.type.replace("_", " "), color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                            Text(event.details, color = Color.Gray, fontSize = 11.sp, maxLines = 1)
+                        }
+                    }
+                }
+            }
+        }
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        // About Section
+        Text("DASTUR HAQIDA", color = GoldPremium, fontSize = 11.sp, fontWeight = FontWeight.Black)
+        Spacer(modifier = Modifier.height(12.dp))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
-                .background(Color.White.copy(alpha=0.03f))
-                .padding(16.dp),
-            contentAlignment = Alignment.Center
+                .background(GlassSurface)
+                .padding(20.dp)
         ) {
-            Text("Engine: Neural Guard v4.2 | Build: 2026.02", color = Color.Gray, fontSize = 10.sp)
+            Column {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Box(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
+                            .background(GoldPremium.copy(alpha = 0.1f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(Icons.Default.Shield, contentDescription = null, tint = GoldPremium, modifier = Modifier.size(24.dp))
+                    }
+                    Spacer(modifier = Modifier.width(16.dp))
+                    Column {
+                        Text("Cyber Brother", color = Color.White, fontWeight = FontWeight.Black, fontSize = 16.sp)
+                        Text("Versiya: 1.7.5 | Build: 2026", color = GoldPremium, fontSize = 11.sp)
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                Text(
+                    "O'zbekistondagi birinchi neyron-asosli kiber-qalqon. Sizning barcha ma'lumotlaringiz qurilmaning o'zida shifrlangan holda qoladi.",
+                    color = Color.Gray,
+                    fontSize = 12.sp,
+                    lineHeight = 18.sp
+                )
+            }
         }
+
+        Spacer(modifier = Modifier.height(40.dp))
     }
 }
 

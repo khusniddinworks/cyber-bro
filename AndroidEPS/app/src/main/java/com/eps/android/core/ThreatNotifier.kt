@@ -19,29 +19,104 @@ class ThreatNotifier @Inject constructor(
 ) {
     private val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
     private val CHANNEL_ID = "threat_alert_channel"
+    private val VISHING_CHANNEL_ID = "vishing_alert_channel"
     private val ALERT_ID = 1001
+    private val VISHING_ALERT_ID = 7777
+
+    private var activeVibrator: android.os.Vibrator? = null
 
     init {
-        createNotificationChannel()
+        createNotificationChannels()
     }
 
-    private fun createNotificationChannel() {
+    private fun createNotificationChannels() {
+        // Standard channel
         val name = "Kiber-Xavf Ogohlantirishlari"
-        val descriptionText = "Jiddiy xavfsizlik tahdidlari haqida bildirishnomalar"
         val importance = NotificationManager.IMPORTANCE_HIGH
         val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-            description = descriptionText
+            description = "Jiddiy xavfsizlik tahdidlari haqida bildirishnomalar"
             enableVibration(true)
-            vibrationPattern = longArrayOf(0, 500, 200, 500) // Double pulse
+            vibrationPattern = longArrayOf(0, 500, 200, 500)
             enableLights(true)
             lightColor = android.graphics.Color.RED
             lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
         }
         notificationManager.createNotificationChannel(channel)
+
+        // Vishing channel
+        val vishingName = "Vishing Himoyasi (Qo'ng'iroq)"
+        val vishingChannel = NotificationChannel(VISHING_CHANNEL_ID, vishingName, importance).apply {
+            description = "Qo'ng'iroq paytidagi firibgarlikdan ogohlantirish"
+            enableVibration(true)
+            setBypassDnd(true)
+            lockscreenVisibility = NotificationCompat.VISIBILITY_PUBLIC
+        }
+        notificationManager.createNotificationChannel(vishingChannel)
     }
 
     /**
-     * Shows a high-priority notification for a detected threat
+     * Shows a specialized push notification with extended vibration for vishing calls
+     */
+    fun showVishingAlert(sourceName: String, isOtp: Boolean = false) {
+        val title = "⚠️ Cyber Brother: DIQQAT!"
+        val message = if (isOtp) {
+            "Qo'ng'iroq paytida $sourceName dan maxfiy kod keldi!\nKODNI HECH KIMGA AYTMANG!"
+        } else {
+            "DIQQAT: Firibgarlik ehtimoli!\nSuhbatda shubhali gaplar ishlatilmoqda. Suhbatni tezda yakunlash tavsiya etiladi!"
+        }
+
+        // 1. EXTENDED VIBRATION (45 Seconds)
+        val vibrator = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            val vm = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as android.os.VibratorManager
+            vm.defaultVibrator
+        } else {
+            @Suppress("DEPRECATION")
+            context.getSystemService(Context.VIBRATOR_SERVICE) as android.os.Vibrator
+        }
+        activeVibrator = vibrator
+        
+        val pattern = longArrayOf(0, 800, 200, 800, 200)
+        if (vibrator.hasVibrator()) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                vibrator.vibrate(android.os.VibrationEffect.createWaveform(pattern, 1))
+            } else {
+                @Suppress("DEPRECATION")
+                vibrator.vibrate(pattern, 1)
+            }
+        }
+
+        // 2. BUILD PUSH
+        val stopIntent = Intent(ACTION_STOP_VISH).setPackage(context.packageName)
+        val stopPendingIntent = PendingIntent.getBroadcast(
+            context, 0, stopIntent,
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+
+        val builder = NotificationCompat.Builder(context, VISHING_CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_shield)
+            .setContentTitle(title)
+            .setContentText(message)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(message))
+            .setPriority(NotificationCompat.PRIORITY_MAX)
+            .setCategory(NotificationCompat.CATEGORY_ALARM)
+            .setDefaults(NotificationCompat.DEFAULT_ALL)
+            .setOngoing(true)
+            .setAutoCancel(false)
+            .setColor(android.graphics.Color.RED)
+            .addAction(android.R.drawable.ic_menu_close_clear_cancel, "TO'XTATISH", stopPendingIntent)
+
+        notificationManager.notify(VISHING_ALERT_ID, builder.build())
+        Timber.w("🚨 VISHING PUSH SENT: Source=$sourceName, isOtp=$isOtp")
+    }
+
+    fun cancelVishingVibration() {
+        activeVibrator?.cancel()
+        notificationManager.cancel(VISHING_ALERT_ID)
+        Timber.d("Vishing vibration and notification cancelled")
+    }
+
+    /**
+     * Shows a high-priority notification for a detected threat (Apps/Files)
      */
     fun showThreatAlert(title: String, message: String, packageName: String? = null, filePath: String? = null) {
         val uniqueId = (packageName?.hashCode() ?: filePath?.hashCode() ?: 0) + ALERT_ID
@@ -96,9 +171,7 @@ class ThreatNotifier @Inject constructor(
             )
         }
 
-        // CRITICAL: Actually show the notification!
         notificationManager.notify(uniqueId, builder.build())
-        Timber.w("🔔 PUSH SENT: $title")
     }
 
     fun showInstallAlert(appName: String, packageName: String) {
@@ -129,10 +202,10 @@ class ThreatNotifier @Inject constructor(
             context.startActivity(intent)
         } catch (e: Exception) {
             e.printStackTrace()
-            // Fallback to notification if activity launch fails
             showThreatAlert("XAVFLI ILOVA!", "Ilova: $appName\nSabab: $reason", packageName)
         }
     }
+
     private fun getAlertPendingIntent(title: String, message: String, packageName: String, risk: String, reason: String): PendingIntent {
         val intent = Intent(context, com.eps.android.ui.activities.ThreatAlertActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
@@ -148,4 +221,9 @@ class ThreatNotifier @Inject constructor(
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
     }
+
+    companion object {
+        const val ACTION_STOP_VISH = "com.eps.android.STOP_VISHING_ALERT"
+    }
 }
+

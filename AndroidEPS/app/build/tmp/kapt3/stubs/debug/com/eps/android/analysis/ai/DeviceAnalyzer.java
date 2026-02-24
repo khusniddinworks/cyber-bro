@@ -1,7 +1,7 @@
 package com.eps.android.analysis.ai;
 
 /**
- * PRO DEVICE ANALYZER - Qurilmani 100% tahlil qiluvchi AI Core
+ * DEVICE ANALYZER - Qurilmani 100% tahlil qiluvchi AI Core
  *
  * Bu modul qurilmadagi barcha jarayonlarni tahlil qiladi va 
  * foydalanuvchiga tushunarli tilda ma'lumot beradi.

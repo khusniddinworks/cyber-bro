@@ -20,16 +20,18 @@ import dagger.hilt.processor.internal.definecomponent.codegen._dagger_hilt_compo
 import hilt_aggregated_deps._androidx_hilt_work_HiltWrapper_WorkerFactoryModule;
 import hilt_aggregated_deps._com_eps_android_EpsApplication_GeneratedInjector;
 import hilt_aggregated_deps._com_eps_android_MainActivity_GeneratedInjector;
-import hilt_aggregated_deps._com_eps_android_core_AntiPhishingVpnService_GeneratedInjector;
 import hilt_aggregated_deps._com_eps_android_core_CyberAccessibilityService_GeneratedInjector;
 import hilt_aggregated_deps._com_eps_android_core_EpsMonitoringService_GeneratedInjector;
+import hilt_aggregated_deps._com_eps_android_core_EpsNotificationListener_GeneratedInjector;
 import hilt_aggregated_deps._com_eps_android_core_EpsWorker_HiltModule;
 import hilt_aggregated_deps._com_eps_android_core_PackageEventReceiver_GeneratedInjector;
 import hilt_aggregated_deps._com_eps_android_core_PhishingAccessibilityService_GeneratedInjector;
+import hilt_aggregated_deps._com_eps_android_core_PhishingWarningActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_eps_android_core_SmsReceiver_GeneratedInjector;
 import hilt_aggregated_deps._com_eps_android_core_ThreatActionReceiver_GeneratedInjector;
 import hilt_aggregated_deps._com_eps_android_di_AppModule;
 import hilt_aggregated_deps._com_eps_android_ui_activities_ThreatAlertActivity_GeneratedInjector;
+import hilt_aggregated_deps._com_eps_android_ui_activities_UrlGuardActivity_GeneratedInjector;
 import hilt_aggregated_deps._com_eps_android_ui_viewmodel_AiMentorViewModel_HiltModules_BindsModule;
 import hilt_aggregated_deps._com_eps_android_ui_viewmodel_AiMentorViewModel_HiltModules_KeyModule;
 import hilt_aggregated_deps._com_eps_android_ui_viewmodel_AppAuditViewModel_HiltModules_BindsModule;
@@ -40,8 +42,6 @@ import hilt_aggregated_deps._com_eps_android_ui_viewmodel_FileScanViewModel_Hilt
 import hilt_aggregated_deps._com_eps_android_ui_viewmodel_FileScanViewModel_HiltModules_KeyModule;
 import hilt_aggregated_deps._com_eps_android_ui_viewmodel_FileVaultViewModel_HiltModules_BindsModule;
 import hilt_aggregated_deps._com_eps_android_ui_viewmodel_FileVaultViewModel_HiltModules_KeyModule;
-import hilt_aggregated_deps._com_eps_android_ui_viewmodel_NetworkTrafficViewModel_HiltModules_BindsModule;
-import hilt_aggregated_deps._com_eps_android_ui_viewmodel_NetworkTrafficViewModel_HiltModules_KeyModule;
 import hilt_aggregated_deps._com_eps_android_ui_viewmodel_SecurityHubViewModel_HiltModules_BindsModule;
 import hilt_aggregated_deps._com_eps_android_ui_viewmodel_SecurityHubViewModel_HiltModules_KeyModule;
 import hilt_aggregated_deps._dagger_hilt_android_flags_FragmentGetContextFix_FragmentGetContextFixEntryPoint;
@@ -86,16 +86,18 @@ import hilt_aggregated_deps._dagger_hilt_android_internal_modules_HiltWrapper_Ac
         _androidx_hilt_work_HiltWrapper_WorkerFactoryModule.class,
         _com_eps_android_EpsApplication_GeneratedInjector.class,
         _com_eps_android_MainActivity_GeneratedInjector.class,
-        _com_eps_android_core_AntiPhishingVpnService_GeneratedInjector.class,
         _com_eps_android_core_CyberAccessibilityService_GeneratedInjector.class,
         _com_eps_android_core_EpsMonitoringService_GeneratedInjector.class,
+        _com_eps_android_core_EpsNotificationListener_GeneratedInjector.class,
         _com_eps_android_core_EpsWorker_HiltModule.class,
         _com_eps_android_core_PackageEventReceiver_GeneratedInjector.class,
         _com_eps_android_core_PhishingAccessibilityService_GeneratedInjector.class,
+        _com_eps_android_core_PhishingWarningActivity_GeneratedInjector.class,
         _com_eps_android_core_SmsReceiver_GeneratedInjector.class,
         _com_eps_android_core_ThreatActionReceiver_GeneratedInjector.class,
         _com_eps_android_di_AppModule.class,
         _com_eps_android_ui_activities_ThreatAlertActivity_GeneratedInjector.class,
+        _com_eps_android_ui_activities_UrlGuardActivity_GeneratedInjector.class,
         _com_eps_android_ui_viewmodel_AiMentorViewModel_HiltModules_BindsModule.class,
         _com_eps_android_ui_viewmodel_AiMentorViewModel_HiltModules_KeyModule.class,
         _com_eps_android_ui_viewmodel_AppAuditViewModel_HiltModules_BindsModule.class,
@@ -106,8 +108,6 @@ import hilt_aggregated_deps._dagger_hilt_android_internal_modules_HiltWrapper_Ac
         _com_eps_android_ui_viewmodel_FileScanViewModel_HiltModules_KeyModule.class,
         _com_eps_android_ui_viewmodel_FileVaultViewModel_HiltModules_BindsModule.class,
         _com_eps_android_ui_viewmodel_FileVaultViewModel_HiltModules_KeyModule.class,
-        _com_eps_android_ui_viewmodel_NetworkTrafficViewModel_HiltModules_BindsModule.class,
-        _com_eps_android_ui_viewmodel_NetworkTrafficViewModel_HiltModules_KeyModule.class,
         _com_eps_android_ui_viewmodel_SecurityHubViewModel_HiltModules_BindsModule.class,
         _com_eps_android_ui_viewmodel_SecurityHubViewModel_HiltModules_KeyModule.class,
         _dagger_hilt_android_flags_FragmentGetContextFix_FragmentGetContextFixEntryPoint.class,

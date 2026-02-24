@@ -1,6 +1,8 @@
 package com.eps.android.analysis
 
 object VishingPatternMatcher {
+    
+    var lastDetectionTimestamp: Long = 0
 
     /**
      * Common phishing keywords/phrases in Uzbek, Russian, and English
@@ -10,20 +12,26 @@ object VishingPatternMatcher {
         "sms kod", "maxfiy kod", "kodni ayting", "tasdiqlash kodi",
         "kartangiz blok", "plastik karta", "xavfsizlik xizmati",
         "transaksiya", "hujum bo'ldi", "pul kiritildi", "shoshiling",
-        "parolni bering", "raqamga sms bordi", "kartangizni blokladik"
+        "parolni bering", "raqamga sms bordi", "kartangizni blokladik",
+        "markaziy bank", "prezident portali", "yutuq chiqdi", "sovg'a",
+        "kabinetga kirish", "shubhali urinish", "karta raqami", "humo", "uzcard"
     )
 
     val RUSSIAN_PATTERNS = listOf(
         "код из смс", "смс код", "скажите код", "подтверждение",
         "ваша карта заблокирована", "служба безопасности", "банк",
         "подозрительная транзакция", "атака на счет", "перевели деньги",
-        "пароль", "номер карты", "срок действия"
+        "пароль", "номер карты", "срок действия",
+        "центральный банк", "портал президента", "выиграли", "подарок",
+        "вход в кабинет", "подозрительная попытка", "номер вашей карты"
     )
 
     val ENGLISH_PATTERNS = listOf(
         "sms code", "verification code", "tell me the code", "security code",
         "card blocked", "bank security", "suspicious transaction",
-        "account at risk", "urgent", "provide password", "card details"
+        "account at risk", "urgent", "provide password", "card details",
+        "central bank", "president portal", "won a prize", "gift awarded",
+        "account login", "suspicious attempt", "provide card number"
     )
 
     /**

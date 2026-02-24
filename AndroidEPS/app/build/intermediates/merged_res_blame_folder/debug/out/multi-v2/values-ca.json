@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.eps.android.app-mergeDebugResources-60:/values-ca/values-ca.xml",
+            "outputFile": "com.eps.android.app-mergeDebugResources-62:/values-ca/values-ca.xml",
             "map": [
                 {
                     "source": "C:\\Users\\ki770\\.gradle\\caches\\transforms-3\\016ff845816e066d0f7d8cfe4e3f0862\\transformed\\ui-release\\res\\values-ca\\values-ca.xml",

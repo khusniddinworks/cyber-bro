@@ -15,7 +15,7 @@ class EventLogger @Inject constructor(
     }
 
     suspend fun logInfo(message: String) {
-        Timber.i("ℹ️ HACKDEFENDER: $message")
+        Timber.i("ℹ️ Cyber Brother: $message")
         threatEventDao.insertEvent(
             ThreatEvent(type = "ACTIVITY", severity = "INFO", source = "System", details = message)
         )

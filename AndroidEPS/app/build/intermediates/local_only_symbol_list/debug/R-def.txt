@@ -29,10 +29,10 @@ string btn_re_scan
 string btn_select_files
 string btn_share
 string btn_start_scan
+string device_admin_description
 string feat_ai
 string feat_audit
 string feat_vault
-string feat_vpn
 string files_selected
 string full_protection
 string header_core
@@ -81,8 +81,6 @@ string scan_completed
 string scan_idle
 string scan_scanning
 string select_language
-string setting_vpn_auto
-string setting_vpn_desc
 string settings_subtitle
 string settings_title
 string status_clean

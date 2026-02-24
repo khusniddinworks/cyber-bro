@@ -1,42 +1,38 @@
 [
     {
-        "merged": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-merged_res-62:\\drawable_ic_shield.xml.flat",
-        "source": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-main-64:\\drawable\\ic_shield.xml"
+        "merged": "com.eps.android.app-merged_res-64:/xml_device_admin_rules.xml.flat",
+        "source": "com.eps.android.app-main-66:/xml/device_admin_rules.xml"
     },
     {
-        "merged": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-merged_res-62:\\xml_provider_paths.xml.flat",
-        "source": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-main-64:\\xml\\provider_paths.xml"
+        "merged": "com.eps.android.app-merged_res-64:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
+        "source": "com.eps.android.app-main-66:/mipmap-anydpi-v26/ic_launcher_round.xml"
     },
     {
-        "merged": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-merged_res-62:\\xml_backup_rules.xml.flat",
-        "source": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-main-64:\\xml\\backup_rules.xml"
+        "merged": "com.eps.android.app-merged_res-64:/xml_backup_rules.xml.flat",
+        "source": "com.eps.android.app-main-66:/xml/backup_rules.xml"
     },
     {
-        "merged": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-merged_res-62:\\xml_data_extraction_rules.xml.flat",
-        "source": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-main-64:\\xml\\data_extraction_rules.xml"
+        "merged": "com.eps.android.app-merged_res-64:/drawable_ic_launcher.png.flat",
+        "source": "com.eps.android.app-main-66:/drawable/ic_launcher.png"
     },
     {
-        "merged": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-merged_res-62:\\xml_accessibility_service_config.xml.flat",
-        "source": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-main-64:\\xml\\accessibility_service_config.xml"
+        "merged": "com.eps.android.app-merged_res-64:/xml_provider_paths.xml.flat",
+        "source": "com.eps.android.app-main-66:/xml/provider_paths.xml"
     },
     {
-        "merged": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-merged_res-62:\\xml_device_admin_rules.xml.flat",
-        "source": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-main-64:\\xml\\device_admin_rules.xml"
+        "merged": "com.eps.android.app-merged_res-64:/xml_accessibility_service_config.xml.flat",
+        "source": "com.eps.android.app-main-66:/xml/accessibility_service_config.xml"
     },
     {
-        "merged": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-merged_res-62:\\mipmap-anydpi-v26_ic_launcher.xml.flat",
-        "source": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-main-64:\\mipmap-anydpi-v26\\ic_launcher.xml"
+        "merged": "com.eps.android.app-merged_res-64:/xml_data_extraction_rules.xml.flat",
+        "source": "com.eps.android.app-main-66:/xml/data_extraction_rules.xml"
     },
     {
-        "merged": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-merged_res-62:\\mipmap-anydpi-v26_ic_launcher_round.xml.flat",
-        "source": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-main-64:\\mipmap-anydpi-v26\\ic_launcher_round.xml"
+        "merged": "com.eps.android.app-merged_res-64:/drawable_ic_shield.xml.flat",
+        "source": "com.eps.android.app-main-66:/drawable/ic_shield.xml"
     },
     {
-        "merged": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-merged_res-62:\\drawable_ic_launcher.png.flat",
-        "source": "C:\\Users\\ki770\\.gradle\\daemon\\8.2\\com.eps.android.app-main-64:\\drawable\\ic_launcher.png"
-    },
-    {
-        "merged": "com.eps.android.app-merged_res-62:/xml_provider_paths.xml.flat",
-        "source": "com.eps.android.app-main-64:/xml/provider_paths.xml"
+        "merged": "com.eps.android.app-merged_res-64:/mipmap-anydpi-v26_ic_launcher.xml.flat",
+        "source": "com.eps.android.app-main-66:/mipmap-anydpi-v26/ic_launcher.xml"
     }
 ]

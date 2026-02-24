@@ -55,12 +55,67 @@ class SecurityHubViewModel @Inject constructor(
                 val perms = pkg.requestedPermissions
                 val flags = pkg.requestedPermissionsFlags
                 if (perms != null && flags != null) {
-                    // Filter System Apps: Check if FLAG_SYSTEM or FLAG_UPDATED_SYSTEM_APP is set
+                    // Filter System Apps and Trusted Apps
                     val isSystemApp = (pkg.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0 ||
                                       (pkg.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0
                     
-                    // Skip if it is a system app
-                    if (isSystemApp) return@forEach
+                    val trustedPackages = setOf(
+                        // Telegram Ecosystem
+                        "org.telegram.messenger", "org.telegram.messenger.web", "org.telegram.plus", "org.thunderdog.challegram", "org.aka.messenger",
+                        // Social & Communication
+                        "com.instagram.android", "com.instagram.lite", "com.instagram.barcelona",
+                        "com.facebook.katana", "com.facebook.orca", "com.facebook.lite",
+                        "com.whatsapp", "com.whatsapp.w4b", "com.viber.voip", "us.zoom.videomeetings", "com.skype.raider",
+                        "com.snapchat.android", "com.twitter.android", "com.linkedin.android", "com.pinterest",
+                        "org.thoughtcrime.securesms", "com.imo.android.imoim", "ru.oneme.app",
+                        "com.zhiliaoapp.musically", "com.ss.android.ugc.trill",
+                        // Banking & Finance (Uzbekistan)
+                        "uz.tbc.mobile", "uz.tbcbank", "com.tbcgroup", "uz.tbc",
+                        "uz.alif.mobi", "uz.alif", "com.alif.mobi", "com.alif",
+                        "uz.click.uz", "uz.click", "air.com.ssd.click", "uz.fido.click", "com.click.uzsmart", "uz.click.mobilbank",
+                        "uz.dida.payme", "uz.payme", "com.payme.app",
+                        "uz.uzcard.mobile", "uz.uzcard", "uz.humo.mobile", "uz.humo",
+                        "uz.shaxslar.kapitalbank", "uz.proweb.kapitalbank", "uz.kapitalbank",
+                        "uz.ipakyulibank.mobile", "uz.ipakyulibank",
+                        "uz.agrobank.agro_mobile", "uz.agrobank",
+                        "uz.hamkorbank.mobile", "uz.hamkorbank",
+                        "uz.vcard.mobile", "uz.vcard",
+                        "uz.ofb.mobile", "uz.ofb",
+                        "uz.sqb.mobile", "uz.sqb",
+                        "uz.nbu.mobile", "uz.nbu",
+                        "uz.vcb.mobile", "uz.vcb",
+                        "uz.zoodpay.app", "uz.paynet.android", "uz.xazna.app", "uz.avo.app",
+                        "uz.soliq.mobile", "uz.zood.pay", "uz.zood.mall",
+                        "uz.uzum.bank", "uz.uzum.market", "uz.uzum.pay", "uz.uzum", "com.uzumbank",
+                        // Government & Public Services (Uzbekistan)
+                        "uz.uzinfocom.mygov", "uz.egov.oneid", "uz.uzinfocom.dmed", "uz.smartbase.myinspector",
+                        "uz.smartbase.license", "uz.iiv.meninginspektorim", "uz.agro.mobile",
+                        // E-commerce & Tools
+                        "uz.asaxiy.app", "uz.asaxiy", "uz.olx.uz", "uz.olx", "uz.doska.birbir",
+                        "com.alibaba.aliexpress", "com.amazon.mShop.android.shopping", "com.ebay.mobile",
+                        "uz.allplay.app", "uz.beeline.uz", "uz.mobiuz.mobi",
+                        // Education & AI
+                        "uz.ibrat.academy", "uz.ibrat", "uz.upscrolled", "com.upscrolled.app",
+                        "com.duolingo", "com.google.android.apps.classroom", "ai.saveall.app",
+                        "com.openai.chatgpt", "com.google.android.apps.bard", "com.google.android.apps.gemini",
+                        "com.pixverseai.pixverse",
+                        // Media & Transportation
+                        "com.spotify.music", "com.netflix.mediaclient", "com.lemon.lvoverseas", "com.jana.tube.video",
+                        "ru.yandex.taxi.uz", "ru.yandex.taxi", "ru.yandex.searchplugin", "com.yandex.browser", 
+                        "ru.yandex.yandexmaps", "uz.mytaxi.client", "uz.mytaxi", "uz.express.customer",
+                        // Games & System
+                        "com.tencent.ig", "com.mobile.legends", "com.ea.gp.fifamobile", "com.roblox.client",
+                        "com.kiloo.subwaysurf", "com.PlayMax.playergames", "com.ForgeGames.SpecialForcesGroup2",
+                        "com.eps.android", "com.google.android.apps.messaging", "com.google.android.apps.photos", "com.google.android.gm",
+                        "uz.gizmo", "com.edaai.globalmove"
+                    )
+                    
+                    val normalizedPkg = pkg.packageName.trim().lowercase()
+                    val isTrusted = trustedPackages.contains(normalizedPkg) || 
+                                    trustedPackages.any { normalizedPkg.startsWith("$it.") }
+                    
+                    // Skip if it is a system app or well-known trusted app
+                    if (isSystemApp || isTrusted) return@forEach
 
                     var hasCamera = false
                     var hasMic = false

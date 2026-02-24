@@ -1,7 +1,7 @@
 package com.eps.android.analysis;
 
 @javax.inject.Singleton
-@kotlin.Metadata(mv = {1, 9, 0}, k = 1, xi = 48, d1 = {"\u00008\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\b\u0007\u0018\u00002\u00020\u0001:\u0001\u0011B1\b\u0007\u0012\b\b\u0001\u0010\u0002\u001a\u00020\u0003\u0012\u0006\u0010\u0004\u001a\u00020\u0005\u0012\u0006\u0010\u0006\u001a\u00020\u0007\u0012\u0006\u0010\b\u001a\u00020\t\u0012\u0006\u0010\n\u001a\u00020\u000b\u00a2\u0006\u0002\u0010\fJ\u000e\u0010\r\u001a\u00020\u000e2\u0006\u0010\u000f\u001a\u00020\u0010R\u000e\u0010\b\u001a\u00020\tX\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0002\u001a\u00020\u0003X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0006\u001a\u00020\u0007X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0004\u001a\u00020\u0005X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\n\u001a\u00020\u000bX\u0082\u0004\u00a2\u0006\u0002\n\u0000\u00a8\u0006\u0012"}, d2 = {"Lcom/eps/android/analysis/StaticAnalyzer;", "", "context", "Landroid/content/Context;", "hashCalculator", "Lcom/eps/android/analysis/HashCalculator;", "entropyCalculator", "Lcom/eps/android/analysis/EntropyCalculator;", "apkAnalyzer", "Lcom/eps/android/analysis/ApkAnalyzer;", "malwareClassifier", "Lcom/eps/android/analysis/ai/MalwareClassifier;", "(Landroid/content/Context;Lcom/eps/android/analysis/HashCalculator;Lcom/eps/android/analysis/EntropyCalculator;Lcom/eps/android/analysis/ApkAnalyzer;Lcom/eps/android/analysis/ai/MalwareClassifier;)V", "analyzeFile", "Lcom/eps/android/analysis/StaticAnalyzer$FileVerdict;", "file", "Ljava/io/File;", "FileVerdict", "app_debug"})
+@kotlin.Metadata(mv = {1, 9, 0}, k = 1, xi = 48, d1 = {"\u00008\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0002\n\u0002\u0018\u0002\n\u0000\n\u0002\u0018\u0002\n\u0002\b\u0003\b\u0007\u0018\u00002\u00020\u0001:\u0001\u0012B1\b\u0007\u0012\b\b\u0001\u0010\u0002\u001a\u00020\u0003\u0012\u0006\u0010\u0004\u001a\u00020\u0005\u0012\u0006\u0010\u0006\u001a\u00020\u0007\u0012\u0006\u0010\b\u001a\u00020\t\u0012\u0006\u0010\n\u001a\u00020\u000b\u00a2\u0006\u0002\u0010\fJ\u0019\u0010\r\u001a\u00020\u000e2\u0006\u0010\u000f\u001a\u00020\u0010H\u0086@\u00f8\u0001\u0000\u00a2\u0006\u0002\u0010\u0011R\u000e\u0010\b\u001a\u00020\tX\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0002\u001a\u00020\u0003X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0006\u001a\u00020\u0007X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\u0004\u001a\u00020\u0005X\u0082\u0004\u00a2\u0006\u0002\n\u0000R\u000e\u0010\n\u001a\u00020\u000bX\u0082\u0004\u00a2\u0006\u0002\n\u0000\u0082\u0002\u0004\n\u0002\b\u0019\u00a8\u0006\u0013"}, d2 = {"Lcom/eps/android/analysis/StaticAnalyzer;", "", "context", "Landroid/content/Context;", "hashCalculator", "Lcom/eps/android/analysis/HashCalculator;", "entropyCalculator", "Lcom/eps/android/analysis/EntropyCalculator;", "apkAnalyzer", "Lcom/eps/android/analysis/ApkAnalyzer;", "malwareClassifier", "Lcom/eps/android/analysis/ai/MalwareClassifier;", "(Landroid/content/Context;Lcom/eps/android/analysis/HashCalculator;Lcom/eps/android/analysis/EntropyCalculator;Lcom/eps/android/analysis/ApkAnalyzer;Lcom/eps/android/analysis/ai/MalwareClassifier;)V", "analyzeFile", "Lcom/eps/android/analysis/StaticAnalyzer$FileVerdict;", "file", "Ljava/io/File;", "(Ljava/io/File;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;", "FileVerdict", "app_debug"})
 public final class StaticAnalyzer {
     @org.jetbrains.annotations.NotNull
     private final android.content.Context context = null;
@@ -25,9 +25,10 @@ public final class StaticAnalyzer {
         super();
     }
     
-    @org.jetbrains.annotations.NotNull
-    public final com.eps.android.analysis.StaticAnalyzer.FileVerdict analyzeFile(@org.jetbrains.annotations.NotNull
-    java.io.File file) {
+    @org.jetbrains.annotations.Nullable
+    public final java.lang.Object analyzeFile(@org.jetbrains.annotations.NotNull
+    java.io.File file, @org.jetbrains.annotations.NotNull
+    kotlin.coroutines.Continuation<? super com.eps.android.analysis.StaticAnalyzer.FileVerdict> $completion) {
         return null;
     }
     

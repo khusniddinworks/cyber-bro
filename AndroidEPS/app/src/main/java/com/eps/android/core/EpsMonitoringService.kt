@@ -46,19 +46,38 @@ class EpsMonitoringService : Service() {
         super.onCreate()
         Timber.i("EpsMonitoringService created")
         createNotificationChannel()
-        startForeground(NOTIFICATION_ID, createNotification())
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            startForeground(
+                NOTIFICATION_ID, 
+                createNotification(),
+                android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            startForeground(NOTIFICATION_ID, createNotification())
+        }
         
         // Register quick scan receiver
-        registerReceiver(quickScanReceiver, android.content.IntentFilter("com.eps.android.ACTION_QUICK_SCAN"), android.content.Context.RECEIVER_NOT_EXPORTED)
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(
+                quickScanReceiver,
+                android.content.IntentFilter("com.eps.android.ACTION_QUICK_SCAN"),
+                android.content.Context.RECEIVER_NOT_EXPORTED
+            )
+        } else {
+            registerReceiver(
+                quickScanReceiver,
+                android.content.IntentFilter("com.eps.android.ACTION_QUICK_SCAN")
+            )
+        }
         
         // Monitor multiple download directories for better coverage
         startMonitoringAllDownloadPaths()
         
-        // Continuous Protection Loop: Check every 30 seconds as fallback
+        // Efficient Fallback: Check every 1 hour instead of 15 seconds to save battery
         serviceScope.launch {
             while (true) {
-                kotlinx.coroutines.delay(30000)
-                Timber.d("🕒 Periodic background check running...")
+                kotlinx.coroutines.delay(3600000) // 🛡️ 1 hour fallback
+                Timber.d("🕒 Hourly safety check running...")
                 performManualCheck()
             }
         }
@@ -145,7 +164,7 @@ class EpsMonitoringService : Service() {
 
     private fun createNotification(): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Cyber Brother PRO Faol")
+            .setContentTitle("Cyber Brother Faol")
             .setContentText("Download papka kuzatilmoqda 🛡️")
             .setSmallIcon(R.drawable.ic_shield)
             .setPriority(NotificationCompat.PRIORITY_LOW)

@@ -22,7 +22,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * PRO DEVICE ANALYZER - Qurilmani 100% tahlil qiluvchi AI Core
+ * DEVICE ANALYZER - Qurilmani 100% tahlil qiluvchi AI Core
  * 
  * Bu modul qurilmadagi barcha jarayonlarni tahlil qiladi va 
  * foydalanuvchiga tushunarli tilda ma'lumot beradi.
@@ -338,7 +338,7 @@ class DeviceAnalyzer @Inject constructor(
             name.contains("whatsapp") -> "WhatsApp - Xabar almashish"
             name.contains("instagram") -> "Instagram - Ijtimoiy tarmoq"
             name.contains("facebook") -> "Facebook - Ijtimoiy tarmoq"
-            name.contains("cyber") || name.contains("hackdefender") -> "Cyber Brother PRO - Sizning himoyangiz 🛡️"
+            name.contains("cyber") || name.contains("hackdefender") -> "Cyber Brother - Sizning himoyangiz 🛡️"
             else -> "$importance holatida ishlamoqda"
         }
     }
@@ -425,7 +425,13 @@ class DeviceAnalyzer @Inject constructor(
             "com.bitdefender.security",
             "com.kaspersky.security.cloud",
             "com.antivirus",
-            "org.malwarebytes.antimalware"
+            "org.malwarebytes.antimalware",
+            
+            // Meta & Telegram (Aggressive Whitelist)
+            "org.telegram.messenger",
+            "org.telegram.messenger.web",
+            "com.instagram.android",
+            "com.whatsapp"
         )
         
         val dangerousPermissions = setOf(

@@ -14,7 +14,7 @@ interface ThreatEventDao {
     fun getAllEvents(): Flow<List<ThreatEvent>>
 
     @Query("SELECT * FROM threat_events ORDER BY timestamp DESC LIMIT :limit")
-    suspend fun getRecentEvents(limit: Int): List<ThreatEvent>
+    fun getRecentEvents(limit: Int): Flow<List<ThreatEvent>>
 
     @Query("SELECT COUNT(*) FROM threat_events WHERE severity IN ('HIGH', 'CRITICAL')")
     fun getCriticalThreatCount(): Flow<Int>

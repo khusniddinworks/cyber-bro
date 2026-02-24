@@ -34,33 +34,67 @@ class DashboardViewModel @Inject constructor(
             initialValue = 0
         )
 
-    val securityScore: StateFlow<Int> = threatEventDao.getCriticalThreatCount().map { count ->
-        (100 - (count * 5)).coerceAtLeast(30)
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = 100
-    )
-
-    // --- LICENSE MANAGEMENT ---
-    private val _deviceId = kotlinx.coroutines.flow.MutableStateFlow("")
-    val deviceId: StateFlow<String> = _deviceId
-    
-    // Check SharedPreferences for saved key validity
-    private val _isPremium = kotlinx.coroutines.flow.MutableStateFlow(false)
-    val isPremium: StateFlow<Boolean> = _isPremium
-
     // --- PERMISSION & SERVICE STATUS ---
     data class ProtectionStatus(
         val isFileGuardActive: Boolean = false,
         val isAccessibilityActive: Boolean = false,
         val isNotificationListenerActive: Boolean = false,
-        val isVpnActive: Boolean = false,
         val isNotificationPermissionGranted: Boolean = true
     )
 
     private val _protectionStatus = kotlinx.coroutines.flow.MutableStateFlow(ProtectionStatus())
     val protectionStatus: StateFlow<ProtectionStatus> = _protectionStatus
+
+    val recentEvents: StateFlow<List<ThreatEvent>> = threatEventDao.getRecentEvents(5)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    val securityScore: StateFlow<Int> = protectionStatus.map { status ->
+        var score = 45 // Base score for running Cyber Brother
+        if (status.isAccessibilityActive) score += 15
+        if (status.isNotificationListenerActive) score += 15
+        if (status.isFileGuardActive) score += 12
+        score.coerceAtMost(100)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = 45
+    )
+
+    val dailyReportResource: StateFlow<String> = events.map { allEvents ->
+        val last24h = System.currentTimeMillis() - (24 * 60 * 60 * 1000)
+        val todayEvents = allEvents.filter { it.timestamp > last24h }
+        val threats = todayEvents.filter { it.severity in listOf("CRITICAL", "HIGH") }.size
+        val itemsParsed = todayEvents.size
+        
+        val lang = context.resources.configuration.locales[0].language
+        when(lang) {
+            "uz" -> "Sizni bugun $itemsParsed ta harakatdan va $threats ta jiddiy xavfdan himoya qildim. Tizim to'liq nazoratda! ✅"
+            "ru" -> "Сегодня я защитил вас от $itemsParsed действий и $threats серьезных угроз. Система под полным контролем! ✅"
+            else -> "Today I protected you from $itemsParsed activities and $threats serious threats. System is under full control! ✅"
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = "Scanning..."
+    )
+
+    // --- LICENSE & TRIAL MANAGEMENT ---
+    private val _deviceId = kotlinx.coroutines.flow.MutableStateFlow("")
+    val deviceId: StateFlow<String> = _deviceId
+    
+    private val _isPremium = kotlinx.coroutines.flow.MutableStateFlow(false)
+    val isPremium: StateFlow<Boolean> = _isPremium
+
+    private val _trialDaysRemaining = kotlinx.coroutines.flow.MutableStateFlow(14)
+    val trialDaysRemaining: StateFlow<Int> = _trialDaysRemaining
+
+    val areFeaturesUnlocked: StateFlow<Boolean> = kotlinx.coroutines.flow.combine(_isPremium, _trialDaysRemaining) { premium, days ->
+        premium || days > 0
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), true)
 
     init {
         loadIdentity()
@@ -68,6 +102,7 @@ class DashboardViewModel @Inject constructor(
     }
 
     fun checkAllServices() {
+        // ... (unchanged)
         viewModelScope.launch {
             val fileGuard = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
                 android.os.Environment.isExternalStorageManager()
@@ -75,7 +110,6 @@ class DashboardViewModel @Inject constructor(
 
             val accessibility = isAccessibilityServiceEnabled()
             val notificationListener = isNotificationListenerEnabled()
-            val vpn = com.eps.android.core.AntiPhishingVpnService.isServiceRunning.get()
             
             val notificationPermission = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
                 androidx.core.content.ContextCompat.checkSelfPermission(
@@ -87,7 +121,6 @@ class DashboardViewModel @Inject constructor(
                 isFileGuardActive = fileGuard,
                 isAccessibilityActive = accessibility,
                 isNotificationListenerActive = notificationListener,
-                isVpnActive = vpn,
                 isNotificationPermissionGranted = notificationPermission
             )
         }
@@ -115,10 +148,22 @@ class DashboardViewModel @Inject constructor(
         val id = com.eps.android.core.IdentityManager.getDeviceId(context)
         _deviceId.value = id
         
-        // Auto-check saved license
         val prefs = context.getSharedPreferences("cyber_prefs", android.content.Context.MODE_PRIVATE)
-        val savedKey = prefs.getString("license_key", "") ?: ""
         
+        // 1. Check Trial
+        val installTime = prefs.getLong("install_timestamp", 0L)
+        if (installTime == 0L) {
+            val now = System.currentTimeMillis()
+            prefs.edit().putLong("install_timestamp", now).apply()
+            _trialDaysRemaining.value = 14
+        } else {
+            val diff = System.currentTimeMillis() - installTime
+            val daysPassed = (diff / (1000 * 60 * 60 * 24)).toInt()
+            _trialDaysRemaining.value = (14 - daysPassed).coerceAtLeast(0)
+        }
+
+        // 2. Check License
+        val savedKey = prefs.getString("license_key", "") ?: ""
         if (savedKey.isNotEmpty()) {
             val isValid = com.eps.android.core.IdentityManager.validateLicense(context, savedKey)
             _isPremium.value = isValid
@@ -129,7 +174,6 @@ class DashboardViewModel @Inject constructor(
         val isValid = com.eps.android.core.IdentityManager.validateLicense(context, key)
         if (isValid) {
             _isPremium.value = true
-            // Save locally
             context.getSharedPreferences("cyber_prefs", android.content.Context.MODE_PRIVATE)
                 .edit()
                 .putString("license_key", key)

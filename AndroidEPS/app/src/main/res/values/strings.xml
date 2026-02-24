@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Cyber Brother PRO</string>
+    <string name="app_name">Cyber Brother</string>
     
     <!-- Dashboard -->
     <string name="nav_home">Home</string>
@@ -14,7 +14,7 @@
     <string name="status_secure">SECURE</string>
     <string name="status_risk">AT RISK</string>
     
-    <string name="feat_vpn">VPN Shield</string>
+
     <string name="feat_audit">App Audit</string>
     <string name="feat_vault">File Vault</string>
     <string name="feat_ai">AI Assist</string>
@@ -60,8 +60,7 @@
     
     <string name="label_language">LANGUAGE</string>
     <string name="label_core_shield">CORE SHIELD</string>
-    <string name="setting_vpn_auto">VPN Auto-Connect</string>
-    <string name="setting_vpn_desc">Start protection at boot</string>
+
     <string name="label_sensitivity">Scan Sensitivity</string>
     <string name="label_sensitivity_desc">Neural analysis aggressiveness</string>
 
@@ -109,7 +108,8 @@
     <string name="btn_grant">INITIALIZE PROTECTION</string>
 
 
-    <string name="accessibility_service_description">Cyber Brother PRO detects and blocks malicious links. All analysis is 100% on-device.</string>
+    <string name="accessibility_service_description">Cyber Brother detects and blocks malicious links. All analysis is 100% on-device.</string>
+    <string name="device_admin_description">Real-time device protection and threat management.</string>
 
     <!-- App Listing -->
     <string name="title_app_list">App Inspection</string>

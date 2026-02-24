@@ -32,7 +32,7 @@ private val LightColorScheme = androidx.compose.material3.lightColorScheme(
 )
 
 @Composable
-fun HACKDEFENDERTheme(
+fun CyberBrotherTheme(
     useDarkTheme: Boolean = true,
     content: @Composable () -> Unit
 ) {

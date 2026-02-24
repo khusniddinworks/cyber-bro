@@ -30,7 +30,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.eps.android.ui.components.CyberScanningEffect
+import com.eps.android.ui.components.CyberDecodingOverlay
 import com.eps.android.ui.components.GlassCard
 import com.eps.android.ui.theme.*
 import com.eps.android.ui.viewmodel.FileVaultViewModel
@@ -135,74 +135,111 @@ fun FileVaultScreen(viewModel: FileVaultViewModel = hiltViewModel()) {
             AlertDialog(
                 onDismissRequest = { if(!isProcessing) showDecryptDialog = null },
                 containerColor = CyberDark,
-                title = { Text("Faylni Ochish", color = GoldPremium) },
+                title = { 
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Icon(Icons.Default.LockOpen, contentDescription = null, tint = GoldPremium)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text("Faylni Dekodlash", color = GoldPremium) 
+                    }
+                },
                 text = {
                     Column {
-                        Text("Parolni kiriting:", color = Color.White)
-                        Spacer(modifier = Modifier.height(8.dp))
-                        OutlinedTextField(
-                            value = password,
-                            onValueChange = { password = it },
-                            visualTransformation = PasswordVisualTransformation(),
-                            singleLine = true,
-                            colors = OutlinedTextFieldDefaults.colors(
-                                focusedBorderColor = GoldPremium,
-                                focusedTextColor = Color.White,
-                                unfocusedTextColor = Color.White
-                            )
-                        )
-                        if (error != null) {
-                            Text(error!!, color = Color.Red, fontSize = 12.sp)
-                        }
                         if (isProcessing) {
-                            LinearProgressIndicator(modifier = Modifier.fillMaxWidth().padding(top=8.dp), color = GoldPremium)
+                            // SHOW DECODING OVERLAY DURING PROCESSING
+                            CyberDecodingOverlay(
+                                progress = 0.5f, // Simulated half-way
+                                statusText = "HEADERLAR О'QILMOQDA..."
+                            )
+                        } else {
+                            Text("Asl holiga qaytarish uchun parolni kiriting:", color = Color.White, fontSize = 13.sp)
+                            Spacer(modifier = Modifier.height(12.dp))
+                            OutlinedTextField(
+                                value = password,
+                                onValueChange = { password = it },
+                                visualTransformation = PasswordVisualTransformation(),
+                                singleLine = true,
+                                label = { Text("Parol") },
+                                modifier = Modifier.fillMaxWidth(),
+                                colors = OutlinedTextFieldDefaults.colors(
+                                    focusedBorderColor = GoldPremium,
+                                    focusedTextColor = Color.White,
+                                    unfocusedTextColor = Color.White,
+                                    unfocusedBorderColor = Color.Gray.copy(alpha=0.3f)
+                                )
+                            )
+                            if (error != null) {
+                                Text(error!!, color = Color.Red, fontSize = 11.sp, modifier = Modifier.padding(top=8.dp))
+                            }
                         }
                     }
                 },
                 confirmButton = {
-                    Button(
-                        onClick = { viewModel.decryptFile(showDecryptDialog!!, password) },
-                        colors = ButtonDefaults.buttonColors(containerColor = GoldPremium),
-                        enabled = !isProcessing
-                    ) {
-                        Text("OCHISH", color = Color.Black)
+                    if (!isProcessing) {
+                        Button(
+                            onClick = { viewModel.decryptFile(showDecryptDialog!!, password) },
+                            colors = ButtonDefaults.buttonColors(containerColor = GoldPremium),
+                            shape = RoundedCornerShape(12.dp)
+                        ) {
+                            Text("DEKODLASH", color = Color.Black, fontWeight = FontWeight.Bold)
+                        }
                     }
                 },
                 dismissButton = {
-                    TextButton(onClick = { showDecryptDialog = null; viewModel.clearResult(); password = "" }) {
-                        Text("BEKOR QILISH", color = Color.Gray)
+                    if (!isProcessing) {
+                        TextButton(onClick = { showDecryptDialog = null; viewModel.clearResult(); password = "" }) {
+                            Text("BEKOR QILISH", color = Color.Gray)
+                        }
                     }
                 }
             )
         }
         
         // --- DECRYPTION SUCCESS OVERLAY ---
-        if (resultPath != null && !isEncryptMode && showDecryptDialog != null) {
-            // Processing finished, success.
-            LaunchedEffect(resultPath) {
-                showDecryptDialog = null // Close dialog
-                // Trigger Open File
-                val file = File(resultPath!!)
-                val uri = androidx.core.content.FileProvider.getUriForFile(
-                    context, "${context.packageName}.fileprovider", file
-                )
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    setDataAndType(uri, context.contentResolver.getType(uri) ?: "*/*")
-                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-                }
-                try {
-                    context.startActivity(intent)
-                } catch (e: Exception) {
-                    // Show toast or fallback
-                    val share = Intent(Intent.ACTION_SEND).apply {
-                        putExtra(Intent.EXTRA_STREAM, uri)
-                        type = "*/*"
-                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        if (resultPath != null && !isEncryptMode) {
+            val decryptedFile = File(resultPath!!)
+            AlertDialog(
+                onDismissRequest = { viewModel.clearResult() },
+                containerColor = CyberDark,
+                icon = { Icon(Icons.Default.Verified, contentDescription = null, tint = MatrixGreen, modifier = Modifier.size(48.dp)) },
+                title = { Text("Muvaffaqiyatli Dekodlandi", color = Color.White) },
+                text = {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                        Text(decryptedFile.name, color = MatrixGreen, fontWeight = FontWeight.Bold, fontSize = 14.sp)
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text("Sizning maxfiy faylingiz xavfsiz shifrdan chiqarildi. Uni qurilmaga saqlash yoki boshqa dastur bilan ochishingiz mumkin.", 
+                             color = Color.Gray, fontSize = 11.sp, textAlign = androidx.compose.ui.text.style.TextAlign.Center)
                     }
-                    context.startActivity(Intent.createChooser(share, "Faylni ochish..."))
+                },
+                confirmButton = {
+                    Button(
+                        onClick = { 
+                            viewModel.exportToPublicStorage(decryptedFile)
+                            viewModel.clearResult()
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = MatrixGreen),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("QURILMAGA SAQLASH", color = Color.Black, fontWeight = FontWeight.Black)
+                    }
+                },
+                dismissButton = {
+                    TextButton(
+                        onClick = {
+                            val uri = androidx.core.content.FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", decryptedFile)
+                            val intent = Intent(Intent.ACTION_VIEW).apply {
+                                setDataAndType(uri, context.contentResolver.getType(uri) ?: "*/*")
+                                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                            }
+                            context.startActivity(Intent.createChooser(intent, "Faylni ochish..."))
+                            viewModel.clearResult()
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("FAQAT OCHISH", color = Color.Gray)
+                    }
                 }
-                viewModel.clearResult()
-            }
+            )
         }
     }
 }

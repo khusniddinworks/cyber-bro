@@ -1,7 +1,6 @@
 package com.eps.android.data;
 
 import android.database.Cursor;
-import android.os.CancellationSignal;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.room.CoroutinesRoom;
@@ -195,14 +194,12 @@ public final class ThreatEventDao_Impl implements ThreatEventDao {
   }
 
   @Override
-  public Object getRecentEvents(final int limit,
-      final Continuation<? super List<ThreatEvent>> $completion) {
+  public Flow<List<ThreatEvent>> getRecentEvents(final int limit) {
     final String _sql = "SELECT * FROM threat_events ORDER BY timestamp DESC LIMIT ?";
     final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
     int _argIndex = 1;
     _statement.bindLong(_argIndex, limit);
-    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
-    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<List<ThreatEvent>>() {
+    return CoroutinesRoom.createFlow(__db, false, new String[] {"threat_events"}, new Callable<List<ThreatEvent>>() {
       @Override
       @NonNull
       public List<ThreatEvent> call() throws Exception {
@@ -256,10 +253,14 @@ public final class ThreatEventDao_Impl implements ThreatEventDao {
           return _result;
         } finally {
           _cursor.close();
-          _statement.release();
         }
       }
-    }, $completion);
+
+      @Override
+      protected void finalize() {
+        _statement.release();
+      }
+    });
   }
 
   @Override

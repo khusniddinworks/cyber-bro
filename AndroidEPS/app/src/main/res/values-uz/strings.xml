@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Cyber Brother PRO</string>
+    <string name="app_name">Cyber Brother</string>
     
     <!-- Dashboard -->
     <string name="nav_home">Asosiy</string>
@@ -14,7 +14,7 @@
     <string name="status_secure">HIMOYaLANGAN</string>
     <string name="status_risk">XAVF OSTIDA</string>
     
-    <string name="feat_vpn">VPN Qalqon</string>
+
     <string name="feat_audit">Ilovalar Auditi</string>
     <string name="feat_vault">Fayllar Ombori</string>
     <string name="feat_ai">AI Yordamchi</string>
@@ -60,8 +60,7 @@
     
     <string name="label_language">TIL</string>
     <string name="label_core_shield">ASOSIY QALQON</string>
-    <string name="setting_vpn_auto">VPN Avto-Ulanish</string>
-    <string name="setting_vpn_desc">Yoqishda himoyani boshlash</string>
+
     <string name="label_sensitivity">Skaner Sezgirligi</string>
     <string name="label_sensitivity_desc">Neyron tahlilning tajovuzkorligi</string>
 
@@ -109,7 +108,7 @@
     <string name="btn_grant">HIMOYANI BOSHLASH</string>
 
 
-    <string name="accessibility_service_description">Cyber Brother PRO xavfli havolalarni aniqlaydi va bloklaydi. Barcha tahlillar 100% qurilmada bajariladi.</string>
+    <string name="accessibility_service_description">Cyber Brother xavfli havolalarni aniqlaydi va bloklaydi. Barcha tahlillar 100% qurilmada bajariladi.</string>
 
     <!-- App Listing -->
     <string name="title_app_list">Ilovalar Tahlili</string>

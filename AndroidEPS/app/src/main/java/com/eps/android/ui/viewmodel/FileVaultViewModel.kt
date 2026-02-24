@@ -204,6 +204,39 @@ class FileVaultViewModel @Inject constructor(
         }
     }
 
+    fun exportToPublicStorage(file: File) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val downloadsDir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS)
+                val destFile = java.io.File(downloadsDir, file.name)
+                
+                // Ensure unique name
+                var uniqueFile = destFile
+                var counter = 1
+                while (uniqueFile.exists()) {
+                    val name = destFile.nameWithoutExtension
+                    val ext = destFile.extension
+                    uniqueFile = java.io.File(downloadsDir, "${name}_($counter).$ext")
+                    counter++
+                }
+
+                file.inputStream().use { input ->
+                    java.io.FileOutputStream(uniqueFile).use { output ->
+                        input.copyTo(output)
+                    }
+                }
+                
+                withContext(Dispatchers.Main) {
+                    android.widget.Toast.makeText(context, "Fayl 'Downloads' papkasiga saqlandi!", android.widget.Toast.LENGTH_LONG).show()
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    android.widget.Toast.makeText(context, "Eksport xatosi: ${e.message}", android.widget.Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
     fun deleteFile(file: File) {
         if (file.exists()) {
             file.delete()

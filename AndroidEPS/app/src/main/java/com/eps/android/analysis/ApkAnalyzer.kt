@@ -12,7 +12,7 @@ class ApkAnalyzer @Inject constructor(
     private val auditor: AppRiskAuditor
 ) {
 
-    fun analyzeApk(context: Context, file: File): ApkVerdict {
+    suspend fun analyzeApk(context: Context, file: File): ApkVerdict {
         val pm = context.packageManager
         val packageInfo = pm.getPackageArchiveInfo(file.absolutePath, PackageManager.GET_PERMISSIONS)
         
@@ -97,13 +97,23 @@ class ApkAnalyzer @Inject constructor(
         )
     }
 
-    fun analyzeInstalledApp(context: Context, packageName: String): ApkVerdict {
+    suspend fun analyzeInstalledApp(context: Context, packageName: String): ApkVerdict {
         val pm = context.packageManager
         return try {
             val pkgInfo = pm.getPackageInfo(packageName, PackageManager.GET_PERMISSIONS)
             val permissions = pkgInfo.requestedPermissions?.toList() ?: emptyList()
             val isSystem = (pkgInfo.applicationInfo.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
-            val riskReport = auditor.auditPermissions(packageName, permissions, isSystem)
+            
+            // Check if installed from Play Store
+            val installer = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                try { pm.getInstallSourceInfo(packageName).installingPackageName } catch (e: Exception) { null }
+            } else {
+                @Suppress("DEPRECATION")
+                pm.getInstallerPackageName(packageName)
+            }
+            val isPlayStore = installer == "com.android.vending"
+
+            val riskReport = auditor.auditPermissions(packageName, permissions, isSystem, isPlayStore)
             
             ApkVerdict(packageName, permissions, riskReport)
         } catch (e: Exception) {

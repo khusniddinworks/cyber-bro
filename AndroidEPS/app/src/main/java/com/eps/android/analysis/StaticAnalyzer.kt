@@ -26,7 +26,7 @@ class StaticAnalyzer @Inject constructor(
         val aiScore: Float = 0f
     )
 
-    fun analyzeFile(file: File): FileVerdict {
+    suspend fun analyzeFile(file: File): FileVerdict {
         val hash = hashCalculator.calculateSha256(file)
         val entropy = entropyCalculator.calculateEntropy(file)
         

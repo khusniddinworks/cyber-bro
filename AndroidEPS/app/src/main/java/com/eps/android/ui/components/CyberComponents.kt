@@ -2,24 +2,19 @@ package com.eps.android.ui.components
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape
-import androidx.compose.material3.Text
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.text.font.FontWeight
@@ -159,15 +154,127 @@ fun HolographicShield(
 }
 
 @Composable
-fun CyberText(
-    text: String,
-    style: androidx.compose.ui.text.TextStyle = MaterialTheme.typography.bodyLarge,
-    color: Color = TextHolo
+fun CyberSecurityOrb(
+    modifier: Modifier = Modifier,
+    score: Int,
+    isResumed: Boolean
 ) {
-    Text(
-        text = text,
-        style = style,
-        color = color,
-        modifier = Modifier.padding(4.dp)
-    )
+    val infiniteTransition = rememberInfiniteTransition(label = "orb")
+    
+    // Complex rotations
+    val rotationInner by if (isResumed) {
+        infiniteTransition.animateFloat(
+            initialValue = 0f, targetValue = 360f,
+            animationSpec = infiniteRepeatable(tween(12000, easing = LinearEasing)), label = ""
+        )
+    } else remember { mutableStateOf(0f) }
+
+    val rotationOuter by if (isResumed) {
+        infiniteTransition.animateFloat(
+            initialValue = 360f, targetValue = 0f,
+            animationSpec = infiniteRepeatable(tween(20000, easing = LinearEasing)), label = ""
+        )
+    } else remember { mutableStateOf(0f) }
+
+    val pulseScale by if (isResumed) {
+        infiniteTransition.animateFloat(
+            initialValue = 0.95f, targetValue = 1.05f,
+            animationSpec = infiniteRepeatable(tween(2000, easing = FastOutSlowInEasing), RepeatMode.Reverse), label = ""
+        )
+    } else remember { mutableStateOf(1f) }
+
+    val orbColor = when {
+        score >= 90 -> GoldPremium
+        score >= 70 -> ElectricCyan
+        else -> LaserRed
+    }
+
+    Box(contentAlignment = Alignment.Center, modifier = modifier.size(280.dp)) {
+        // Ambient Glow
+        Box(
+            modifier = Modifier
+                .size(220.dp)
+                .background(orbColor.copy(alpha = 0.1f * pulseScale), CircleShape)
+                .blur(50.dp)
+        )
+
+        // Outer Tech Rings
+        Canvas(modifier = Modifier.size(260.dp)) {
+            val strokeWidth = 1.5.dp.toPx()
+            rotate(rotationOuter) {
+                // Dashed outer ring
+                drawArc(
+                    color = orbColor.copy(alpha = 0.2f),
+                    startAngle = 0f,
+                    sweepAngle = 360f,
+                    useCenter = false,
+                    style = Stroke(
+                        width = strokeWidth,
+                        cap = StrokeCap.Round,
+                        pathEffect = androidx.compose.ui.graphics.PathEffect.dashPathEffect(floatArrayOf(10f, 20f), 0f)
+                    )
+                )
+                
+                // Segments
+                for (i in 0 until 4) {
+                    drawArc(
+                        color = orbColor.copy(alpha = 0.5f),
+                        startAngle = i * 90f + 15f,
+                        sweepAngle = 60f,
+                        useCenter = false,
+                        style = Stroke(width = 3.dp.toPx(), cap = StrokeCap.Round)
+                    )
+                }
+            }
+        }
+
+        // Inner HUD Rings
+        Canvas(modifier = Modifier.size(210.dp)) {
+            rotate(rotationInner) {
+                drawArc(
+                    color = orbColor.copy(alpha = 0.4f),
+                    startAngle = 45f,
+                    sweepAngle = 270f,
+                    useCenter = false,
+                    style = Stroke(width = 1.dp.toPx())
+                )
+                
+                // Tech Bits
+                val radius = size.minDimension / 2
+                for (i in 0 until 8) {
+                    val angle = i * 45f
+                    val x = center.x + radius * kotlin.math.cos(Math.toRadians(angle.toDouble())).toFloat()
+                    val y = center.y + radius * kotlin.math.sin(Math.toRadians(angle.toDouble())).toFloat()
+                    drawCircle(orbColor.copy(alpha = 0.6f), radius = 3.dp.toPx(), center = Offset(x, y))
+                }
+            }
+        }
+
+        // Central Core
+        Surface(
+            modifier = Modifier.size(170.dp),
+            shape = CircleShape,
+            color = Color(0xFF030508).copy(alpha = 0.9f),
+            border = androidx.compose.foundation.BorderStroke(2.dp, Brush.linearGradient(listOf(orbColor, Color.Transparent, orbColor)))
+        ) {
+            Box(contentAlignment = Alignment.Center) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = "$score%",
+                        fontSize = 58.sp,
+                        color = orbColor,
+                        fontWeight = FontWeight.ExtraLight,
+                        style = MaterialTheme.typography.displayLarge
+                    )
+                    Text(
+                        text = if (score >= 90) "SECURE" else if (score >= 70) "PROTECTED" else "DANGER",
+                        fontSize = 10.sp,
+                        color = orbColor.copy(alpha = 0.7f),
+                        letterSpacing = 4.sp,
+                        fontWeight = FontWeight.Black
+                    )
+                }
+            }
+        }
+    }
 }

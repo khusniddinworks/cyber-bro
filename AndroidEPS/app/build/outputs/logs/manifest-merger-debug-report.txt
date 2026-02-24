@@ -1,21 +1,23 @@
 -- Merging decision tree log ---
 provider#androidx.core.content.FileProvider
-INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:33:9-41:20
+INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:36:9-44:20
 	android:grantUriPermissions
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:37:13-47
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:40:13-47
 	android:authorities
 		INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:35:13-64
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:38:13-64
 	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:36:13-37
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:39:13-37
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:34:13-62
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:37:13-62
 manifest
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:2:1-182:12
-INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:2:1-182:12
-INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:2:1-182:12
-INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:2:1-182:12
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:2:1-189:12
+INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:2:1-189:12
+INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:2:1-189:12
+INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:2:1-189:12
 MERGED from [com.google.accompanist:accompanist-permissions:0.32.0] C:\Users\ki770\.gradle\caches\transforms-3\1e5253c9b3a5e61c72d8af4da93f82b2\transformed\accompanist-permissions-0.32.0\AndroidManifest.xml:17:1-23:12
+MERGED from [com.google.ai.client.generativeai:generativeai:0.9.0] C:\Users\ki770\.gradle\caches\transforms-3\b744cb3dbbcf05fd4fcdd0cd9482b265\transformed\generativeai-0.9.0\AndroidManifest.xml:17:1-24:12
+MERGED from [com.google.ai.client.generativeai:common:0.8.0] C:\Users\ki770\.gradle\caches\transforms-3\20787320ca2de98b8dfac4b498a7a9b0\transformed\common-0.8.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.work:work-runtime-ktx:2.9.0] C:\Users\ki770\.gradle\caches\transforms-3\616be16d9b3676d712bd03fa2f8e3628\transformed\work-runtime-ktx-2.9.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.hilt:hilt-work:1.1.0] C:\Users\ki770\.gradle\caches\transforms-3\0efdd40c516072f1560694f17012d051\transformed\hilt-work-1.1.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.work:work-runtime:2.9.0] C:\Users\ki770\.gradle\caches\transforms-3\7e5f886887666b62de8ad8326808161d\transformed\work-runtime-2.9.0\AndroidManifest.xml:17:1-145:12
@@ -74,21 +76,28 @@ MERGED from [androidx.core:core:1.12.0] C:\Users\ki770\.gradle\caches\transforms
 MERGED from [androidx.lifecycle:lifecycle-runtime:2.6.2] C:\Users\ki770\.gradle\caches\transforms-3\474651a5e48f311a5eccbcfa09c15527\transformed\lifecycle-runtime-2.6.2\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2] C:\Users\ki770\.gradle\caches\transforms-3\9f28cf0538f6e53af9369c49f9988a54\transformed\lifecycle-viewmodel-compose-2.6.2\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] C:\Users\ki770\.gradle\caches\transforms-3\89bba1e7119334ba90d7169e95ed8ee6\transformed\lifecycle-runtime-ktx-2.6.2\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:17:1-55:12
 MERGED from [androidx.compose.runtime:runtime-saveable-android:1.5.4] C:\Users\ki770\.gradle\caches\transforms-3\a16e838ea89582d06a214244379426bd\transformed\runtime-saveable-release\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.compose.runtime:runtime-android:1.5.4] C:\Users\ki770\.gradle\caches\transforms-3\2ed57169027af42178f2440a4c5273ef\transformed\runtime-release\AndroidManifest.xml:2:1-7:12
+MERGED from [org.tensorflow:tensorflow-lite-support:0.4.4] C:\Users\ki770\.gradle\caches\transforms-3\833a3c13cda7d245f3c22ab9075144ae\transformed\tensorflow-lite-support-0.4.4\AndroidManifest.xml:2:1-5:12
+MERGED from [org.tensorflow:tensorflow-lite:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\b474585eab6336db86bf27a660d94a73\transformed\tensorflow-lite-2.14.0\AndroidManifest.xml:2:1-11:12
 MERGED from [com.jakewharton.timber:timber:5.0.1] C:\Users\ki770\.gradle\caches\transforms-3\73efb942e440ac920b4565e95d8c78ac\transformed\timber-5.0.1\AndroidManifest.xml:2:1-9:12
+MERGED from [net.zetetic:android-database-sqlcipher:4.5.4] C:\Users\ki770\.gradle\caches\transforms-3\3b32b35698232316ff179086b2734998\transformed\android-database-sqlcipher-4.5.4\AndroidManifest.xml:2:1-9:12
 MERGED from [androidx.sqlite:sqlite-framework:2.4.0] C:\Users\ki770\.gradle\caches\transforms-3\8061d69575fa05beef802df18a9e25d7\transformed\sqlite-framework-2.4.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.sqlite:sqlite:2.4.0] C:\Users\ki770\.gradle\caches\transforms-3\98843161a38eab442eecc462aae69fa1\transformed\sqlite-2.4.0\AndroidManifest.xml:17:1-22:12
+MERGED from [androidx.sqlite:sqlite-ktx:2.4.0] C:\Users\ki770\.gradle\caches\transforms-3\189301e72bc2b7700be99cc17e1d2cad\transformed\sqlite-ktx-2.4.0\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\18908036a2a1fb31adfa7082c376282d\transformed\annotation-experimental-1.3.0\AndroidManifest.xml:17:1-22:12
 MERGED from [io.github.aakira:napier-android-debug:1.4.1] C:\Users\ki770\.gradle\caches\transforms-3\6daedebe0aced9905933f89e06f5c5c6\transformed\napier-debug\AndroidManifest.xml:2:1-11:12
 MERGED from [androidx.cursoradapter:cursoradapter:1.0.0] C:\Users\ki770\.gradle\caches\transforms-3\36c0afd2cc473793b894beff0882ac47\transformed\cursoradapter-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.arch.core:core-runtime:2.2.0] C:\Users\ki770\.gradle\caches\transforms-3\b070a6ac0fada11b79ff1083b426dcfe\transformed\core-runtime-2.2.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\ki770\.gradle\caches\transforms-3\2e5f381220a53152b471c5754692a95d\transformed\interpolator-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\dbfa8cc55155e3fb9353042c53c659f4\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:17:1-55:12
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\b56e821c6c32ee8497d21e425ddb3429\transformed\startup-runtime-1.1.1\AndroidManifest.xml:17:1-33:12
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\ki770\.gradle\caches\transforms-3\e552e12e89a748e3f5394ccec61961a4\transformed\tracing-1.0.0\AndroidManifest.xml:17:1-24:12
+MERGED from [org.tensorflow:tensorflow-lite-support-api:0.4.4] C:\Users\ki770\.gradle\caches\transforms-3\d4ffa107afae33666d1427e707711058\transformed\tensorflow-lite-support-api-0.4.4\AndroidManifest.xml:2:1-5:12
+MERGED from [org.tensorflow:tensorflow-lite-api:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\3c7535c1556a2b48aa311141283c0191\transformed\tensorflow-lite-api-2.14.0\AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.dagger:dagger-lint-aar:2.48] C:\Users\ki770\.gradle\caches\transforms-3\ed5d1862761fd143bdc9f0a02cbabde8\transformed\dagger-lint-aar-2.48\AndroidManifest.xml:16:1-19:12
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\ki770\.gradle\caches\transforms-3\c10bb031b07b8f16861582a82f305a0c\transformed\image-1.0.0-beta1\AndroidManifest.xml:2:1-9:12
 	package
 		INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml
 	android:versionName
@@ -157,6 +166,10 @@ ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main
 		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:16:22-79
 uses-permission#android.permission.INTERNET
 ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:17:5-67
+MERGED from [com.google.ai.client.generativeai:generativeai:0.9.0] C:\Users\ki770\.gradle\caches\transforms-3\b744cb3dbbcf05fd4fcdd0cd9482b265\transformed\generativeai-0.9.0\AndroidManifest.xml:22:5-67
+MERGED from [com.google.ai.client.generativeai:generativeai:0.9.0] C:\Users\ki770\.gradle\caches\transforms-3\b744cb3dbbcf05fd4fcdd0cd9482b265\transformed\generativeai-0.9.0\AndroidManifest.xml:22:5-67
+MERGED from [com.google.ai.client.generativeai:common:0.8.0] C:\Users\ki770\.gradle\caches\transforms-3\20787320ca2de98b8dfac4b498a7a9b0\transformed\common-0.8.0\AndroidManifest.xml:22:5-67
+MERGED from [com.google.ai.client.generativeai:common:0.8.0] C:\Users\ki770\.gradle\caches\transforms-3\20787320ca2de98b8dfac4b498a7a9b0\transformed\common-0.8.0\AndroidManifest.xml:22:5-67
 	android:name
 		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:17:22-64
 uses-permission#android.permission.RECORD_AUDIO
@@ -167,19 +180,33 @@ uses-permission#android.permission.RECEIVE_SMS
 ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:19:5-70
 	android:name
 		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:19:22-67
+uses-permission#android.permission.READ_PHONE_STATE
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:20:5-75
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:20:22-72
+uses-permission#android.permission.VIBRATE
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:21:5-66
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:21:22-63
 uses-permission#android.permission.SYSTEM_ALERT_WINDOW
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:20:5-78
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:22:5-78
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:20:22-75
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:22:22-75
 uses-permission#android.permission.BIND_DEVICE_ADMIN
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:21:5-112
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:23:5-112
 	tools:ignore
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:21:74-109
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:23:74-109
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:21:22-73
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:23:22-73
+uses-permission#android.permission.BIND_ACCESSIBILITY_SERVICE
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:24:5-121
+	tools:ignore
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:24:83-118
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:24:22-82
 application
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:23:5-180:19
-INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:23:5-180:19
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:26:5-187:19
+INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:26:5-187:19
 MERGED from [androidx.work:work-runtime:2.9.0] C:\Users\ki770\.gradle\caches\transforms-3\7e5f886887666b62de8ad8326808161d\transformed\work-runtime-2.9.0\AndroidManifest.xml:28:5-143:19
 MERGED from [androidx.work:work-runtime:2.9.0] C:\Users\ki770\.gradle\caches\transforms-3\7e5f886887666b62de8ad8326808161d\transformed\work-runtime-2.9.0\AndroidManifest.xml:28:5-143:19
 MERGED from [androidx.room:room-runtime:2.6.0] C:\Users\ki770\.gradle\caches\transforms-3\2a2efe925a6f01435d1801fa4b514bbd\transformed\room-runtime-2.6.0\AndroidManifest.xml:23:5-29:19
@@ -190,256 +217,274 @@ MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\ki770\.gradle\
 MERGED from [androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\ki770\.gradle\caches\transforms-3\b2cd3c4313f39fae21ad449549bfe823\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:23:5-33:19
 MERGED from [androidx.core:core:1.12.0] C:\Users\ki770\.gradle\caches\transforms-3\a200b44be5daf0b9b0b60e4ce1f80071\transformed\core-1.12.0\AndroidManifest.xml:28:5-89
 MERGED from [androidx.core:core:1.12.0] C:\Users\ki770\.gradle\caches\transforms-3\a200b44be5daf0b9b0b60e4ce1f80071\transformed\core-1.12.0\AndroidManifest.xml:28:5-89
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:23:5-53:19
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:23:5-53:19
+MERGED from [org.tensorflow:tensorflow-lite:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\b474585eab6336db86bf27a660d94a73\transformed\tensorflow-lite-2.14.0\AndroidManifest.xml:9:5-20
+MERGED from [org.tensorflow:tensorflow-lite:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\b474585eab6336db86bf27a660d94a73\transformed\tensorflow-lite-2.14.0\AndroidManifest.xml:9:5-20
 MERGED from [com.jakewharton.timber:timber:5.0.1] C:\Users\ki770\.gradle\caches\transforms-3\73efb942e440ac920b4565e95d8c78ac\transformed\timber-5.0.1\AndroidManifest.xml:7:5-20
 MERGED from [com.jakewharton.timber:timber:5.0.1] C:\Users\ki770\.gradle\caches\transforms-3\73efb942e440ac920b4565e95d8c78ac\transformed\timber-5.0.1\AndroidManifest.xml:7:5-20
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\dbfa8cc55155e3fb9353042c53c659f4\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\dbfa8cc55155e3fb9353042c53c659f4\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:24:5-25:19
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:23:5-53:19
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:23:5-53:19
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\b56e821c6c32ee8497d21e425ddb3429\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\b56e821c6c32ee8497d21e425ddb3429\transformed\startup-runtime-1.1.1\AndroidManifest.xml:25:5-31:19
+MERGED from [org.tensorflow:tensorflow-lite-api:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\3c7535c1556a2b48aa311141283c0191\transformed\tensorflow-lite-api-2.14.0\AndroidManifest.xml:9:5-20
+MERGED from [org.tensorflow:tensorflow-lite-api:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\3c7535c1556a2b48aa311141283c0191\transformed\tensorflow-lite-api-2.14.0\AndroidManifest.xml:9:5-20
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\ki770\.gradle\caches\transforms-3\c10bb031b07b8f16861582a82f305a0c\transformed\image-1.0.0-beta1\AndroidManifest.xml:7:5-20
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\ki770\.gradle\caches\transforms-3\c10bb031b07b8f16861582a82f305a0c\transformed\image-1.0.0-beta1\AndroidManifest.xml:7:5-20
 	android:extractNativeLibs
 		INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml
 	android:appComponentFactory
 		ADDED from [androidx.core:core:1.12.0] C:\Users\ki770\.gradle\caches\transforms-3\a200b44be5daf0b9b0b60e4ce1f80071\transformed\core-1.12.0\AndroidManifest.xml:28:18-86
 	android:supportsRtl
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:29:9-35
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:32:9-35
 	android:label
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:27:9-41
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:30:9-41
 	android:roundIcon
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:28:9-50
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:31:9-50
 	tools:targetApi
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:31:9-29
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:34:9-29
 	android:icon
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:26:9-45
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:29:9-45
 	android:allowBackup
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:25:9-35
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:28:9-35
 	android:theme
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:30:9-50
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:33:9-50
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:24:9-39
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:27:9-39
 activity#com.eps.android.MainActivity
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:43:9-62:20
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:46:9-55:20
+	android:launchMode
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:50:13-43
 	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:45:13-36
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:48:13-36
 	android:theme
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:46:13-54
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:49:13-54
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:44:13-41
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:47:13-41
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:47:13-50:29
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:51:13-54:29
 action#android.intent.action.MAIN
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:48:17-69
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:52:17-69
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:48:25-66
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:52:25-66
 category#android.intent.category.LAUNCHER
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:49:17-77
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:53:17-77
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:49:27-74
-intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:host:*+data:scheme:http+data:scheme:https
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:53:13-61:29
-	android:autoVerify
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:53:28-53
-action#android.intent.action.VIEW
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:54:17-69
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:54:25-66
-category#android.intent.category.DEFAULT
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:55:17-76
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:55:27-73
-category#android.intent.category.BROWSABLE
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:56:17-78
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:56:27-75
-data
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:57:17-47
-	android:host
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:60:23-39
-	android:scheme
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:57:23-44
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:53:27-74
 service#com.eps.android.core.EpsMonitoringService
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:65:9-69:56
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:58:9-62:56
 	android:enabled
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:67:13-35
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:60:13-35
+	android:exported
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:61:13-37
+	android:foregroundServiceType
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:62:13-53
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:59:13-54
+service#com.eps.android.core.PhishingAccessibilityService
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:65:9-76:19
+	android:label
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:69:13-62
 	android:exported
 		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:68:13-37
-	android:foregroundServiceType
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:69:13-53
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:66:13-54
-service#com.eps.android.core.EpsNotificationListener
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:72:9-80:19
-	android:label
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:74:13-45
-	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:76:13-36
 	android:permission
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:75:13-87
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:67:13-79
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:73:13-57
-intent-filter#action:name:android.service.notification.NotificationListenerService
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:77:13-79:29
-action#android.service.notification.NotificationListenerService
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:78:17-99
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:78:25-96
-service#com.eps.android.core.AntiPhishingVpnService
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:83:9-90:19
-	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:86:13-37
-	android:permission
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:85:13-69
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:84:13-56
-intent-filter#action:name:android.service.quicksettings.action.QS_TILE
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:87:13-89:29
-action#android.service.quicksettings.action.QS_TILE
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:88:17-87
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:88:25-84
-service#com.eps.android.core.PhishingAccessibilityService
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:93:9-103:19
-	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:96:13-36
-	android:permission
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:95:13-79
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:94:13-62
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:66:13-62
 intent-filter#action:name:android.accessibilityservice.AccessibilityService
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:97:13-99:29
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:70:13-72:29
 action#android.accessibilityservice.AccessibilityService
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:98:17-92
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:71:17-92
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:98:25-89
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:71:25-89
 meta-data#android.accessibilityservice
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:100:13-102:72
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:73:13-75:72
 	android:resource
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:102:17-69
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:75:17-69
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:101:17-60
-activity#com.eps.android.core.PhishingWarningActivity
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:106:9-109:75
-	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:108:13-37
-	android:theme
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:109:13-72
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:107:13-57
-receiver#com.eps.android.core.BootReceiver
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:112:9-118:20
-	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:114:13-37
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:113:13-46
-intent-filter#action:name:android.intent.action.BOOT_COMPLETED
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:115:13-117:29
-action#android.intent.action.BOOT_COMPLETED
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:116:17-79
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:116:25-76
-receiver#com.eps.android.core.PackageEventReceiver
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:121:9-129:20
-	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:123:13-36
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:122:13-54
-intent-filter#action:name:android.intent.action.PACKAGE_ADDED+action:name:android.intent.action.PACKAGE_REPLACED+data:scheme:package
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:124:13-128:29
-action#android.intent.action.PACKAGE_ADDED
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:125:17-78
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:125:25-75
-action#android.intent.action.PACKAGE_REPLACED
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:126:17-81
-	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:126:25-78
-receiver#com.eps.android.core.SecurityAdminReceiver
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:132:9-143:20
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:74:17-60
+service#com.eps.android.core.EpsNotificationListener
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:81:9-89:19
 	android:label
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:134:13-65
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:83:13-62
 	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:136:13-36
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:85:13-36
 	android:permission
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:135:13-70
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:84:13-87
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:133:13-55
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:82:13-57
+intent-filter#action:name:android.service.notification.NotificationListenerService
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:86:13-88:29
+action#android.service.notification.NotificationListenerService
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:87:17-99
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:87:25-96
+receiver#com.eps.android.core.SecurityAdminReceiver
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:92:9-104:20
+	android:label
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:94:13-55
+	android:exported
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:97:13-36
+	android:permission
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:96:13-70
+	android:description
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:95:13-67
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:93:13-55
 meta-data#android.app.device_admin
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:137:13-139:62
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:98:13-100:62
 	android:resource
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:139:17-59
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:100:17-59
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:138:17-56
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:99:17-56
 intent-filter#action:name:android.app.action.DEVICE_ADMIN_ENABLED
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:140:13-142:29
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:101:13-103:29
 action#android.app.action.DEVICE_ADMIN_ENABLED
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:141:17-82
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:102:17-82
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:141:25-79
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:102:25-79
 receiver#com.eps.android.core.SmsReceiver
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:146:9-153:20
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:107:9-114:20
 	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:149:13-36
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:110:13-36
 	android:permission
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:148:13-66
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:109:13-66
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:147:13-45
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:108:13-45
 intent-filter#action:name:android.provider.Telephony.SMS_RECEIVED
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:150:13-152:29
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:111:13-113:29
 	android:priority
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:150:28-50
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:111:28-50
 action#android.provider.Telephony.SMS_RECEIVED
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:151:17-82
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:112:17-82
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:151:25-79
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:112:25-79
+receiver#com.eps.android.core.BootReceiver
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:117:9-124:20
+	android:exported
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:119:13-36
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:118:13-46
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED+category:name:android.intent.category.DEFAULT
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:120:13-123:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:121:17-79
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:121:25-76
+category#android.intent.category.DEFAULT
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:122:17-76
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:122:27-73
+receiver#com.eps.android.core.PackageEventReceiver
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:127:9-135:20
+	android:exported
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:129:13-36
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:128:13-54
+intent-filter#action:name:android.intent.action.PACKAGE_ADDED+action:name:android.intent.action.PACKAGE_REMOVED+data:scheme:package
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:130:13-134:29
+action#android.intent.action.PACKAGE_ADDED
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:131:17-78
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:131:25-75
+action#android.intent.action.PACKAGE_REMOVED
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:132:17-80
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:132:25-77
+data
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:133:17-50
+	android:scheme
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:133:23-47
 receiver#com.eps.android.core.ThreatActionReceiver
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:156:9-162:20
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:138:9-144:20
 	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:158:13-37
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:140:13-37
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:157:13-54
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:139:13-54
 intent-filter#action:name:com.eps.android.ACTION_DELETE_FILE
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:159:13-161:29
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:141:13-143:29
 action#com.eps.android.ACTION_DELETE_FILE
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:160:17-77
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:142:17-77
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:160:25-74
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:142:25-74
 activity#com.eps.android.ui.activities.ThreatAlertActivity
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:165:9-169:46
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:147:9-151:46
 	android:launchMode
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:169:13-43
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:151:13-43
 	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:167:13-37
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:149:13-37
 	android:theme
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:168:13-54
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:150:13-54
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:166:13-62
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:148:13-62
 activity#com.eps.android.ui.screens.VishingAlertActivity
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:172:9-178:51
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:154:9-160:51
 	android:showForAllUsers
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:175:13-43
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:157:13-43
 	android:launchMode
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:178:13-48
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:160:13-48
 	android:exported
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:174:13-37
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:156:13-37
 	android:showOnLockScreen
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:176:13-44
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:158:13-44
 	android:theme
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:177:13-54
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:159:13-54
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:173:13-60
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:155:13-60
+activity#com.eps.android.ui.activities.UrlGuardActivity
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:163:9-178:20
+	android:excludeFromRecents
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:169:13-46
+	android:launchMode
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:167:13-43
+	android:noHistory
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:168:13-37
+	android:exported
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:165:13-36
+	android:theme
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:166:13-54
+	android:taskAffinity
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:170:13-60
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:164:13-59
+intent-filter#action:name:android.intent.action.VIEW+category:name:android.intent.category.BROWSABLE+category:name:android.intent.category.DEFAULT+data:scheme:http+data:scheme:https
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:171:13-177:29
+	android:label
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:171:28-73
+action#android.intent.action.VIEW
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:172:17-69
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:172:25-66
+category#android.intent.category.BROWSABLE
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:174:17-78
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:174:27-75
+activity#com.eps.android.core.PhishingWarningActivity
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:181:9-185:46
+	android:launchMode
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:185:13-43
+	android:exported
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:183:13-37
+	android:theme
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:184:13-54
+	android:name
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:182:13-57
 meta-data#android.support.FILE_PROVIDER_PATHS
-ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:38:13-40:58
+ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:41:13-43:58
 	android:resource
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:40:17-55
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:43:17-55
 	android:name
-		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:39:17-67
+		ADDED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml:42:17-67
 uses-sdk
 INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml
 INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml
 MERGED from [com.google.accompanist:accompanist-permissions:0.32.0] C:\Users\ki770\.gradle\caches\transforms-3\1e5253c9b3a5e61c72d8af4da93f82b2\transformed\accompanist-permissions-0.32.0\AndroidManifest.xml:21:5-44
 MERGED from [com.google.accompanist:accompanist-permissions:0.32.0] C:\Users\ki770\.gradle\caches\transforms-3\1e5253c9b3a5e61c72d8af4da93f82b2\transformed\accompanist-permissions-0.32.0\AndroidManifest.xml:21:5-44
+MERGED from [com.google.ai.client.generativeai:generativeai:0.9.0] C:\Users\ki770\.gradle\caches\transforms-3\b744cb3dbbcf05fd4fcdd0cd9482b265\transformed\generativeai-0.9.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.ai.client.generativeai:generativeai:0.9.0] C:\Users\ki770\.gradle\caches\transforms-3\b744cb3dbbcf05fd4fcdd0cd9482b265\transformed\generativeai-0.9.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.ai.client.generativeai:common:0.8.0] C:\Users\ki770\.gradle\caches\transforms-3\20787320ca2de98b8dfac4b498a7a9b0\transformed\common-0.8.0\AndroidManifest.xml:20:5-44
+MERGED from [com.google.ai.client.generativeai:common:0.8.0] C:\Users\ki770\.gradle\caches\transforms-3\20787320ca2de98b8dfac4b498a7a9b0\transformed\common-0.8.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.work:work-runtime-ktx:2.9.0] C:\Users\ki770\.gradle\caches\transforms-3\616be16d9b3676d712bd03fa2f8e3628\transformed\work-runtime-ktx-2.9.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.work:work-runtime-ktx:2.9.0] C:\Users\ki770\.gradle\caches\transforms-3\616be16d9b3676d712bd03fa2f8e3628\transformed\work-runtime-ktx-2.9.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.hilt:hilt-work:1.1.0] C:\Users\ki770\.gradle\caches\transforms-3\0efdd40c516072f1560694f17012d051\transformed\hilt-work-1.1.0\AndroidManifest.xml:20:5-44
@@ -556,16 +601,26 @@ MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2] C:\Users\ki77
 MERGED from [androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2] C:\Users\ki770\.gradle\caches\transforms-3\9f28cf0538f6e53af9369c49f9988a54\transformed\lifecycle-viewmodel-compose-2.6.2\AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] C:\Users\ki770\.gradle\caches\transforms-3\89bba1e7119334ba90d7169e95ed8ee6\transformed\lifecycle-runtime-ktx-2.6.2\AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-runtime-ktx:2.6.2] C:\Users\ki770\.gradle\caches\transforms-3\89bba1e7119334ba90d7169e95ed8ee6\transformed\lifecycle-runtime-ktx-2.6.2\AndroidManifest.xml:20:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:21:5-44
+MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:21:5-44
 MERGED from [androidx.compose.runtime:runtime-saveable-android:1.5.4] C:\Users\ki770\.gradle\caches\transforms-3\a16e838ea89582d06a214244379426bd\transformed\runtime-saveable-release\AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.runtime:runtime-saveable-android:1.5.4] C:\Users\ki770\.gradle\caches\transforms-3\a16e838ea89582d06a214244379426bd\transformed\runtime-saveable-release\AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.runtime:runtime-android:1.5.4] C:\Users\ki770\.gradle\caches\transforms-3\2ed57169027af42178f2440a4c5273ef\transformed\runtime-release\AndroidManifest.xml:5:5-44
 MERGED from [androidx.compose.runtime:runtime-android:1.5.4] C:\Users\ki770\.gradle\caches\transforms-3\2ed57169027af42178f2440a4c5273ef\transformed\runtime-release\AndroidManifest.xml:5:5-44
+MERGED from [org.tensorflow:tensorflow-lite-support:0.4.4] C:\Users\ki770\.gradle\caches\transforms-3\833a3c13cda7d245f3c22ab9075144ae\transformed\tensorflow-lite-support-0.4.4\AndroidManifest.xml:4:3-71
+MERGED from [org.tensorflow:tensorflow-lite-support:0.4.4] C:\Users\ki770\.gradle\caches\transforms-3\833a3c13cda7d245f3c22ab9075144ae\transformed\tensorflow-lite-support-0.4.4\AndroidManifest.xml:4:3-71
+MERGED from [org.tensorflow:tensorflow-lite:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\b474585eab6336db86bf27a660d94a73\transformed\tensorflow-lite-2.14.0\AndroidManifest.xml:6:5-7:38
+MERGED from [org.tensorflow:tensorflow-lite:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\b474585eab6336db86bf27a660d94a73\transformed\tensorflow-lite-2.14.0\AndroidManifest.xml:6:5-7:38
 MERGED from [com.jakewharton.timber:timber:5.0.1] C:\Users\ki770\.gradle\caches\transforms-3\73efb942e440ac920b4565e95d8c78ac\transformed\timber-5.0.1\AndroidManifest.xml:5:5-44
 MERGED from [com.jakewharton.timber:timber:5.0.1] C:\Users\ki770\.gradle\caches\transforms-3\73efb942e440ac920b4565e95d8c78ac\transformed\timber-5.0.1\AndroidManifest.xml:5:5-44
+MERGED from [net.zetetic:android-database-sqlcipher:4.5.4] C:\Users\ki770\.gradle\caches\transforms-3\3b32b35698232316ff179086b2734998\transformed\android-database-sqlcipher-4.5.4\AndroidManifest.xml:5:5-7:41
+MERGED from [net.zetetic:android-database-sqlcipher:4.5.4] C:\Users\ki770\.gradle\caches\transforms-3\3b32b35698232316ff179086b2734998\transformed\android-database-sqlcipher-4.5.4\AndroidManifest.xml:5:5-7:41
 MERGED from [androidx.sqlite:sqlite-framework:2.4.0] C:\Users\ki770\.gradle\caches\transforms-3\8061d69575fa05beef802df18a9e25d7\transformed\sqlite-framework-2.4.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.sqlite:sqlite-framework:2.4.0] C:\Users\ki770\.gradle\caches\transforms-3\8061d69575fa05beef802df18a9e25d7\transformed\sqlite-framework-2.4.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.sqlite:sqlite:2.4.0] C:\Users\ki770\.gradle\caches\transforms-3\98843161a38eab442eecc462aae69fa1\transformed\sqlite-2.4.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.sqlite:sqlite:2.4.0] C:\Users\ki770\.gradle\caches\transforms-3\98843161a38eab442eecc462aae69fa1\transformed\sqlite-2.4.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.sqlite:sqlite-ktx:2.4.0] C:\Users\ki770\.gradle\caches\transforms-3\189301e72bc2b7700be99cc17e1d2cad\transformed\sqlite-ktx-2.4.0\AndroidManifest.xml:5:5-44
+MERGED from [androidx.sqlite:sqlite-ktx:2.4.0] C:\Users\ki770\.gradle\caches\transforms-3\189301e72bc2b7700be99cc17e1d2cad\transformed\sqlite-ktx-2.4.0\AndroidManifest.xml:5:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\18908036a2a1fb31adfa7082c376282d\transformed\annotation-experimental-1.3.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\18908036a2a1fb31adfa7082c376282d\transformed\annotation-experimental-1.3.0\AndroidManifest.xml:20:5-44
 MERGED from [io.github.aakira:napier-android-debug:1.4.1] C:\Users\ki770\.gradle\caches\transforms-3\6daedebe0aced9905933f89e06f5c5c6\transformed\napier-debug\AndroidManifest.xml:7:5-9:41
@@ -578,14 +633,18 @@ MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\ki770\.gradle\ca
 MERGED from [androidx.interpolator:interpolator:1.0.0] C:\Users\ki770\.gradle\caches\transforms-3\2e5f381220a53152b471c5754692a95d\transformed\interpolator-1.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\dbfa8cc55155e3fb9353042c53c659f4\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\dbfa8cc55155e3fb9353042c53c659f4\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:21:5-44
-MERGED from [androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\ki770\.gradle\caches\transforms-3\a3bc6def3264f33a38b583b31820a85e\transformed\profileinstaller-1.3.0\AndroidManifest.xml:21:5-44
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\b56e821c6c32ee8497d21e425ddb3429\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.startup:startup-runtime:1.1.1] C:\Users\ki770\.gradle\caches\transforms-3\b56e821c6c32ee8497d21e425ddb3429\transformed\startup-runtime-1.1.1\AndroidManifest.xml:21:5-23:41
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\ki770\.gradle\caches\transforms-3\e552e12e89a748e3f5394ccec61961a4\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\ki770\.gradle\caches\transforms-3\e552e12e89a748e3f5394ccec61961a4\transformed\tracing-1.0.0\AndroidManifest.xml:20:5-22:41
+MERGED from [org.tensorflow:tensorflow-lite-support-api:0.4.4] C:\Users\ki770\.gradle\caches\transforms-3\d4ffa107afae33666d1427e707711058\transformed\tensorflow-lite-support-api-0.4.4\AndroidManifest.xml:4:3-71
+MERGED from [org.tensorflow:tensorflow-lite-support-api:0.4.4] C:\Users\ki770\.gradle\caches\transforms-3\d4ffa107afae33666d1427e707711058\transformed\tensorflow-lite-support-api-0.4.4\AndroidManifest.xml:4:3-71
+MERGED from [org.tensorflow:tensorflow-lite-api:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\3c7535c1556a2b48aa311141283c0191\transformed\tensorflow-lite-api-2.14.0\AndroidManifest.xml:6:5-7:38
+MERGED from [org.tensorflow:tensorflow-lite-api:2.14.0] C:\Users\ki770\.gradle\caches\transforms-3\3c7535c1556a2b48aa311141283c0191\transformed\tensorflow-lite-api-2.14.0\AndroidManifest.xml:6:5-7:38
 MERGED from [com.google.dagger:dagger-lint-aar:2.48] C:\Users\ki770\.gradle\caches\transforms-3\ed5d1862761fd143bdc9f0a02cbabde8\transformed\dagger-lint-aar-2.48\AndroidManifest.xml:18:3-42
 MERGED from [com.google.dagger:dagger-lint-aar:2.48] C:\Users\ki770\.gradle\caches\transforms-3\ed5d1862761fd143bdc9f0a02cbabde8\transformed\dagger-lint-aar-2.48\AndroidManifest.xml:18:3-42
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\ki770\.gradle\caches\transforms-3\c10bb031b07b8f16861582a82f305a0c\transformed\image-1.0.0-beta1\AndroidManifest.xml:5:5-44
+MERGED from [com.google.android.odml:image:1.0.0-beta1] C:\Users\ki770\.gradle\caches\transforms-3\c10bb031b07b8f16861582a82f305a0c\transformed\image-1.0.0-beta1\AndroidManifest.xml:5:5-44
 	android:targetSdkVersion
 		INJECTED from C:\Users\ki770\OneDrive\Desktop\CYBER BROTHER\AndroidEPS\app\src\main\AndroidManifest.xml
 	android:minSdkVersion

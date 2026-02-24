@@ -30,22 +30,30 @@ public final class EpsDatabase_Impl extends EpsDatabase {
 
   private volatile BlacklistDao _blacklistDao;
 
+  private volatile UrlScanCacheDao _urlScanCacheDao;
+
+  private volatile TrustedAppDao _trustedAppDao;
+
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(2) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(4) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `threat_events` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `timestamp` INTEGER NOT NULL, `type` TEXT NOT NULL, `severity` TEXT NOT NULL, `source` TEXT NOT NULL, `details` TEXT NOT NULL, `isResolved` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `blacklist` (`domain` TEXT NOT NULL, `reason` TEXT NOT NULL, `addedAt` INTEGER NOT NULL, PRIMARY KEY(`domain`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `url_scan_cache` (`url` TEXT NOT NULL, `isSecure` INTEGER NOT NULL, `maliciousCount` INTEGER NOT NULL, `scannerCount` INTEGER NOT NULL, `timestamp` INTEGER NOT NULL, PRIMARY KEY(`url`))");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `trusted_apps` (`packageName` TEXT NOT NULL, `addedAt` INTEGER NOT NULL, PRIMARY KEY(`packageName`))");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3a5f12165d8a9687cc35088873139371')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '8354b1efa094ceb72989ad8cf3f0aabc')");
       }
 
       @Override
       public void dropAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("DROP TABLE IF EXISTS `threat_events`");
         db.execSQL("DROP TABLE IF EXISTS `blacklist`");
+        db.execSQL("DROP TABLE IF EXISTS `url_scan_cache`");
+        db.execSQL("DROP TABLE IF EXISTS `trusted_apps`");
         final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
         if (_callbacks != null) {
           for (RoomDatabase.Callback _callback : _callbacks) {
@@ -119,9 +127,36 @@ public final class EpsDatabase_Impl extends EpsDatabase {
                   + " Expected:\n" + _infoBlacklist + "\n"
                   + " Found:\n" + _existingBlacklist);
         }
+        final HashMap<String, TableInfo.Column> _columnsUrlScanCache = new HashMap<String, TableInfo.Column>(5);
+        _columnsUrlScanCache.put("url", new TableInfo.Column("url", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsUrlScanCache.put("isSecure", new TableInfo.Column("isSecure", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsUrlScanCache.put("maliciousCount", new TableInfo.Column("maliciousCount", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsUrlScanCache.put("scannerCount", new TableInfo.Column("scannerCount", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsUrlScanCache.put("timestamp", new TableInfo.Column("timestamp", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysUrlScanCache = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesUrlScanCache = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoUrlScanCache = new TableInfo("url_scan_cache", _columnsUrlScanCache, _foreignKeysUrlScanCache, _indicesUrlScanCache);
+        final TableInfo _existingUrlScanCache = TableInfo.read(db, "url_scan_cache");
+        if (!_infoUrlScanCache.equals(_existingUrlScanCache)) {
+          return new RoomOpenHelper.ValidationResult(false, "url_scan_cache(com.eps.android.data.UrlScanCache).\n"
+                  + " Expected:\n" + _infoUrlScanCache + "\n"
+                  + " Found:\n" + _existingUrlScanCache);
+        }
+        final HashMap<String, TableInfo.Column> _columnsTrustedApps = new HashMap<String, TableInfo.Column>(2);
+        _columnsTrustedApps.put("packageName", new TableInfo.Column("packageName", "TEXT", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsTrustedApps.put("addedAt", new TableInfo.Column("addedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysTrustedApps = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesTrustedApps = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoTrustedApps = new TableInfo("trusted_apps", _columnsTrustedApps, _foreignKeysTrustedApps, _indicesTrustedApps);
+        final TableInfo _existingTrustedApps = TableInfo.read(db, "trusted_apps");
+        if (!_infoTrustedApps.equals(_existingTrustedApps)) {
+          return new RoomOpenHelper.ValidationResult(false, "trusted_apps(com.eps.android.data.TrustedApp).\n"
+                  + " Expected:\n" + _infoTrustedApps + "\n"
+                  + " Found:\n" + _existingTrustedApps);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "3a5f12165d8a9687cc35088873139371", "b25c9eb58d53c1f46a9d8995995b2259");
+    }, "8354b1efa094ceb72989ad8cf3f0aabc", "03bf6cea0f5ad512a8c541afb991e7b1");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -132,7 +167,7 @@ public final class EpsDatabase_Impl extends EpsDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "threat_events","blacklist");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "threat_events","blacklist","url_scan_cache","trusted_apps");
   }
 
   @Override
@@ -143,6 +178,8 @@ public final class EpsDatabase_Impl extends EpsDatabase {
       super.beginTransaction();
       _db.execSQL("DELETE FROM `threat_events`");
       _db.execSQL("DELETE FROM `blacklist`");
+      _db.execSQL("DELETE FROM `url_scan_cache`");
+      _db.execSQL("DELETE FROM `trusted_apps`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -159,6 +196,8 @@ public final class EpsDatabase_Impl extends EpsDatabase {
     final HashMap<Class<?>, List<Class<?>>> _typeConvertersMap = new HashMap<Class<?>, List<Class<?>>>();
     _typeConvertersMap.put(ThreatEventDao.class, ThreatEventDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(BlacklistDao.class, BlacklistDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(UrlScanCacheDao.class, UrlScanCacheDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(TrustedAppDao.class, TrustedAppDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -201,6 +240,34 @@ public final class EpsDatabase_Impl extends EpsDatabase {
           _blacklistDao = new BlacklistDao_Impl(this);
         }
         return _blacklistDao;
+      }
+    }
+  }
+
+  @Override
+  public UrlScanCacheDao urlScanCacheDao() {
+    if (_urlScanCacheDao != null) {
+      return _urlScanCacheDao;
+    } else {
+      synchronized(this) {
+        if(_urlScanCacheDao == null) {
+          _urlScanCacheDao = new UrlScanCacheDao_Impl(this);
+        }
+        return _urlScanCacheDao;
+      }
+    }
+  }
+
+  @Override
+  public TrustedAppDao trustedAppDao() {
+    if (_trustedAppDao != null) {
+      return _trustedAppDao;
+    } else {
+      synchronized(this) {
+        if(_trustedAppDao == null) {
+          _trustedAppDao = new TrustedAppDao_Impl(this);
+        }
+        return _trustedAppDao;
       }
     }
   }

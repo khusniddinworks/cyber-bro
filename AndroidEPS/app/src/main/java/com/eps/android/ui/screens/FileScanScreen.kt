@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.eps.android.R
 import com.eps.android.ui.theme.*
+import com.eps.android.ui.components.CyberDecodingOverlay
 import com.eps.android.ui.viewmodel.FileScanViewModel
 
 @Composable
@@ -130,12 +131,19 @@ fun FileScanScreen(
             Text(stringResource(R.string.label_apks_found, results.size), color = GoldMuted, fontSize = 12.sp)
             Spacer(modifier = Modifier.height(16.dp))
 
+            val isDeepScanningByFile by viewModel.isDeepScanning.collectAsState()
+
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(results) { item ->
-                    FileResultCard(item, onDelete = { viewModel.deleteFile(item.file) })
+                    FileResultCard(
+                        item = item, 
+                        isDecoding = isDeepScanningByFile == item.file,
+                        onDecode = { viewModel.deepDecodeApk(item.file) },
+                        onDelete = { viewModel.deleteFile(item.file) }
+                    )
                 }
             }
         }
@@ -143,7 +151,12 @@ fun FileScanScreen(
 }
 
 @Composable
-fun FileResultCard(item: FileScanViewModel.ScannedFile, onDelete: () -> Unit) {
+fun FileResultCard(
+    item: FileScanViewModel.ScannedFile, 
+    isDecoding: Boolean,
+    onDecode: () -> Unit,
+    onDelete: () -> Unit
+) {
     val isMalicious = item.aiVerdict != null && item.aiVerdict.probability > 0.85f
     val isSuspicious = item.verdict.isSuspicious
     
@@ -159,7 +172,7 @@ fun FileResultCard(item: FileScanViewModel.ScannedFile, onDelete: () -> Unit) {
         else -> stringResource(R.string.status_clean)
     }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
@@ -172,14 +185,42 @@ fun FileResultCard(item: FileScanViewModel.ScannedFile, onDelete: () -> Unit) {
             Column(modifier = Modifier.weight(1f)) {
                 Text(item.file.name, color = Color.White, fontSize = 14.sp, fontWeight = FontWeight.Bold, maxLines = 1)
                 Text(statusText, color = statusColor, fontSize = 10.sp, fontWeight = FontWeight.Black)
-                if (isSuspicious || isMalicious) {
-                    Text(item.verdict.reason, color = Color.Gray, fontSize = 10.sp)
+            }
+            
+            if (item.decodedInfo == null) {
+                TextButton(onClick = onDecode, enabled = !isDecoding) {
+                    if (isDecoding) CircularProgressIndicator(modifier = Modifier.size(14.dp), color = GoldPremium, strokeWidth = 2.dp)
+                    else Text("DECODE", color = GoldPremium, fontSize = 11.sp, fontWeight = FontWeight.Black)
                 }
             }
+
             if (isMalicious || isSuspicious) {
                 IconButton(onClick = onDelete) {
-                    Icon(Icons.Default.DeleteForever, contentDescription = null, tint = Color.Red)
+                    Icon(Icons.Default.DeleteForever, contentDescription = null, tint = Color.Red.copy(alpha=0.6f))
                 }
+            }
+        }
+
+        if (item.decodedInfo != null) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Divider(color = Color.White.copy(alpha=0.05f))
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            CyberDecodingOverlay(
+                progress = 1.0f,
+                statusText = "MANBA KODI TAHLILI YAKUNLANDI"
+            )
+            
+            Spacer(modifier = Modifier.height(8.dp))
+            
+            item.decodedInfo.forEach { info ->
+                Text(
+                    text = "> $info",
+                    color = if(info.contains("DECODED")) Color.Gray else MatrixGreen,
+                    fontSize = 9.sp,
+                    fontFamily = androidx.compose.ui.text.font.FontFamily.Monospace,
+                    modifier = Modifier.padding(vertical = 2.dp)
+                )
             }
         }
     }

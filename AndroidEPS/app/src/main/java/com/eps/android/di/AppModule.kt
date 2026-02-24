@@ -22,7 +22,7 @@ object AppModule {
         return Room.databaseBuilder(
             context,
             EpsDatabase::class.java,
-            "hackdefender_secure.db"
+            "hackdefender_secure_v2.db"
         ).fallbackToDestructiveMigration()
          .build()
     }
@@ -35,6 +35,16 @@ object AppModule {
     @Provides
     fun provideBlacklistDao(db: EpsDatabase): BlacklistDao {
         return db.blacklistDao()
+    }
+
+    @Provides
+    fun provideUrlScanCacheDao(db: EpsDatabase): com.eps.android.data.UrlScanCacheDao {
+        return db.urlScanCacheDao()
+    }
+
+    @Provides
+    fun provideTrustedAppDao(db: EpsDatabase): com.eps.android.data.TrustedAppDao {
+        return db.trustedAppDao()
     }
 
     @Provides

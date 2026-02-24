@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Cyber Brother PRO</string>
+    <string name="app_name">Cyber Brother</string>
     
     <!-- Dashboard -->
     <string name="nav_home">Главная</string>
@@ -14,7 +14,7 @@
     <string name="status_secure">ЗАЩИЩЕНО</string>
     <string name="status_risk">ПОД УГРОЗОЙ</string>
     
-    <string name="feat_vpn">VPN Щит</string>
+
     <string name="feat_audit">Аудит Приложений</string>
     <string name="feat_vault">Файловый Сейф</string>
     <string name="feat_ai">AI Помощник</string>
@@ -60,8 +60,7 @@
     
     <string name="label_language">ЯЗЫК</string>
     <string name="label_core_shield">ОСНОВНОЙ ЩИТ</string>
-    <string name="setting_vpn_auto">VPN Авто-подключение</string>
-    <string name="setting_vpn_desc">Запуск защиты при загрузке</string>
+
     <string name="label_sensitivity">Чувствительность</string>
     <string name="label_sensitivity_desc">Агрессивность нейроанализа</string>
 
@@ -109,7 +108,7 @@
     <string name="btn_grant">ЗАПУСТИТЬ ЗАЩИТУ</string>
 
 
-    <string name="accessibility_service_description">Cyber Brother PRO обнаруживает и блокирует опасные ссылки. Весь анализ на 100% выполняется на устройстве.</string>
+    <string name="accessibility_service_description">Cyber Brother обнаруживает и блокирует опасные ссылки. Весь анализ на 100% выполняется на устройстве.</string>
 
     <!-- App Listing -->
     <string name="title_app_list">Анализ Приложений</string>

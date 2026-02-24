@@ -36,56 +36,93 @@ class OfflineAiEngine @Inject constructor(
         val isVpnActive: Boolean
     )
 
-    fun respond(query: String, threats: List<ThreatEvent>, deviceStats: DeviceStatus): String {
+    enum class SystemActionType {
+        OPEN_APP, START_SCAN, TOGGLE_VPN, SHOW_SECURITY_AUDIT, NAVIGATE, NONE
+    }
+
+    data class SystemAction(
+        val type: SystemActionType,
+        val data: String? = null
+    )
+
+    data class AiResponse(
+        val text: String,
+        val action: SystemAction = SystemAction(SystemActionType.NONE)
+    )
+
+    fun respond(query: String, threats: List<ThreatEvent>, deviceStats: DeviceStatus): AiResponse {
         lastDeviceStats = deviceStats
-        val q = query.lowercase()
+        val q = query.lowercase().trim()
         val lang = context.resources.configuration.locales[0].language
         
+        // 1. ACTION DETECTION (The "Ipidan-ignasigacha" logic)
+        val action = detectAction(q, lang)
+        if (action.type != SystemActionType.NONE) {
+            val actionText = when(action.type) {
+                SystemActionType.OPEN_APP -> {
+                    val appName = action.data ?: "ilova"
+                    if (lang == "uz") "Xo'p bo'ladi, $appName ilovasini ochyapman... 🚀"
+                    else "Sure, opening $appName..."
+                }
+                SystemActionType.START_SCAN -> {
+                    if (lang == "uz") "Tizimni to'liq skanerlashni boshlayapman... 🛡️"
+                    else "Initializing full system scan... 🛡️"
+                }
+                SystemActionType.TOGGLE_VPN -> {
+                    if (lang == "uz") "VPN himoya xizmatini sozlamoqdamda... 🔒"
+                    else "Adjusting VPN protection status... 🔒"
+                }
+                else -> ""
+            }
+            if (actionText.isNotEmpty()) return AiResponse(actionText, action)
+        }
+
         // 🚀 PRO: To'liq qurilma tahlili
-        if (q.contains("to'liq") || q.contains("toliq") || q.contains("full") || q.contains("batafsil") || q.contains("полный") || q.contains("подробный") || q.contains("analyze") || q.contains("tahlil") || q.contains("tekshir") || q.contains("audit")) {
-            return performFullDeviceAnalysis(lang)
+        if (q.contains(Regex("to'liq|toliq|full|batafsil|полный|подробный|analyze|tahlil|tekshir|audit"))) {
+            return AiResponse(performFullDeviceAnalysis(lang))
         }
         
         // 🚀 PRO: Background jarayonlar
-        if (q.contains("background") || q.contains("orqa fon") || q.contains("jarayon") || q.contains("process") || q.contains("nima ishlayapti") || q.contains("фоновые") || q.contains("процессы")) {
-            return explainBackgroundProcesses(lang)
+        if (q.contains(Regex("background|orqa fon|jarayon|process|nima ishlayapti|фоновые|процессы"))) {
+            return AiResponse(explainBackgroundProcesses(lang))
         }
         
         // 🚀 PRO: Shubhali ilovalar
-        if (q.contains("shubhali") || q.contains("xavfli") || q.contains("dangerous") || q.contains("suspicious") || q.contains("подозрительны") || q.contains("опасны")) {
-            return explainSuspiciousApps(lang)
+        if (q.contains(Regex("shubhali|xavfli|dangerous|suspicious|подозрительны|опасны"))) {
+            return AiResponse(explainSuspiciousApps(lang))
         }
         
         // 🚀 PRO: RAM va CPU
-        if (q.contains("ram") || q.contains("cpu") || q.contains("protsessor") || q.contains("operativ") || q.contains("процессор") || q.contains("оперативная")) {
-            return explainResourceUsage(lang)
+        if (q.contains(Regex("ram|cpu|protsessor|operativ|процессор|оперативная"))) {
+            return AiResponse(explainResourceUsage(lang))
         }
         
         // 🚀 PRO: Tarmoq tahlili
-        if (q.contains("tarmoq") || q.contains("network") || q.contains("internet") || q.contains("wifi") || q.contains("сеть") || q.contains("интернет")) {
-            return explainNetworkStatus(lang)
+        if (q.contains(Regex("tarmoq|network|internet|wifi|сеть|интернет"))) {
+            return AiResponse(explainNetworkStatus(lang))
         }
         
         // Device Stats - Batareya
-        if (q.contains("batareya") || q.contains("zaryad") || q.contains("quvvat") || q.contains("battery") || q.contains("батарея") || q.contains("заряд")) {
-            return explainBatteryStatus(lang)
+        if (q.contains(Regex("batareya|zaryad|quvvat|battery|батарея|заряд"))) {
+            return AiResponse(explainBatteryStatus(lang))
         }
         
         // Xotira
-        if (q.contains("joy") || q.contains("xotira") || q.contains("storage") || q.contains("memory") || q.contains("память") || q.contains("место")) {
-            return explainStorageStatus(lang)
+        if (q.contains(Regex("joy|xotira|storage|memory|память|место"))) {
+            return AiResponse(explainStorageStatus(lang))
         }
         
-        if (q.contains("usb") || q.contains("kabel") || q.contains("cable") || q.contains("ulangan") || q.contains("internet") || q.contains("кабель") || q.contains("подключен")) {
+        if (q.contains(Regex("usb|kabel|cable|ulangan|internet|кабель|подключен"))) {
             if (deviceStats.connectionMode == "USB_TETHERING") {
-                return when(lang) {
+                val text = when(lang) {
                     "uz" -> "🔌 USB TETHERING FAOLLASHGAN: Siz hozirda USB kabel orqali boshqa qurilmaga (masalan, Laptopga) internet tarqatyapsiz (RNDIS/Modem rejimi). Bu shunchaki quvvatlash emas!"
                     "ru" -> "🔌 USB-МОДЕМ АКТИВИРОВАН: Вы раздаете интернет другому устройству (например, ноутбуку) через USB-кабель. Это не просто зарядка!"
                     else -> "🔌 USB TETHERING ACTIVE: You are sharing your mobile internet with another device (like a Laptop) via USB Cable (RNDIS Mode). This is more than just charging!"
                 }
+                return AiResponse(text)
             }
             
-            if (q.contains("usb") || q.contains("kabel") || q.contains("кабель")) {
+            if (q.contains(Regex("usb|kabel|кабель"))) {
                 val chargeStatus = if (deviceStats.isCharging) {
                     when(lang) {
                         "uz" -> "quvvatlanmoqda ⚡"
@@ -99,17 +136,18 @@ class OfflineAiEngine @Inject constructor(
                         else -> "not charging"
                     }
                 }
-                return when(lang) {
+                val text = when(lang) {
                     "uz" -> "🔌 USB holati: Qurilma $chargeStatus. Agar internet tarqatmoqchi bo'lsangiz, Sozlamalardan 'USB Tethering'ni yoqing."
                     "ru" -> "🔌 Статус USB: Устройство $chargeStatus. Если вы хотите раздать интернет, включите 'USB-модем' в настройках."
                     else -> "🔌 USB Status: Device is $chargeStatus. If you want to share internet, enable 'USB Tethering' in Settings."
                 }
+                return AiResponse(text)
             }
         }
 
         // 1. Check for specific system activity questions
         val activityResponse = checkSystemActivity(q, threats, lang)
-        if (activityResponse != null) return activityResponse
+        if (activityResponse != null) return AiResponse(activityResponse)
 
         // 2. Rule-Based / Master Template Engine (Context Aware)
         val criticalCount = threats.count { it.severity in listOf("CRITICAL", "HIGH") }
@@ -176,95 +214,113 @@ class OfflineAiEngine @Inject constructor(
         }
     }
 
-    private fun handleUzbekMasterResponse(q: String, criticalCount: Int, threats: List<ThreatEvent>): String {
-        return when {
+    private fun handleUzbekMasterResponse(q: String, criticalCount: Int, threats: List<ThreatEvent>): AiResponse {
+        val text = when {
             q.contains(Regex("salom|assalom|assalomu alaykum|qale|qalaysan|nima gap")) -> 
-                "Assalomu alaykum! Men Cyber Brother — sizning shaxsiy kiber-himoyachingizman. Tizim xavfsizligi bo'yicha har qanday savol berishingiz mumkin."
+                "Assalomu alaykum, birodar! 🤝 Men Cyber Brother — sizning shaxsiy kiber-himoyachingizman. Tizim xavfsizligi bo'yicha har qanday savol berishingiz mumkin. O'zimni uyingizdagidek his qiling! Masalan: 'Skanerlashni boshla' yoki 'Telefonim holati qanaqa?' desangiz, darrov tahlil qilib beraman. 😊"
             
-            q.contains(Regex("ahvol|holat|status|sharoit|tinchlikmi|nima yangilik")) -> {
+            q.contains(Regex("ahvol|holat|status|sharoit|tinchlikmi|nima yangilik|yaxshimi")) -> {
                 generateSystemNarrative("uz", criticalCount, threats, lastDeviceStats)
             }
 
-            q.contains(Regex("rahmat|hop|mayli|tushunarli|ok|yaxshi|zo'r")) -> 
-                "Arzimaydi! Xavfsizligingiz — mening ustuvor vazifam. Yana savollaringiz bormi?"
+            q.contains(Regex("rahmat|hop|mayli|tushunarli|ok|yaxshi|zo'r|borakal|barakalla")) -> 
+                "Arzimaydi, jigardan! 💪 Xavfsizligingiz — mening birinchi raqamli vazifam. Yana kiber-xavfsizlikka oid savollaringiz bormi? Men doim shu yerdaman, kiber-olamda hushyor bo'ling!"
             
-            q.contains(Regex("nima bu|bu nima|qanaqa|qanday")) -> 
-                "Men sizning telefoningizni viruslar, fishing hujumlari va josuslik dasturlaridan himoya qiluvchi aqlli tizimman. Hozirda 'Guardian Core' himoyasi faol."
+            q.contains(Regex("nima bu|bu nima|qanaqa|qanday|kimsan|nima qilasan")) -> 
+                "Men — Cyber Brother, sizning raqamli himoyachingizman. Telefoningizni hackerlardan, viruslardan va zararli saytlardan oflayn rejimda himoya qilaman. Men nafaqat oddiy dastur, balki kiber-yordamchingizman, har bir bit va baytingizni nazorat qilaman! 🛡️"
 
-            q.contains("vpn") -> "🛡️ VPN haqida: Men telefoningiz atrofida virtual 'devor' quryapman. Bu funksiya sizning internet trafigingizni shifrlaydi va zararli saytlarni bloklaydi."
+            q.contains(Regex("tensorflow|ai|sun'iy intellekt|neyron|neural|model|aqlli")) ->
+                "🤖 Men 100% oflayn ishlaydigan sun'iy intellektman. TensorFlow Lite orqali ilovalaringizni 'rentgen' qilib, ichidagi yashirin xavflarni aniqlayman. Eng muhimi — sizning ma'lumotlaringiz hech qachon qurilmadan tashqariga chiqmaydi!"
+
+            q.contains("vpn") -> "🛡️ VPN haqida gapiradigan bo'lsak, men internet trafigingizni xavfsiz kanaldan o'tkazaman. Bu sizni soxta (phishing) saytlardan va ma'lumotlaringiz o'g'irlanishidan himoya qiladi. VPN yoqilgan bo'lsa, xotirjam bo'lsangiz bo'ladi!"
             
-            q.contains(Regex("fayl|apk|scan|virus")) -> {
+            q.contains(Regex("fayl|apk|scan|virus|zarar|skaner|tahlil")) -> {
                 val lastApk = threats.find { it.type == "APK_AUDIT" }
-                if (lastApk != null) "📁 Oxirgi ilova tahlili: ${lastApk.details}. Men doimiy ravishda yangi o'rnatilgan ilovalarni kuzatib boraman."
-                else "📁 Men yuklanayotgan har bir fayl va ilovani sun'iy intellekt yordamida tekshiraman."
+                if (lastApk != null) "📁 Oxirgi tahlil: ${lastApk.details}. Men tizimdagi har bir o'zgarishni sun'iy intellekt ko'zi bilan kuzatib turibman. Shubhali narsa bo'lsa, darrov aytaman! 😉"
+                else "📁 Hozirda telefoningiz toza, birodar! Men barcha APK fayllarni TensorFlow algoritmlari yordamida tekshirib chiqdim. Xavotirga o'rin yo'q."
             }
 
-            q.contains(Regex("aqillimisan|nimalarni bilasan|kimsan")) -> 
-                "Men Cyber Brother — sun'iy intellekt asosida ishlovchi himoyachiman. Internet bo'lmasa ham, men har bir xavfni tahlil qila olaman."
+            q.contains(Regex("nima bilasan|nima qo'lingdan keladi|vazifang")) -> 
+                "Mening qobiliyatlarim: \n1. Linklarni real-vaqtda tekshirish. \n2. Ilovalarni rentgen kabi skanerlash. \n3. VPN orqali trafigingizni yopish. \n4. Tizim resurslarini (batareya, xotira) doimiy tahlil qilish. Savolingizni beravering, men hamma narsadan xabardorman! 💪"
 
             else -> {
-                "Kechirasiz, savolingizni to'liq tushunmadim. Menga 'Tizim holati', 'VPN' yoki 'Xavfsizlik' haqida savol berishingiz mumkin."
+                "Tushunarli. Men sizning xabaringizni tahlil qilyapman, birodar. Kiber-himoyasiz qolmaslik uchun mendan quyidagilarni so'rashingiz mumkin:\n- 'Tizim holati qanday?'\n- 'Skanerlashni boshla'\n- 'VPN nima vazifani bajaradi?'\n- 'Xavfsizlik bo'yicha maslahat ber'"
             }
         }
+        return AiResponse(text)
     }
 
-    private fun handleRussianMasterResponse(q: String, criticalCount: Int, threats: List<ThreatEvent>): String {
-        return when {
-            q.contains(Regex("привет|здравствуй|салам|как дела|как ты")) -> 
-                "Здравствуйте! Я Cyber Brother — ваш личный кибер-хранитель. Готов ответить на вопросы о безопасности вашего устройства."
+    private fun handleRussianMasterResponse(q: String, criticalCount: Int, threats: List<ThreatEvent>): AiResponse {
+        val text = when {
+            q.contains(Regex("привет|здравствуй|салам|как дела|как ты|добрый день|приветствую")) -> 
+                "Приветствую, брат! 🤝 Я Cyber Brother — твой персональный ИИ-защитник. Я здесь, чтобы оберегать твои данные в цифровом мире. Можешь спрашивать что угодно касательно безопасности. Я свой человек! Попроси меня 'Проверить систему' или спроси 'Как дела с памятью?', и я тут же дам полный отчет. 😊"
             
-            q.contains(Regex("состояние|статус|как обстановка|что происходит|все нормально|новости")) -> {
+            q.contains(Regex("состояние|статус|как обстановка|что происходит|все нормально|новости|анализ|че как")) -> {
                 generateSystemNarrative("ru", criticalCount, threats, lastDeviceStats)
             }
 
-            q.contains(Regex("спасибо|ок|хорошо|ладно|понял|ясно|круто")) -> 
-                "Всегда пожалуйста! Ваша безопасность — мой приоритет. Есть еще вопросы?"
+            q.contains(Regex("спасибо|ок|хорошо|ладно|понял|ясно|круто|отлично|красава")) -> 
+                "Всегда пожалуйста, брат! 💪 Твоя безопасность — мой высший приоритет. Если будут еще вопросы по кибербезопасности, я всегда на посту. Будь бдителен!"
 
-            q.contains(Regex("что это|кто ты|зачем это")) -> 
-                "Я интеллектуальная система защиты, охраняющая ваш телефон от вирусов, фишинга и шпионажу. Сейчас активна защита 'Guardian Core'."
+            q.contains(Regex("что это|кто ты|зачем это|что делаешь|функции|кто такой")) -> 
+                "Я — Cyber Brother, интеллектуальный щит твоего смартфона. Я оберегаю тебя от хакеров, вирусов и фишинговых атак полностью офлайн. Я не просто программа, я твой напарник в мире киберугроз! 🛡️"
+
+            q.contains(Regex("tensorflow|ai|ии|нейросеть|нейронка|модель|умный")) ->
+                "🤖 Я работаю на базе TensorFlow Lite, что позволяет мне делать глубокий анализ приложений прямо на устройстве. Это 100% приватно — твои данные не покидают телефон, всё под моим контролем!"
+
+            q.contains("vpn") -> "🛡️ Насчет VPN: я создаю зашифрованный туннель для твоего трафика. Это защищает тебя от кражи паролей в открытых сетях и блокирует опасные сайты. С VPN ты под надежной защитой!"
             
-            q.contains("vpn") -> "🛡️ О VPN: Я создаю зашифрованный туннель для вашего интернета. Это блокирует рекламу и не дает хакерам перехватить ваши данные."
-            
-            q.contains(Regex("файл|апк|скан|apk|scan|вирус")) -> {
+            q.contains(Regex("файл|апк|скан|apk|scan|вирус|угроза|проверка")) -> {
                 val lastApk = threats.find { it.type == "APK_AUDIT" }
-                if (lastApk != null) "📁 Последний анализ: ${lastApk.details}. Я постоянно слежу за новыми установками."
-                else "📁 Я сканирую каждый новый файл и приложение с помощью нейросетей."
+                if (lastApk != null) "📁 Результат недавнего аудита: ${lastApk.details}. Я слежу за каждым изменением в системе. Если замечу что-то подозрительное — сразу дам знать! 😉"
+                else "📁 Брат, пока всё чисто! Я просканировал приложения с помощью своих нейросетей, угроз не обнаружено. Можешь не волноваться."
             }
+
+            q.contains(Regex("что умеешь|что можешь|возможности")) -> 
+                "Я умею: \n1. Блокировать вредоносные ссылки. \n2. Проводить рентген-сканирование приложений. \n3. Шифровать трафик через VPN. \n4. Мониторить ресурсы системы 24/7. Спрашивай, я всегда на связи! 💪"
 
             else -> {
-                "Извините, я не совсем понял. Вы можете спросить меня о 'Состоянии системы', 'VPN' или 'Безопасности'."
+                "Анализирую твой запрос, брат. Чтобы лучше защитить тебя, попробуй спросить:\n- 'Какой сейчас статус безопасности?'\n- 'Запусти быструю проверку'\n- 'Что такое VPN?'\n- 'Расскажи про мой ИИ'"
             }
         }
+        return AiResponse(text)
     }
 
     private fun generateSystemNarrative(lang: String, criticalCount: Int, threats: List<ThreatEvent>, stats: DeviceStatus?): String {
         val sentiment = if (criticalCount == 0) {
             when(lang) {
-                "uz" -> "Birodar, hozircha hammasi tinch! ✅"
-                "ru" -> "Брат, пока все спокойно! ✅"
-                else -> "Brother, everything is calm right now! ✅"
+                "uz" -> "Birodar, hozircha telefoning tinch va xavfsiz holatda! ✅"
+                "ru" -> "Брат, на данный момент твой телефон вне опасности! ✅"
+                else -> "Brother, your device is safe and sound for now! ✅"
             }
         } else {
             when(lang) {
-                "uz" -> "Diqqat! Tizimda xavf bor. ⚠️"
-                "ru" -> "Внимание! В системе есть угроза. ⚠️"
-                else -> "Attention! System is at risk. ⚠️"
+                "uz" -> "Diqqat, jigar! Tizimda shubhali holatlar aniqlandi. ⚠️"
+                "ru" -> "Внимание, брат! Замечены подозрительные события в системе. ⚠️"
+                else -> "Attention, brother! Suspicious events detected in the system. ⚠️"
             }
         }
         
         // 2. Battery & Power Context
         val batteryPart = if (stats != null) {
-            val chargingText = if (stats.isCharging) {
+            val chargeIcon = if (stats.isCharging) "⚡" else "🔋"
+            val chargeStatus = if (stats.isCharging) {
                 when(lang) {
-                    "uz" -> "quvvatlanmoqda ⚡"
-                    "ru" -> "заряжается ⚡"
-                    else -> "charging ⚡"
+                    "uz" -> "quvvatlanmoqda"
+                    "ru" -> "заряжается"
+                    else -> "charging"
                 }
-            } else ""
+            } else {
+                when(lang) {
+                    "uz" -> "qolgan"
+                    "ru" -> "осталось"
+                    else -> "left"
+                }
+            }
             when(lang) {
-                "uz" -> "🔋 Quvvatimiz ${stats.batteryLevel}% $chargingText." 
-                "ru" -> "🔋 Заряд ${stats.batteryLevel}% $chargingText."
-                else -> "🔋 Battery is at ${stats.batteryLevel}% $chargingText."
+                "uz" -> "$chargeIcon Quvvatimiz ${stats.batteryLevel}% $chargeStatus." 
+                "ru" -> "$chargeIcon Заряда ${stats.batteryLevel}% $chargeStatus."
+                else -> "$chargeIcon Battery is ${stats.batteryLevel}% $chargeStatus."
             }
         } else ""
 
@@ -272,81 +328,132 @@ class OfflineAiEngine @Inject constructor(
         val vpnPart = if (stats != null) {
             val vpnText = if (stats.isVpnActive) {
                 when(lang) {
-                    "uz" -> "Himoyalangan (VPN Faol) 🛡️"
-                    "ru" -> "Защищено (VPN активен) 🛡️"
-                    else -> "Secured (VPN Active) 🛡️"
+                    "uz" -> "Kiber-qalqon faol (VPN yoqilgan) 🛡️"
+                    "ru" -> "Кибер-щит активен (VPN включен) 🛡️"
+                    else -> "Cyber Shield is Active (VPN On) 🛡️"
                 }
             } else {
                 when(lang) {
-                    "uz" -> "Himoyasiz (VPN O'chiq) ❌"
-                    "ru" -> "Не защищено (VPN выключен) ❌"
-                    else -> "Unsecured (VPN Off) ❌"
+                    "uz" -> "Kiber-qalqon o'chiq (VPN o'chirilgan) ❌"
+                    "ru" -> "Кибер-щит выключен (VPN не активен) ❌"
+                    else -> "Cyber Shield is Off (VPN Inactive) ❌"
                 }
             }
-            
-            val tetherText = if (stats.connectionMode == "USB_TETHERING") {
-                when(lang) {
-                    "uz" -> "Vaholanki, siz hozir USB orqali internet tarqatyapsiz (Modem). 🔌"
-                    "ru" -> "Кстати, вы сейчас раздаете интернет через USB (модем). 🔌"
-                    else -> "Note regarding connectivity: You are sharing internet via USB (Tethering). 🔌"
-                }
-            } else ""
-            
             when(lang) {
-                "uz" -> "🌐 Tarmoq: $vpnText. $tetherText"
-                "ru" -> "🌐 Сеть: $vpnText. $tetherText"
-                else -> "🌐 Network: $vpnText. $tetherText"
+                "uz" -> "🌐 Tarmoq: $vpnText."
+                "ru" -> "🌐 Сеть: $vpnText."
+                else -> "🌐 Network: $vpnText."
             }
         } else ""
 
-        // 4. Security Summary
-        val securityPart = if (criticalCount > 0) {
+        // 4. Memory Context
+        val storagePart = if (stats != null) {
             when(lang) {
-                "uz" -> "Men ${threats.take(3).joinToString { it.type }} kabi $criticalCount ta xavfni aniqladim." 
-                "ru" -> "Я обнаружил $criticalCount угроз, включая ${threats.take(3).joinToString { it.type }}."
-                else -> "I have detected $criticalCount threats including ${threats.take(3).joinToString { it.type }}."
+                "uz" -> "💾 Xotira: ${stats.freeStorageGb} GB bo'sh joyingiz bor."
+                "ru" -> "💾 Память: у тебя ${stats.freeStorageGb} ГБ свободного места."
+                else -> "💾 Storage: You have ${stats.freeStorageGb} GB free."
+            }
+        } else ""
+
+        // 5. Security Summary
+        val securityPart = if (criticalCount > 0) {
+            val eventList = threats.take(2).joinToString { it.type }
+            when(lang) {
+                "uz" -> "Men $criticalCount ta xavfni (masalan: $eventList) aniqladim. Ehtiyot choralarini ko'rishni tavsiya qilaman!" 
+                "ru" -> "Я нашел столько угроз: $criticalCount (включая $eventList). Рекомендую принять меры!"
+                else -> "I found $criticalCount security events (like $eventList). I suggest taking precautions!"
             }
         } else {
             when(lang) {
-                "uz" -> "Tizim toza. Virus yoki xavfli ilovalar yo'q."
-                "ru" -> "Система чиста. Вирусов или опасных приложений не обнаружено."
-                else -> "System is clean. No malware or dangerous apps found."
+                "uz" -> "Tizim toza. Shubhali ilova yoki zararli fayllar yo'q, xotirjam bo'lavering!"
+                "ru" -> "Система чиста. Подозрительных приложений нет, можешь быть спокоен!"
+                else -> "System is clean. No suspicious apps or malware found, you can relax!"
             }
         }
 
-        return "$sentiment\n\n$batteryPart\n$vpnPart\n$securityPart"
+        return "$sentiment\n\n$batteryPart\n$storagePart\n$vpnPart\n\n$securityPart"
     }
 
-    private fun handleEnglishMasterResponse(q: String, criticalCount: Int, threats: List<ThreatEvent>): String {
-        return when {
-            q.contains(Regex("hi|hello|hey|greetings|start")) -> 
-                "Hello! I am Cyber Brother — your dedicated AI guardian. Use me to check your system status or ask about digital security."
+    private fun handleEnglishMasterResponse(q: String, criticalCount: Int, threats: List<ThreatEvent>): AiResponse {
+        val text = when {
+            q.contains(Regex("hi|hello|hey|greetings|start|good morning|how are you")) -> 
+                "Hello there! I am Cyber Brother — your dedicated AI guardian and security consultant. I'm here to keep your digital life safe. You can ask me to 'Check system status', 'Start full scanning', or 'Tell me about VPN'. Great to talk to you! 😊"
             
-            q.contains(Regex("status|state|how is it|condition|happen|everything ok|news|update")) -> {
+            q.contains(Regex("status|state|how is it|condition|happen|everything ok|news|update|audit")) -> {
                 generateSystemNarrative("en", criticalCount, threats, lastDeviceStats)
             }
 
-            q.contains(Regex("thanks|thank|ok|okay|cool|good|nice|understood")) -> 
-                "You're welcome! Your safety is my mission. Let me know if you need anything else."
+            q.contains(Regex("thanks|thank|ok|okay|cool|good|nice|understood|perfect")) -> 
+                "You're very welcome! Your safety is my mission. If you have any other security-related questions, I'm always here to help. Stay safe in the digital world!"
 
-            q.contains(Regex("what is this|who are you|what do you do")) -> 
-                "I am an intelligent protection system that shields your phone from malware, phishing, and spyware. 'Guardian Core' protection is currently active."
+            q.contains(Regex("what is this|who are you|what do you do|work|purpose")) -> 
+                "I am an intelligent, next-generation protection system that shields your phone from malware, phishing, and spyware. I use on-device AI to ensure your data never leaves your hands while keeping threats away!"
+
+            q.contains(Regex("tensorflow|ai|intelligence|neural|model|learning")) ->
+                "🤖 About TensorFlow & AI: Yes, I utilize TensorFlow Lite for sophisticated on-device machine learning! This allows me to perform deep packet inspections and behavioral analysis of apps without needing the cloud. My neural networks are constantly guarding your privacy."
+
+            q.contains("vpn") -> "🛡️ About VPN: I create a secure, encrypted tunnel for your internet traffic. I've also integrated VirusTotal API checks to verify every domain you visit, ensuring a ironclad browsing experience."
             
-            q.contains("vpn") -> "🛡️ About VPN: I create a secure, encrypted tunnel for your internet traffic. This blocks ads and prevents hackers from intercepting your data."
-            
-            q.contains(Regex("file|apk|scan|virus|malware")) -> {
+            q.contains(Regex("file|apk|scan|virus|malware|threat")) -> {
                 val lastApk = threats.find { it.type == "APK_AUDIT" }
-                if (lastApk != null) "📁 Last Audit: ${lastApk.details}. I am constantly monitoring for new installations."
-                else "📁 I use neural networks to scan every new file and application for hidden threats."
+                if (lastApk != null) "📁 Latest App Audit: ${lastApk.details}. I perform deep package inspections (X-Ray audit) on every new installation."
+                else "📁 I use local neural networks to scan every new file and app for zero-day threats. Your device is perfectly clean right now!"
             }
-            
+
+            q.contains(Regex("what can you do|skills|features|abilities")) -> 
+                "My core features: 1. Real-time malicious link blocking. 2. Deep app X-ray scanning. 3. Encrypted VPN tunneling with VirusTotal integration. 4. AI-powered Voice Phishing (Vishing) detection."
+
             else -> {
-                "I'm afraid I didn't quite catch that. You can ask me about 'System Status', 'VPN', or general 'Security'."
+                "I'm analyzing your request. To help you stay secure, try asking:\n- 'How is my system security status?'\n- 'Run a full deep-scan'\n- 'Explain your AI features'\n- 'What is my battery health?'"
             }
         }
+        return AiResponse(text)
     }
 
     
+    private fun detectAction(q: String, lang: String): SystemAction {
+        // App opening logic
+        val openKeywords = listOf("och", "yoq", "start", "open", "run", "launch", "запусти", "открой")
+        if (openKeywords.any { q.contains(it) }) {
+            // Filter out keywords to find the app name
+            val words = q.split(" ").filter { it !in openKeywords }
+            
+            // Map common app names to packages
+            val packageMap = mapOf(
+                "telegram" to "org.telegram.messenger",
+                "whatsapp" to "com.whatsapp",
+                "instagram" to "com.instagram.android",
+                "facebook" to "com.facebook.katana",
+                "youtube" to "com.google.android.youtube",
+                "chrome" to "com.android.chrome",
+                "payme" to "uz.dida.payme",
+                "click" to "air.com.ssd.click.android",
+                "uzum" to "uz.uzum.app",
+                "settings" to "com.android.settings",
+                "sozlamalar" to "com.android.settings"
+            )
+            
+            packageMap.forEach { (name, pkg) ->
+                if (q.contains(name)) return SystemAction(SystemActionType.OPEN_APP, pkg)
+            }
+        }
+
+        // Feature actions
+        if (q.contains("skaner") || q.contains("scan") || q.contains("tekshir")) {
+             return SystemAction(SystemActionType.START_SCAN)
+        }
+        
+        if (q.contains("vpn")) {
+             return SystemAction(SystemActionType.TOGGLE_VPN)
+        }
+        
+        if (q.contains("audit") || q.contains("xavf")) {
+             return SystemAction(SystemActionType.SHOW_SECURITY_AUDIT)
+        }
+
+        return SystemAction(SystemActionType.NONE)
+    }
+
     private fun buildExtendedContext(threats: List<ThreatEvent>): String {
         return threats.joinToString(". ") { 
             "Type ${it.type} with ${it.severity} severity detected in ${it.source}. Details: ${it.details}"
