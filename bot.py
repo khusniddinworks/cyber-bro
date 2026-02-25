@@ -520,9 +520,10 @@ async def pay_premium_callback(update: Update, context: ContextTypes.DEFAULT_TYP
     await query.answer()
     
     pay_text = (
-        "💳 *Premium Obuna To'lovi*\n\n"
-        "Narxi: 25,000 so'm\n"
-        "Muddat: Umrbod (Lifetime)\n\n"
+        "💳 *Cyber Brother PREMIUM Obuna*\n\n"
+        "💰 *Narxi:* 10,000 so'm / oy\n"
+        "🎁 *Sinov davri:* 14 kun bepul\n"
+        "✨ *Imkoniyat:* To'liq AI himoya va Anti-Sideloading\n\n"
         "*To'lov usullari:*\n"
         "🔸 Click: `+998870871604`\n"
         "🔸 Payme: `https://payme.uz/@cyberbrother` (Simulyatsiya)\n\n"
