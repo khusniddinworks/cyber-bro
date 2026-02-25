@@ -297,7 +297,6 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             active_subs = sum(1 for s in subs.values() if s['status'] == 'active')
             count = len(users)
             
-            # Count recent feedbacks in memory logic if file lost, but rely on file first
             feedbacks_count = 0
             if os.path.exists(FEEDBACKS_FILE):
                  with open(FEEDBACKS_FILE, 'r', encoding='utf-8') as f:
@@ -312,7 +311,7 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             await update.message.reply_text(stats_msg, parse_mode='Markdown')
             return
         elif text == "📂 Baza Yuklash":
-            await update.message.reply_text("📂 Fayllar yuklanmoqda (Agar server restart bo'lsa, ma'lumot kam bo'lishi mumkin)...")
+            await update.message.reply_text("📂 Fayllar yuklanmoqda...")
             files = [USERS_FILE, FEEDBACKS_FILE, SUBSCRIPTIONS_FILE]
             found = False
             for filename in files:
@@ -321,11 +320,11 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
                     with open(filename, 'rb') as f:
                         await update.message.reply_document(document=f, caption=f"📂 {filename}")
             if not found:
-                 await update.message.reply_text("⚠️ Hozircha baza bo'sh (Server restart bo'lgan). Yangi ma'lumotlarni kuting.")
+                 await update.message.reply_text("⚠️ Hozircha baza bo'sh.")
             return
 
-    # --- USER FLOWS ---
-    elif text == "🛒 Premium Olish":
+    # --- 1. PRIORITY BUTTONS (Always work) ---
+    if text == "🛒 Premium Olish":
         premium_text = (
             "💎 *Cyber Brother PREMIUM — Cheklovsiz Himoya*\n\n"
             "Siz oddiy foydalanuvchi emassiz. Sizga eng yaxshisi kerak.\n\n"
@@ -338,8 +337,60 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         )
         keyboard = [[InlineKeyboardButton("💳 To'lov qilish", callback_data='pay_premium')]]
         await update.message.reply_text(premium_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
-        
-    elif context.user_data.get('state') == 'waiting_device_id':
+        return
+
+    if text == "📥 APK Yuklab Olish":
+        version_text = "📱 *Cyber Brother ULTRA v1.9.0*\n\nEng so'nggi va eng xavfsiz versiyani yuklab oling:"
+        keyboard = [
+            [InlineKeyboardButton(APK_FILES['v1.9.0']['label'], callback_data='download_v1.9.0')]
+        ]
+        await update.message.reply_text(version_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
+        return
+
+    if text == "🛡️ 100% Himoya yo'riqnomasi" or text == "/help_protect":
+        guide_text = (
+            "🛡️ *Cyber Brother: 100% Himoyani Yoqish Yo'riqnomasi*\n\n"
+            "Tizim to'liq ishlashi uchun quyidagi 10 ta qadamni bajaring:\n\n"
+            "1️⃣ *Fayllarga ruxsat:* Ilova ichida 'Barcha fayllarni boshqarish'ni yoqing.\n"
+            "2️⃣ *Dashboard:* 'Xavfli fayllar filtri' va boshqa ruxsatlarni tasdiqlang.\n"
+            "3️⃣ *Bildirishnomalar:* Cyber Brotherga bildirishnomalarga kirish ruxsatini bering.\n"
+            "4️⃣ *Sozlamalar:* Telefoningizning 'Sozlamalar' (Settings) menyusiga kiring.\n"
+            "5️⃣ *Ilovalar:* 'Ilova boshqaruvi' bo'limini tanlang.\n"
+            "6️⃣ *Ilova tanlash:* Ro'yxatdan 'Cyber Brother'ni toping.\n"
+            "7️⃣ *3 nuqta:* Yuqori o'ng burchakdagi 3 ta nuqta tugmasini bosing.\n"
+            "8️⃣ *Cheklov yechish:* 'Cheklangan sozlamalarga ruxsat berish' bandini tanlang.\n"
+            "9️⃣ *Qaytish:* Ilovaga qaytib, 'Fishingdan himoya' tugmasini bosing.\n"
+            "🔟 *So'nggi qadam:* 'Accessibility' bo'limidan 'Cyber Brother Phishing Protection'ni yoqing.\n\n"
+            "✅ *Bajarildi! Endi qurilmangiz mutlaq xavfsiz.*"
+        )
+        await update.message.reply_text(guide_text, parse_mode='Markdown')
+        return
+
+    if text == "🌐 Vebsayt":
+        await update.message.reply_text("🔗 [https://khusniddinworks.github.io/cyber-bro/](https://khusniddinworks.github.io/cyber-bro/)")
+        return
+
+    if text == "ℹ️ Ilova haqida":
+        about_text = (
+            "ℹ️ *Cyber Brother PRO Haqida*\n\n"
+            "Biz jahon gigantlariga (Kaspersky, Bitdefender) qarshi yangi muqobilmiz.\n\n"
+            "1️⃣ *100% Offline Maxfiylik:* Server yo'q. Bizda sizning ma'lumotlaringizni ko'rish imkoni yo'q.\n"
+            "2️⃣ *Mahalliy AI:* O'zbek tilida so'zlashuvchi va mahalliy muammolarni tushunuvchi yagona kiber-aql.\n"
+            "3️⃣ *Resurs Tejamkorligi:* Telefoningizni qizdirmaydi va quvvatini yemaydi.\n\n"
+            "🦅 *Bizning shior:* Sizning xavfsizligingiz — bizning obro'yimiz!"
+        )
+        await update.message.reply_text(about_text, parse_mode='Markdown')
+        return
+
+    if text == "✍️ Fikr qoldirish":
+        context.user_data['state'] = 'waiting_feedback'
+        await update.message.reply_text("📝 Fikringizni yozing:", reply_markup=ReplyKeyboardMarkup([[KeyboardButton("🚫 Bekor qilish")]], resize_keyboard=True))
+        return
+
+    # --- 2. STATE-BASED FLOWS (Inputs) ---
+    state = context.user_data.get('state')
+    
+    if state == 'waiting_device_id':
         if text == "🚫 Bekor qilish":
             context.user_data.clear()
             await update.message.reply_text("❌ Bekor qilindi.", reply_markup=get_main_keyboard(is_admin))
@@ -357,7 +408,6 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             return
 
         if verified_devices[device_id]['status'] == 'active':
-            # Allow retrieval of already generated key
              await update.message.reply_text(
                 f"✅ *Sizning kalitingiz allaqachon mavjud:*\n\n`{verified_devices[device_id]['key']}`",
                 parse_mode='Markdown',
@@ -366,47 +416,32 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
              context.user_data.clear()
              return
 
-        # Generate and Assign Key
         license_key = generate_license_key(device_id)
         verified_devices[device_id]['status'] = 'active'
         verified_devices[device_id]['assigned_to'] = user.id
         verified_devices[device_id]['key'] = license_key
         verified_devices[device_id]['activated_at'] = datetime.now().isoformat()
-        
         save_verified_devices(verified_devices)
         
-        # Sync with subscriptions for redundancy
         subs = load_subscriptions()
         subs[device_id] = {'user_id': user.id, 'status': 'active', 'key': license_key}
         save_subscriptions(subs)
         
         await notify_admin(context, f"💰 *Yangi Aktivatsiya!*\nUser: @{user.username}\nID: `{device_id}`")
-        
         context.user_data.clear()
         await update.message.reply_text(
             f"✅ *Tabriklaymiz!*\n\n🔑 Kalitingiz: `{license_key}`\n\nIlovaga kiriting.", 
             parse_mode='Markdown', 
             reply_markup=get_main_keyboard(is_admin)
         )
+        return
 
-    elif text == "📥 APK Yuklab Olish":
-        version_text = "📱 * Cyber Brother ULTRA v1.9.0*\n\nEng so'nggi va eng xavfsiz versiyani yuklab oling:"
-        keyboard = [
-            [InlineKeyboardButton(APK_FILES['v1.9.0']['label'], callback_data='download_v1.9.0')]
-        ]
-        await update.message.reply_text(version_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
-        
-    elif text == "✍️ Fikr qoldirish":
-        context.user_data['state'] = 'waiting_feedback'
-        await update.message.reply_text("📝 Fikringizni yozing:", reply_markup=ReplyKeyboardMarkup([[KeyboardButton("🚫 Bekor qilish")]], resize_keyboard=True))
-
-    elif context.user_data.get('state') == 'waiting_feedback':
+    if state == 'waiting_feedback':
         if text == "🚫 Bekor qilish":
             context.user_data.clear()
             await update.message.reply_text("❌ Bekor qilindi.", reply_markup=get_main_keyboard(is_admin))
             return
             
-        # 1. Save locally (even if temporary)
         feedbacks = []
         if os.path.exists(FEEDBACKS_FILE):
              with open(FEEDBACKS_FILE, 'r', encoding='utf-8') as f:
@@ -423,43 +458,10 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         with open(FEEDBACKS_FILE, 'w', encoding='utf-8') as f:
             json.dump(feedbacks, f, indent=4, ensure_ascii=False)
             
-        # 2. INSTANT ADMIN NOTIFICATION (Forwarding)
         await notify_admin(context, f"📩 *Yangi Fikr (Feedback)*\n👤 Kimdan: @{user.username}\n🆔 ID: `{user.id}`\n💬 Xabar: {text}\n\nJavob berish uchun: `/reply {user.id} [xabar]`")
-
         context.user_data.clear()
         await update.message.reply_text("Rahmat! Fikringiz adminga yetkazildi.", reply_markup=get_main_keyboard(is_admin))
-
-    elif text == "ℹ️ Ilova haqida":
-        about_text = (
-            "ℹ️ *Cyber Brother PRO Haqida*\n\n"
-            "Biz jahon gigantlariga (Kaspersky, Bitdefender) qarshi yangi muqobilmiz.\n\n"
-            "1️⃣ *100% Offline Maxfiylik:* Server yo'q. Bizda sizning ma'lumotlaringizni ko'rish imkoni yo'q.\n"
-            "2️⃣ *Mahalliy AI:* O'zbek tilida so'zlashuvchi va mahalliy muammolarni tushunuvchi yagona kiber-aql.\n"
-            "3️⃣ *Resurs Tejamkorligi:* Telefoningizni qizdirmaydi va quvvatini yemaydi.\n\n"
-            "🦅 *Bizning shior:* Sizning xavfsizligingiz — bizning obro'yimiz!"
-        )
-        await update.message.reply_text(about_text, parse_mode='Markdown')
-        
-    elif text == "🌐 Vebsayt":
-        await update.message.reply_text("🔗 [https://khusniddinworks.github.io/cyber-bro/](https://khusniddinworks.github.io/cyber-bro/)")
-
-    elif text == "🛡️ 100% Himoya yo'riqnomasi" or text == "/help_protect":
-        guide_text = (
-            "🛡️ *Cyber Brother: 100% Himoyani Yoqish Yo'riqnomasi*\n\n"
-            "Tizim to'liq ishlashi uchun quyidagi 10 ta qadamni bajaring:\n\n"
-            "1️⃣ *Fayllarga ruxsat:* Ilova ichida 'Barcha fayllarni boshqarish'ni yoqing.\n"
-            "2️⃣ *Dashboard:* 'Xavfli fayllar filtri' va boshqa ruxsatlarni tasdiqlang.\n"
-            "3️⃣ *Bildirishnomalar:* Cyber Brotherga bildirishnomalarga kirish ruxsatini bering.\n"
-            "4️⃣ *Sozlamalar:* Telefoningizning 'Sozlamalar' (Settings) menyusiga kiring.\n"
-            "5️⃣ *Ilovalar:* 'Ilova boshqaruvi' bo'limini tanlang.\n"
-            "6️⃣ *Ilova tanlash:* Ro'yxatdan 'Cyber Brother'ni toping.\n"
-            "7️⃣ *3 nuqta:* Yuqori o'ng burchakdagi 3 ta nuqta tugmasini bosing.\n"
-            "8️⃣ *Cheklov yechish:* 'Cheklangan sozlamalarga ruxsat berish' bandini tanlang.\n"
-            "9️⃣ *Qaytish:* Ilovaga qaytib, 'Fishingdan himoya' tugmasini bosing.\n"
-            "🔟 *So'nggi qadam:* 'Accessibility' bo'limidan 'Cyber Brother Phishing Protection'ni yoqing.\n\n"
-            "✅ *Bajarildi! Endi qurilmangiz mutlaq xavfsiz.*"
-        )
-        await update.message.reply_text(guide_text, parse_mode='Markdown')
+        return
 
 async def download_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query
