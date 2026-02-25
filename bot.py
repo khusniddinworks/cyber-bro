@@ -205,9 +205,13 @@ async def notify_admin(context: ContextTypes.DEFAULT_TYPE, message: str):
 
 # --- LICENSE LOGIC ---
 def generate_license_key(device_id):
-    salt = "CYBER_BROTHER_SECRET_2026"
-    raw = device_id + salt
-    return hashlib.sha256(raw.encode()).hexdigest()[:16].upper()
+    # SYNCED WITH IdentityManager.kt (Android App)
+    salt = "CYBER_BROTHER_PRIVACY_PROTECT"
+    secret_alpha = "CB_SHIELD_V2_2026"
+    raw = device_id + salt + secret_alpha
+    # Take substring [5:21] as defined in IdentityManager.kt
+    full_hash = hashlib.sha256(raw.encode()).hexdigest().upper()
+    return full_hash[5:21]
 
 # --- CONTENT CONSTANTS ---
 APK_FILES = {
