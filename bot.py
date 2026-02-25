@@ -401,15 +401,11 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         device_id = text.strip().upper()
         verified_devices = load_verified_devices()
         
+        # If ID is not in database, add it as a new one (since payment is already approved)
         if device_id not in verified_devices:
-            await update.message.reply_text(
-                "❌ *Xatolik: Ushbu Device ID tizimda mavjud emas!*\n\n"
-                "Iltimos, avval premium sotib oling yoki admin bilan bog'laning.",
-                parse_mode='Markdown'
-            )
-            return
+            verified_devices[device_id] = {"status": "available", "assigned_to": None}
 
-        if verified_devices[device_id]['status'] == 'active':
+        if verified_devices[device_id].get('status') == 'active':
              await update.message.reply_text(
                 f"✅ *Sizning kalitingiz allaqachon mavjud:*\n\n`{verified_devices[device_id]['key']}`",
                 parse_mode='Markdown',
