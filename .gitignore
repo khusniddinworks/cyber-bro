@@ -8,20 +8,25 @@
 __pycache__/
 *.pyc
 
-# Android
-AndroidEPS/build/
-AndroidEPS/.gradle/
-AndroidEPS/local.properties
-AndroidEPS/*.apk
-AndroidEPS/.idea/
-AndroidEPS/*.iml
+# IDEs and Editors
+.idea/
+.vscode/
+*.iml
+*.iws
+
+# Android / Build
+**/build/
+**/.gradle/
+**/local.properties
+**/GeneratedInjector.java
+**/Dagger*.java
+*.apk
 
 # Miscellaneous
 TEST/
 GreedyTestApp/
-.vscode/
+WEBSITE_APP/
 *.log
 node_modules/
 dist/
-build/
 .DS_Store
