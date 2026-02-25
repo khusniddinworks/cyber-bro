@@ -239,9 +239,8 @@ APK_FILES = {
 def get_main_keyboard(is_admin=False):
     keyboard = [
         [KeyboardButton("🛒 Premium Olish"), KeyboardButton("📥 APK Yuklab Olish")],
-        [KeyboardButton("🔑 Litsenziyani Aktivlashtirish"), KeyboardButton("ℹ️ Ilova haqida")],
         [KeyboardButton("🛡️ 100% Himoya yo'riqnomasi"), KeyboardButton("🌐 Vebsayt")],
-        [KeyboardButton("✍️ Fikr qoldirish")]
+        [KeyboardButton("ℹ️ Ilova haqida"), KeyboardButton("✍️ Fikr qoldirish")]
     ]
     if is_admin:
         # Add Admin Controls
@@ -335,26 +334,19 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             return
 
     # --- USER FLOWS ---
-    if text == "🛒 Premium Olish":
+    elif text == "🛒 Premium Olish":
         premium_text = (
-            "� *Cyber Brother PREMIUM — Cheklovsiz Himoya*\n\n"
+            "💎 *Cyber Brother PREMIUM — Cheklovsiz Himoya*\n\n"
             "Siz oddiy foydalanuvchi emassiz. Sizga eng yaxshisi kerak.\n\n"
-            "✅ *Anti-Vishing Call Detector* (Firibgar qo'ng'iroqlardan himoya)\n"
-            "✅ *Shaxsiy Kiber-Konsultant* (24/7 Yordamchi)\n"
-            "✅ *Shifrangan Fayllar Ombori* (File Vault)\n"
-            "✅ *Reklamasiz va to'liq tezlik*\n\n"
-            "💰 *Narxi: 25,000 so'm / oy* (Xavfsizligingiz uchun arzimagan summa)"
+            "✅ *Anti-Sideloading Shield* (APK o'rnatishni bloklash)\n"
+            "✅ *AI Deep Scan* (200% DEX tahlili)\n"
+            "✅ *Red Alert Protocol* (Xavfli ilovalarni majburiy o'chirish)\n"
+            "✅ *Offline AI Engine* (Maxfiylik kafolati)\n\n"
+            "💰 *Narxi: 10,000 so'm / oy* (14 kunlik bepul sinov)\n"
+            "Muddat: Cheksiz yangilanishlar."
         )
-        keyboard = [[InlineKeyboardButton("💳 Click / Payme", callback_data='pay_premium')]]
+        keyboard = [[InlineKeyboardButton("💳 To'lov qilish", callback_data='pay_premium')]]
         await update.message.reply_text(premium_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
-        
-    elif text == "🔑 Litsenziyani Aktivlashtirish":
-        context.user_data['state'] = 'waiting_device_id'
-        await update.message.reply_text(
-            "📱 *Device ID ni yuboring:*\n(Settings -> Subscription bo'limida)",
-            reply_markup=ReplyKeyboardMarkup([[KeyboardButton("🚫 Bekor qilish")]], resize_keyboard=True),
-            parse_mode='Markdown'
-        )
         
     elif context.user_data.get('state') == 'waiting_device_id':
         if text == "🚫 Bekor qilish":
@@ -554,11 +546,12 @@ async def confirm_payment_callback(update: Update, context: ContextTypes.DEFAULT
     # In reality, verify transaction here via API
     await query.edit_message_text(
         "✅ *To'lov qabul qilindi!*\n\n"
-        "Siz endi **Premium** foydalanuvchisiz.\n"
-        "Endi pastdagi menudan '🔑 Litsenziyani Aktivlashtirish' tugmasini bosing va Device IDingizni yuboring. "
-        "Men sizga shaxsiy **Private Key** generatsiya qilib beraman.",
+        "Siz endi **Premium** foydalanuvchisiz. Endi oxirgi qadam qoldi:\n\n"
+        "📱 Iltimos, ilovangizdagi **Device ID**ni yuboring.\n"
+        "(_Ilova ichidan: Sozlamalar -> Obuna bo'limidan nusxa oling_)",
         parse_mode='Markdown'
     )
+    context.user_data['state'] = 'waiting_device_id'
 
 # --- ADMIN COMMANDS ---
 async def broadcast_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
