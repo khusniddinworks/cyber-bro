@@ -436,8 +436,8 @@
 
     <script>
         const ACTIVATION_KEY = 'CYBER-CORE-2026'; // Local trust key
-        // Avval lokal serverni tekshiramiz, agar bo'lmasa Render-ni ishlatamiz
-        const API_BASE_URL = 'https://cyberbrother.onrender.com';
+        // AUTOMATIC API DETECTION: Points to the same server that serves this file
+        const API_BASE_URL = window.location.origin;
 
         let authenticatedPass = "";
 

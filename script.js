@@ -396,7 +396,7 @@ function trackDownload(version) {
 }
 
 // Automatically detects the current domain for API calls (Render or Local)
-const API_BASE_URL = 'https://cyberbrother.onrender.com';
+const API_BASE_URL = window.location.origin;
 
 async function saveTrackingData(data) {
     // 1. Save locally (backup)

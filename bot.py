@@ -373,7 +373,7 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         return
 
     if text == "🌐 Vebsayt":
-        await update.message.reply_text("🔗 [https://khusniddinworks.github.io/cyber-bro/](https://khusniddinworks.github.io/cyber-bro/)")
+        await update.message.reply_text("🔗 [https://cyber-brother.onrender.com/](https://cyber-brother.onrender.com/)")
         return
 
     if text == "ℹ️ Ilova haqida":
@@ -869,9 +869,10 @@ class UniversalServer(BaseHTTPRequestHandler):
         self._set_headers(404)
 
     def do_GET(self):
-        # Admin Header Check
+        # Admin Header Check (only for API endpoints)
         admin_pass = self.headers.get('X-Admin-Password')
         
+        # --- API ENDPOINTS ---
         if self.path == '/events':
             if admin_pass != ADMIN_PASSWORD:
                 self._set_headers(401)
@@ -910,8 +911,37 @@ class UniversalServer(BaseHTTPRequestHandler):
             self.wfile.write(b'{"url":"https://t.me/cyberbrotherrobot"}')
             return
 
-        self._set_headers()
-        self.wfile.write(b'{"status":"online"}')
+        # --- STATIC FILE SERVING ---
+        file_path = self.path[1:] # Remove leading /
+        if not file_path or file_path == '': 
+            file_path = 'index.html'
+
+        # SECURITY: Prevent directory traversal
+        if '..' in file_path:
+            self._set_headers(403)
+            self.wfile.write(b'Forbidden')
+            return
+
+        if os.path.exists(file_path) and os.path.isfile(file_path):
+            content_type = 'text/plain'
+            if file_path.endswith('.html'): content_type = 'text/html'
+            elif file_path.endswith('.css'): content_type = 'text/css'
+            elif file_path.endswith('.js'): content_type = 'application/javascript'
+            elif file_path.endswith('.png'): content_type = 'image/png'
+            elif file_path.endswith('.jpg') or file_path.endswith('.jpeg'): content_type = 'image/jpeg'
+
+            self.send_response(200)
+            self.send_header('Content-type', content_type)
+            # Add CORS for static files too
+            self.send_header('Access-Control-Allow-Origin', '*')
+            self.end_headers()
+            
+            with open(file_path, 'rb') as f:
+                self.wfile.write(f.read())
+            return
+
+        self._set_headers(404)
+        self.wfile.write(b'{"status":"not_found"}')
 
 # --- KEEP ALIVE LOGIC ---
 def start_keep_alive(url):
