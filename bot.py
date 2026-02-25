@@ -31,7 +31,9 @@ else:
     ADMIN_IDS = [8332161047] # Default Admin ID
 
 # Admin Password (for Website Admin Panel)
-ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'cyberadmin2026')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin123')
+CARD_NUMBER = os.getenv('CARD_NUMBER', 'Bog\'laning')
+CARD_NAME = os.getenv('CARD_NAME', '')
 
 # Files Configuration
 CONFIG_FILE = 'bot_config.json'
@@ -525,8 +527,8 @@ async def pay_premium_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         "🎁 *Sinov davri:* 14 kun bepul\n"
         "✨ *Imkoniyat:* To'liq AI himoya va Anti-Sideloading\n\n"
         "*To'lov usullari:*\n"
-        "🔸 Click: `+998870871604`\n"
-        "🔸 Payme: `https://payme.uz/@cyberbrother` (Simulyatsiya)\n\n"
+        f"💳 Karta: `{CARD_NUMBER}`\n"
+        f"👤 Ega: {CARD_NAME}\n\n"
         "⚠️ *Diqqat:* To'lov qilgach, quyidagi 'To'lovni Tasdiqlash' tugmasini bosing."
     )
     keyboard = [[InlineKeyboardButton("✅ To'lovni Tasdiqlash", callback_data='confirm_payment')]]
