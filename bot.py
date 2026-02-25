@@ -536,15 +536,40 @@ async def confirm_payment_callback(update: Update, context: ContextTypes.DEFAULT
     query = update.callback_query
     await query.answer()
     
-    # In reality, verify transaction here via API
     await query.edit_message_text(
-        "✅ *To'lov qabul qilindi!*\n\n"
-        "Siz endi **Premium** foydalanuvchisiz. Endi oxirgi qadam qoldi:\n\n"
-        "📱 Iltimos, ilovangizdagi **Device ID**ni yuboring.\n"
-        "(_Ilova ichidan: Sozlamalar -> Obuna bo'limidan nusxa oling_)",
+        "🧾 *To'lovni tasdiqlash*\n\n"
+        "Iltimos, to'lov chekini (rasm yoki PDF fayl) shu yerga yuboring. Admin tasdiqlashi uchun bu zarur.",
         parse_mode='Markdown'
     )
-    context.user_data['state'] = 'waiting_device_id'
+    context.user_data['state'] = 'waiting_payment_receipt'
+
+async def handle_payment_media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    user = update.effective_user
+    state = context.user_data.get('state')
+    
+    if state == 'waiting_payment_receipt':
+        # Forward to all admins
+        for admin_id in ADMIN_IDS:
+            try:
+                caption = f"🧾 *YANGI TO'LOV CHEKI*\n👤 Foydalanuvchi: @{user.username} (ID: `{user.id}`)"
+                if update.message.photo:
+                    await context.bot.send_photo(chat_id=admin_id, photo=update.message.photo[-1].file_id, caption=caption, parse_mode='Markdown')
+                elif update.message.document:
+                    await context.bot.send_document(chat_id=admin_id, document=update.message.document.file_id, caption=caption, parse_mode='Markdown')
+            except Exception as e:
+                print(f"Error forwarding receipt: {e}")
+        
+        await update.message.reply_text(
+            "✅ *Chek adminga yuborildi!*\n\n"
+            "Endi ilovangizdagi **Device ID**ni yuboring. Admin to'lovni tekshirib, kalitingizni faollashtiradi.",
+            parse_mode='Markdown'
+        )
+        context.user_data['state'] = 'waiting_device_id'
+        return
+    
+    # If it's an admin uploading an APK
+    if user.id in ADMIN_IDS and update.message.document:
+        await handle_document(update, context)
 
 # --- ADMIN COMMANDS ---
 async def broadcast_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -877,7 +902,7 @@ def main():
     application.add_handler(CallbackQueryHandler(pay_premium_callback, pattern='^pay_premium'))
     application.add_handler(CallbackQueryHandler(confirm_payment_callback, pattern='^confirm_payment'))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text_menu))
-    application.add_handler(MessageHandler(filters.Document.ALL, handle_document))
+    application.add_handler(MessageHandler(filters.PHOTO | filters.Document.ALL, handle_payment_media))
 
     RENDER_URL = os.getenv('RENDER_EXTERNAL_URL')
     PORT = int(os.environ.get("PORT", 8080))
