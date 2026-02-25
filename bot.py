@@ -996,22 +996,24 @@ def main():
     asyncio.set_event_loop(loop)
     loop_instance = loop
 
+    # Start Internal HTTP Server (For Admin Panel and Webhooks)
+    # This runs regardless of Polling or Webhook mode to allow API access
+    server = HTTPServer(('0.0.0.0', PORT), UniversalServer)
+    server_thread = threading.Thread(target=server.serve_forever, daemon=True)
+    server_thread.start()
+    print(f"📡 Internal Server started on port {PORT}")
+
     if RENDER_URL:
         print(f"🚀 WEBHOOK MODE: {RENDER_URL}")
-        
         # Start the robust Keep-Alive Pinger
         start_keep_alive(RENDER_URL)
         
         loop.run_until_complete(application.initialize())
         loop.run_until_complete(application.bot.set_webhook(f"{RENDER_URL}/telegram-webhook"))
         loop.run_until_complete(application.start())
-        
-        server = HTTPServer(('0.0.0.0', PORT), UniversalServer)
-        threading.Thread(target=server.serve_forever, daemon=True).start()
-        
         loop.run_forever()
     else:
-        print("POLLING MODE (Only Bot, No Local API)")
+        print("🤖 POLLING MODE")
         application.run_polling()
 
 if __name__ == '__main__':

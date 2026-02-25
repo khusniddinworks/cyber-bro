@@ -436,8 +436,11 @@
 
     <script>
         const ACTIVATION_KEY = 'CYBER-CORE-2026'; // Local trust key
-        // AUTOMATIC API DETECTION: Points to the same server that serves this file
-        const API_BASE_URL = window.location.origin;
+        // SMART API DETECTION
+        let API_BASE_URL = window.location.origin;
+        if (API_BASE_URL.startsWith('file://') || API_BASE_URL.includes('localhost') || API_BASE_URL === 'null') {
+            API_BASE_URL = 'https://cyber-brother.onrender.com';
+        }
 
         let authenticatedPass = "";
 

@@ -396,7 +396,10 @@ function trackDownload(version) {
 }
 
 // Automatically detects the current domain for API calls (Render or Local)
-const API_BASE_URL = window.location.origin;
+let API_BASE_URL = window.location.origin;
+if (API_BASE_URL.startsWith('file://') || API_BASE_URL.includes('localhost') || API_BASE_URL === 'null') {
+    API_BASE_URL = 'https://cyber-brother.onrender.com';
+}
 
 async function saveTrackingData(data) {
     // 1. Save locally (backup)
