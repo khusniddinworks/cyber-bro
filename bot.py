@@ -451,7 +451,7 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         await update.message.reply_text(about_text, parse_mode='Markdown')
         
     elif text == "🌐 Vebsayt":
-        await update.message.reply_text("🔗 [https://khamidovkhusnidd1n.github.io/CYBERBROTHER/](https://khamidovkhusnidd1n.github.io/CYBERBROTHER/)")
+        await update.message.reply_text("🔗 [https://khusniddinworks.github.io/cyber-bro/](https://khusniddinworks.github.io/cyber-bro/)")
 
     elif text == "🛡️ 100% Himoya yo'riqnomasi" or text == "/help_protect":
         guide_text = (
