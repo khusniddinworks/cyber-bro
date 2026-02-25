@@ -209,26 +209,20 @@ def generate_license_key(device_id):
 
 # --- CONTENT CONSTANTS ---
 APK_FILES = {
-    'v1.7.0': {
-        'label': '🦅 v1.7.0 SUPER ULTRA',
+    'v1.9.0': {
+        'label': '🦅 v1.9.0 SUPER ULTRA (Yangi)',
         'caption': (
-            "🛡️ *Cyber Brother v1.7.9 SUPER*\n\n"
-            "🔥 *MAXIMAL HIMOYA:* \n"
-            "• 🛑 *Real-Time Wizard:* Yoshi kattalar uchun oson sozlash.\n"
-            "• 🎯 *Phishing Whitelist:* Xavfsiz saytlarga ruxsat berish imkoniyati.\n"
-            "• 🧠 *Advanced AI Scan:* Yanada aqlli va tezkor tahlil.\n\n"
-            "✅ *Bu hozirgi eng xavfsiz versiya.*"
+            "🛡️ *Cyber Brother v1.9.0 ULTRA*\n\n"
+            "🔥 *ENG SO'NGGI VERSIYA:* \n"
+            "• 🛑 *Full Protection:* Maksimal xavfsizlik protokollari.\n"
+            "• 🎯 *Better Detection:* AI model yangilandi.\n"
+            "• 🧠 *Ultra Speed:* DEX tahlili tezlashtirildi.\n\n"
+            "✅ *Hozirgi eng kuchli va barqaror versiya.*"
         )
     },
-    'v1.3.0': {
-        'label': '🚀 v1.3.0 PRO',
-        'caption': (
-            "🛡️ *Cyber Brother PRO v1.3.0*\n\n"
-            "✨ *Asosiy Xususiyatlar:*\n"
-            "• Offline AI Engine\n"
-            "• Anti-Vishing Shield (Call Protection)\n"
-            "• Zero-Server Privacy"
-        )
+    'v1.7.0': {
+        'label': '🚀 v1.7.0 PRO',
+        'caption': "🛡️ *Cyber Brother v1.7.0 PRO*"
     }
 }
 
@@ -396,10 +390,9 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         )
 
     elif text == "📥 APK Yuklab Olish":
-        version_text = "📱 *Versiyani tanlang:* (Noma'lum manbalarga ruxsat bering)"
+        version_text = "📱 * Cyber Brother ULTRA v1.9.0*\n\nEng so'nggi va eng xavfsiz versiyani yuklab oling:"
         keyboard = [
-            [InlineKeyboardButton(APK_FILES['v1.7.0']['label'], callback_data='download_v1.7.0')],
-            [InlineKeyboardButton(APK_FILES['v1.3.0']['label'], callback_data='download_v1.3.0')]
+            [InlineKeyboardButton(APK_FILES['v1.9.0']['label'], callback_data='download_v1.9.0')]
         ]
         await update.message.reply_text(version_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
         
