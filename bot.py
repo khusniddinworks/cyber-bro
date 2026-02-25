@@ -548,28 +548,77 @@ async def handle_payment_media(update: Update, context: ContextTypes.DEFAULT_TYP
     state = context.user_data.get('state')
     
     if state == 'waiting_payment_receipt':
+        # Admin Approval Buttons
+        keyboard = [
+            [
+                InlineKeyboardButton("✅ Tasdiqlash", callback_data=f"approve_pay_{user.id}"),
+                InlineKeyboardButton("❌ Rad etish", callback_data=f"reject_pay_{user.id}")
+            ]
+        ]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+
         # Forward to all admins
         for admin_id in ADMIN_IDS:
             try:
-                caption = f"🧾 *YANGI TO'LOV CHEKI*\n👤 Foydalanuvchi: @{user.username} (ID: `{user.id}`)"
+                caption = (
+                    f"🧾 *YANGI TO'LOV CHEKI*\n\n"
+                    f"👤 Foydalanuvchi: @{user.username}\n"
+                    f"🆔 ID: `{user.id}`\n\n"
+                    f"Tasdiqlash tugmasini bossangiz, foydalanuvchidan Device ID so'raladi."
+                )
                 if update.message.photo:
-                    await context.bot.send_photo(chat_id=admin_id, photo=update.message.photo[-1].file_id, caption=caption, parse_mode='Markdown')
+                    await context.bot.send_photo(chat_id=admin_id, photo=update.message.photo[-1].file_id, caption=caption, parse_mode='Markdown', reply_markup=reply_markup)
                 elif update.message.document:
-                    await context.bot.send_document(chat_id=admin_id, document=update.message.document.file_id, caption=caption, parse_mode='Markdown')
+                    await context.bot.send_document(chat_id=admin_id, document=update.message.document.file_id, caption=caption, parse_mode='Markdown', reply_markup=reply_markup)
             except Exception as e:
                 print(f"Error forwarding receipt: {e}")
         
         await update.message.reply_text(
             "✅ *Chek adminga yuborildi!*\n\n"
-            "Endi ilovangizdagi **Device ID**ni yuboring. Admin to'lovni tekshirib, kalitingizni faollashtiradi.",
+            "To'lov tekshirilmoqda. Admin tasdiqlashi bilan sizdan **Device ID** so'raladi. Iltimos, biroz kuting. ⏳",
             parse_mode='Markdown'
         )
-        context.user_data['state'] = 'waiting_device_id'
+        context.user_data['state'] = None # Wait for admin action
         return
     
-    # If it's an admin uploading an APK
+    # APK Upload logic remains for admin
     if user.id in ADMIN_IDS and update.message.document:
         await handle_document(update, context)
+
+async def approve_payment_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    query = update.callback_query
+    admin_id = query.from_user.id
+    if admin_id not in ADMIN_IDS: return
+    
+    data = query.data
+    target_user_id = int(data.split('_')[-1])
+    
+    await query.answer()
+    
+    if data.startswith('approve_pay_'):
+        # 1. Set user state remotely
+        if target_user_id not in context.application.user_data:
+            context.application.user_data[target_user_id] = {}
+        context.application.user_data[target_user_id]['state'] = 'waiting_device_id'
+
+        # 2. Notify User
+        try:
+            msg = (
+                "🎉 *To'lovingiz tasdiqlandi!*\n\n"
+                "Endi ilovangizdagi **Device ID**ni yuboring. Biz sizga aktivatsiya kalitini generatsiya qilib beramiz."
+            )
+            await context.bot.send_message(chat_id=target_user_id, text=msg, parse_mode='Markdown')
+        except: pass
+        
+        await query.edit_message_caption(caption=query.message.caption + "\n\n✅ *TASDIQLANDI*", parse_mode='Markdown')
+        
+    elif data.startswith('reject_pay_'):
+        try:
+            msg = "❌ *To'lovingiz rad etildi.*\n\nChek noto'g'ri yoki mablag' kelib tushmadi. Muammo bo'lsa adminga murojaat qiling."
+            await context.bot.send_message(chat_id=target_user_id, text=msg, parse_mode='Markdown')
+        except: pass
+        
+        await query.edit_message_caption(caption=query.message.caption + "\n\n❌ *RAD ETILDI*", parse_mode='Markdown')
 
 # --- ADMIN COMMANDS ---
 async def broadcast_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -901,6 +950,7 @@ def main():
     application.add_handler(CallbackQueryHandler(save_version_callback, pattern='^save_v'))
     application.add_handler(CallbackQueryHandler(pay_premium_callback, pattern='^pay_premium'))
     application.add_handler(CallbackQueryHandler(confirm_payment_callback, pattern='^confirm_payment'))
+    application.add_handler(CallbackQueryHandler(approve_payment_callback, pattern='^(approve|reject)_pay_'))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text_menu))
     application.add_handler(MessageHandler(filters.PHOTO | filters.Document.ALL, handle_payment_media))
 
