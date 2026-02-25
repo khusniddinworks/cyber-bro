@@ -401,13 +401,12 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         device_id = text.strip().upper()
         verified_devices = load_verified_devices()
         
+        # PROFESSIONAL DYNAMIC ACTIVATION:
+        # If the user is in 'waiting_device_id' state (approved by admin), 
+        # we allow the ID even if it's not in the pre-defined slots.
         if device_id not in verified_devices:
-            await update.message.reply_text(
-                "❌ *Xatolik: Ushbu Device ID tizimda mavjud emas!*\n\n"
-                "Iltimos, avval premium sotib oling yoki admin bilan bog'laning.",
-                parse_mode='Markdown'
-            )
-            return
+            # Create a new entry for this newly approved device
+            verified_devices[device_id] = {"status": "available", "assigned_to": None}
 
         if verified_devices[device_id].get('status') == 'active':
              await update.message.reply_text(
