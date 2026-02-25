@@ -1318,72 +1318,96 @@ body {
     }
 }
 
-/* ===== FEEDBACK SECTION ===== */
-.feedback-sec {
-    padding: 100px 0;
+/* ===== FULL PROTECTION SECTION ===== */
+.full-protection-sec {
+    padding: 120px 0;
     background: var(--bg-main);
 }
 
-.feedback-container {
+.protection-guide-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 40px;
     padding: 60px;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     box-shadow: var(--shadow-soft);
 }
 
-.feedback-form {
-    margin-top: 40px;
+.guide-intro {
+    font-size: 20px;
+    color: var(--text-main);
+    margin-bottom: 40px;
+    font-weight: 700;
+    text-align: center;
 }
 
-.input-group {
-    margin-bottom: 20px;
+.guide-steps-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
 }
 
-.feedback-form input,
-.feedback-form textarea {
-    width: 100%;
-    padding: 18px 25px;
+.guide-step {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 24px;
     background: var(--bg-main);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    color: var(--text-main);
-    font-family: inherit;
-    font-size: 16px;
-    outline: none;
+    border-radius: 18px;
     transition: 0.3s;
+    color: var(--text-muted);
+    font-size: 16px;
 }
 
-.feedback-form textarea {
-    height: 150px;
-    resize: none;
-}
-
-.feedback-form input:focus,
-.feedback-form textarea:focus {
+.guide-step:hover {
+    transform: translateX(12px);
     border-color: var(--primary);
-    box-shadow: 0 0 15px var(--primary-glow);
+    background: var(--bg-card);
 }
 
-.fb-success-msg {
+.guide-step span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 0.95rem;
+}
+
+.guide-step b {
+    color: var(--text-main);
+}
+
+.guide-footer {
+    margin-top: 48px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
     text-align: center;
-    padding: 40px 0;
-}
-
-.fb-success-msg .icon {
-    font-size: 50px;
-    margin-bottom: 20px;
-}
-
-.fb-success-msg p {
+    font-weight: 800;
+    color: var(--primary);
     font-size: 20px;
-    font-weight: 700;
 }
 
 @media (max-width: 768px) {
-    .feedback-container {
-        padding: 40px 25px;
+    .protection-guide-card {
+        padding: 40px 20px;
+    }
+
+    .guide-step {
+        font-size: 14px;
+        padding: 14px 16px;
+        gap: 12px;
+    }
+
+    .guide-step span {
+        min-width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
     }
 }

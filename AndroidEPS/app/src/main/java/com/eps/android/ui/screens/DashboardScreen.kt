@@ -188,18 +188,18 @@ fun HomeDashboard(viewModel: DashboardViewModel, onNavigate: (String) -> Unit) {
                 Text(stringResource(R.string.header_core), color = GoldMuted, fontSize = 10.sp, letterSpacing = 2.sp, fontWeight = FontWeight.Black)
                 Text("CYBER BROTHER", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.ExtraBold)
             }
-            IconButton(onClick = { showNotifications = true }) {
+            IconButton(onClick = { showNotifications = true }, modifier = Modifier.size(48.dp)) {
                 BadgedBox(
                     badge = { 
                         if (activityLogs.isNotEmpty()) {
                             Badge(
                                 containerColor = Color.Red,
                                 contentColor = Color.White,
-                                modifier = Modifier.offset(x = (-4).dp, y = 4.dp)
+                                modifier = Modifier.offset(x = (-2).dp, y = 2.dp)
                             ) { 
                                 Text(
                                     text = activityLogs.size.toString(),
-                                    fontSize = 10.sp,
+                                    fontSize = 9.sp,
                                     fontWeight = FontWeight.Bold,
                                     color = Color.White
                                 ) 
@@ -211,7 +211,7 @@ fun HomeDashboard(viewModel: DashboardViewModel, onNavigate: (String) -> Unit) {
                         imageVector = Icons.Default.NotificationsNone,
                         contentDescription = "Notifications",
                         tint = GoldPremium,
-                        modifier = Modifier.size(28.dp)
+                        modifier = Modifier.size(26.dp)
                     )
                 }
             }

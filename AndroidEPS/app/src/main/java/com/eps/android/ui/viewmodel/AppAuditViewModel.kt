@@ -27,8 +27,20 @@ class AppAuditViewModel @Inject constructor(
     fun trustApp(packageName: String) {
         viewModelScope.launch {
             trustedAppDao.addTrustedApp(com.eps.android.data.TrustedApp(packageName))
-            // Refresh scan to reflect change
-            scanApps()
+            
+            // Update local list to avoid full re-scan animation
+            _apps.value = _apps.value.map { app ->
+                if (app.packageName == packageName) {
+                    app.copy(riskReport = app.riskReport.copy(
+                        level = AppRiskAuditor.RiskLevel.LOW,
+                        explanation = "Foydalanuvchi tomonidan tasdiqlandi"
+                    ))
+                } else app
+            }
+            
+            withContext(Dispatchers.Main) {
+                android.widget.Toast.makeText(context, "Ilova ishonchli ro'yxatga kiritildi ✅", android.widget.Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

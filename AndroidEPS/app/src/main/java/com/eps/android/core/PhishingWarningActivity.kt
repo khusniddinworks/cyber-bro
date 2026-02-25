@@ -359,13 +359,34 @@ fun AiScanOverlayScreen(
         }
         progress = 1.0f
         
-        // --- V1.7.9 HEURISTICS ---
+        // --- V1.8.0 SMART HEURISTICS ---
+        val latestApk = findLatestApk()
+        val fileName = latestApk?.name?.lowercase() ?: ""
         val lowerPackage = packageName.lowercase()
-        val isUntrustedSource = lowerPackage.contains("telegram") || lowerPackage.contains("chrome") || 
-                               lowerPackage.contains("browser") || lowerPackage.contains("whatsapp") ||
-                               lowerPackage.contains("google")
-        
-        resultStatus = if (isUntrustedSource) "danger" else "safe"
+
+        // 1. DANGER: Weird names or suspicious patterns
+        val isWeirdName = fileName.contains("debug") || 
+                         fileName.contains("test") || 
+                         fileName.contains("-") || 
+                         fileName.contains("_") ||
+                         Regex("\\(\\d+\\)").containsMatchIn(fileName) // e.g. apk(11).apk
+
+        // 2. SUSPICIOUS: From untrusted sources like Telegram/Chrome
+        val isUntrustedSource = lowerPackage.contains("telegram") || 
+                               lowerPackage.contains("chrome") || 
+                               lowerPackage.contains("browser")
+
+        resultStatus = when {
+            isWeirdName -> "danger"
+            isUntrustedSource -> "suspicious"
+            else -> "safe"
+        }
+
+        // Auto-close if safe
+        if (resultStatus == "safe") {
+            kotlinx.coroutines.delay(2000)
+            onClose()
+        }
     }
 
     Box(
@@ -379,9 +400,12 @@ fun AiScanOverlayScreen(
                 .background(
                     Brush.radialGradient(
                         colors = listOf(
-                            if (resultStatus == "danger") Color.Red.copy(alpha = 0.15f) 
-                            else if (resultStatus == "safe") Color(0xFF00FFCC).copy(alpha = 0.15f) 
-                            else Color.White.copy(alpha = 0.05f),
+                            when(resultStatus) {
+                                "danger" -> Color.Red.copy(alpha = 0.2f)
+                                "suspicious" -> Color(0xFFFFA500).copy(alpha = 0.15f)
+                                "safe" -> Color(0xFF00FFCC).copy(alpha = 0.15f)
+                                else -> Color.White.copy(alpha = 0.05f)
+                            },
                             Color.Transparent
                         )
                     )
@@ -416,13 +440,22 @@ fun AiScanOverlayScreen(
                 CircularProgressIndicator(
                     progress = animatedProgress,
                     modifier = Modifier.fillMaxSize(),
-                    color = if (resultStatus == "danger") Color.Red else Color(0xFF00FFCC),
+                    color = when(resultStatus) {
+                        "danger" -> Color.Red
+                        "suspicious" -> Color(0xFFFFA500)
+                        else -> Color(0xFF00FFCC)
+                    },
                     strokeWidth = 4.dp,
                     trackColor = Color.White.copy(alpha = 0.1f)
                 )
                 
                 Text(
-                    text = if (resultStatus == "danger") "🛑" else if (resultStatus == "safe") "✅" else "🧠",
+                    text = when(resultStatus) {
+                        "danger" -> "�"
+                        "suspicious" -> "⚠️"
+                        "safe" -> "✅"
+                        else -> "🧠"
+                    },
                     fontSize = 52.sp,
                     modifier = Modifier.graphicsLayer(scaleX = scale, scaleY = scale)
                 )
@@ -431,10 +464,20 @@ fun AiScanOverlayScreen(
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
-                text = if (resultStatus == "scanning") "AI TAHLIL QILINMOQDA" else if (resultStatus == "danger") "XAVF ANIQLANDI!" else "TIZIM XAVFSIZ",
+                text = when(resultStatus) {
+                    "scanning" -> "AI TAHLIL QILINMOQDA"
+                    "danger" -> "XAVFLI ILOVA ANIQLANDI!"
+                    "suspicious" -> "SHUBHALI ILOVA!"
+                    else -> "TIZIM XAVFSIZ"
+                },
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Black,
-                color = if (resultStatus == "danger") Color.Red else if (resultStatus == "safe") Color(0xFF00FFCC) else Color.White,
+                color = when(resultStatus) {
+                    "danger" -> Color.Red
+                    "suspicious" -> Color(0xFFFFA500)
+                    "safe" -> Color(0xFF00FFCC)
+                    else -> Color.White
+                },
                 letterSpacing = 2.sp,
                 textAlign = TextAlign.Center
             )
@@ -481,30 +524,34 @@ fun AiScanOverlayScreen(
             Spacer(modifier = Modifier.height(30.dp))
 
             if (resultStatus != "scanning") {
-                if (resultStatus == "danger") {
+                if (resultStatus == "danger" || resultStatus == "suspicious") {
                     // DISCLAIMER BOX
                     Surface(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(bottom = 20.dp),
                         shape = RoundedCornerShape(16.dp),
-                        color = Color(0x33FF0000),
-                        border = androidx.compose.foundation.BorderStroke(1.dp, Color.Red.copy(alpha = 0.3f))
+                        color = if (resultStatus == "danger") Color.Red.copy(alpha = 0.2f) else Color(0xFFFFA500).copy(alpha = 0.15f),
+                        border = androidx.compose.foundation.BorderStroke(1.dp, (if(resultStatus == "danger") Color.Red else Color(0xFFFFA500)).copy(alpha = 0.3f))
                     ) {
                         Column(modifier = Modifier.padding(14.dp)) {
                             Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text("⚠️", fontSize = 14.sp)
+                                Text(if (resultStatus == "danger") "💀" else "⚠️", fontSize = 14.sp)
                                 Spacer(modifier = Modifier.width(8.dp))
                                 Text(
-                                    text = "MAS'ULIYATDAN VOZ KECHISH:",
-                                    color = Color.Red,
+                                    text = if (resultStatus == "danger") "XAVFLI ILOVA:" else "SHUBHALI MANBA:",
+                                    color = if (resultStatus == "danger") Color.Red else Color(0xFFFFA500),
                                     fontWeight = FontWeight.Bold,
                                     fontSize = 11.sp
                                 )
                             }
                             Spacer(modifier = Modifier.height(6.dp))
                             Text(
-                                text = "Cyber Brother ushbu ilovani xavfli deb topdi. Agar baribir o'rnatsangiz, ma'lumotlaringiz xavfsizligi uchun javobgarlik TO'LIQ sizning zimmangizda bo'ladi.",
+                                text = if (resultStatus == "danger") {
+                                    "Ushbu ilova mantiqsiz nomga ega (repack/virus ehtimoli). Uni o'rnatish qurilmangizning butunlay buzilishiga olib kelishi mumkin."
+                                } else {
+                                    "Ilova nomi mantiqan to'g'ri, ammo u norasmiy manbadan (Telegram/Chrome) yuklangan. Cyber Brother uning xavfsizligiga kafolat bermaydi va mas'uliyatni o'z zimmasiga olmaydi."
+                                },
                                 color = Color.White.copy(alpha = 0.9f),
                                 fontSize = 12.sp,
                                 textAlign = TextAlign.Start,
@@ -528,19 +575,19 @@ fun AiScanOverlayScreen(
                                 onClose()
                             },
                             modifier = Modifier.weight(1f).height(56.dp),
-                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00D4AA)),
+                            colors = ButtonDefaults.buttonColors(containerColor = if(resultStatus == "danger") Color(0xFF00D4AA) else Color.Gray.copy(alpha=0.3f)),
                             shape = RoundedCornerShape(14.dp)
                         ) {
-                            Text("BEKOR QILISH", fontWeight = FontWeight.Bold, color = Color.Black, fontSize = 13.sp)
+                            Text("BEKOR QILISH", fontWeight = FontWeight.Bold, color = Color.White, fontSize = 13.sp)
                         }
 
                         OutlinedButton(
                             onClick = { onClose() }, // Allow install by closing overlay
                             modifier = Modifier.weight(1f).height(56.dp),
-                            border = androidx.compose.foundation.BorderStroke(1.5.dp, Color.Red.copy(alpha = 0.7f)),
+                            border = androidx.compose.foundation.BorderStroke(1.5.dp, (if(resultStatus == "danger") Color.Red else Color(0xFFFFA500)).copy(alpha = 0.7f)),
                             shape = RoundedCornerShape(14.dp)
                         ) {
-                            Text("BARIBIR O'RNATISH", fontWeight = FontWeight.Bold, color = Color.Red, fontSize = 11.sp)
+                            Text(if(resultStatus == "danger") "BARIBIR O'RNATISH" else "DAVOM ETISH", fontWeight = FontWeight.Bold, color = if(resultStatus == "danger") Color.Red else Color(0xFFFFA500), fontSize = 11.sp)
                         }
                     }
                 } else {

@@ -127,14 +127,15 @@ public final class DashboardViewModel extends androidx.lifecycle.ViewModel {
         return null;
     }
     
-    @kotlin.Metadata(mv = {1, 9, 0}, k = 1, xi = 48, d1 = {"\u0000\u001e\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000b\n\u0002\b\r\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u000e\n\u0000\b\u0086\b\u0018\u00002\u00020\u0001B-\u0012\b\b\u0002\u0010\u0002\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0005\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0006\u001a\u00020\u0003\u00a2\u0006\u0002\u0010\u0007J\t\u0010\t\u001a\u00020\u0003H\u00c6\u0003J\t\u0010\n\u001a\u00020\u0003H\u00c6\u0003J\t\u0010\u000b\u001a\u00020\u0003H\u00c6\u0003J\t\u0010\f\u001a\u00020\u0003H\u00c6\u0003J1\u0010\r\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u00032\b\b\u0002\u0010\u0006\u001a\u00020\u0003H\u00c6\u0001J\u0013\u0010\u000e\u001a\u00020\u00032\b\u0010\u000f\u001a\u0004\u0018\u00010\u0001H\u00d6\u0003J\t\u0010\u0010\u001a\u00020\u0011H\u00d6\u0001J\t\u0010\u0012\u001a\u00020\u0013H\u00d6\u0001R\u0011\u0010\u0004\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0004\u0010\bR\u0011\u0010\u0002\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0002\u0010\bR\u0011\u0010\u0005\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0005\u0010\bR\u0011\u0010\u0006\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0006\u0010\b\u00a8\u0006\u0014"}, d2 = {"Lcom/eps/android/ui/viewmodel/DashboardViewModel$ProtectionStatus;", "", "isFileGuardActive", "", "isAccessibilityActive", "isNotificationListenerActive", "isNotificationPermissionGranted", "(ZZZZ)V", "()Z", "component1", "component2", "component3", "component4", "copy", "equals", "other", "hashCode", "", "toString", "", "app_debug"})
+    @kotlin.Metadata(mv = {1, 9, 0}, k = 1, xi = 48, d1 = {"\u0000\u001e\n\u0002\u0018\u0002\n\u0002\u0010\u0000\n\u0000\n\u0002\u0010\u000b\n\u0002\b\u000f\n\u0002\u0010\b\n\u0000\n\u0002\u0010\u000e\n\u0000\b\u0086\b\u0018\u00002\u00020\u0001B7\u0012\b\b\u0002\u0010\u0002\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0004\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0005\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0006\u001a\u00020\u0003\u0012\b\b\u0002\u0010\u0007\u001a\u00020\u0003\u00a2\u0006\u0002\u0010\bJ\t\u0010\n\u001a\u00020\u0003H\u00c6\u0003J\t\u0010\u000b\u001a\u00020\u0003H\u00c6\u0003J\t\u0010\f\u001a\u00020\u0003H\u00c6\u0003J\t\u0010\r\u001a\u00020\u0003H\u00c6\u0003J\t\u0010\u000e\u001a\u00020\u0003H\u00c6\u0003J;\u0010\u000f\u001a\u00020\u00002\b\b\u0002\u0010\u0002\u001a\u00020\u00032\b\b\u0002\u0010\u0004\u001a\u00020\u00032\b\b\u0002\u0010\u0005\u001a\u00020\u00032\b\b\u0002\u0010\u0006\u001a\u00020\u00032\b\b\u0002\u0010\u0007\u001a\u00020\u0003H\u00c6\u0001J\u0013\u0010\u0010\u001a\u00020\u00032\b\u0010\u0011\u001a\u0004\u0018\u00010\u0001H\u00d6\u0003J\t\u0010\u0012\u001a\u00020\u0013H\u00d6\u0001J\t\u0010\u0014\u001a\u00020\u0015H\u00d6\u0001R\u0011\u0010\u0004\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0004\u0010\tR\u0011\u0010\u0007\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0007\u0010\tR\u0011\u0010\u0002\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0002\u0010\tR\u0011\u0010\u0005\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0005\u0010\tR\u0011\u0010\u0006\u001a\u00020\u0003\u00a2\u0006\b\n\u0000\u001a\u0004\b\u0006\u0010\t\u00a8\u0006\u0016"}, d2 = {"Lcom/eps/android/ui/viewmodel/DashboardViewModel$ProtectionStatus;", "", "isFileGuardActive", "", "isAccessibilityActive", "isNotificationListenerActive", "isNotificationPermissionGranted", "isAutoRevokeDisabled", "(ZZZZZ)V", "()Z", "component1", "component2", "component3", "component4", "component5", "copy", "equals", "other", "hashCode", "", "toString", "", "app_debug"})
     public static final class ProtectionStatus {
         private final boolean isFileGuardActive = false;
         private final boolean isAccessibilityActive = false;
         private final boolean isNotificationListenerActive = false;
         private final boolean isNotificationPermissionGranted = false;
+        private final boolean isAutoRevokeDisabled = false;
         
-        public ProtectionStatus(boolean isFileGuardActive, boolean isAccessibilityActive, boolean isNotificationListenerActive, boolean isNotificationPermissionGranted) {
+        public ProtectionStatus(boolean isFileGuardActive, boolean isAccessibilityActive, boolean isNotificationListenerActive, boolean isNotificationPermissionGranted, boolean isAutoRevokeDisabled) {
             super();
         }
         
@@ -151,6 +152,10 @@ public final class DashboardViewModel extends androidx.lifecycle.ViewModel {
         }
         
         public final boolean isNotificationPermissionGranted() {
+            return false;
+        }
+        
+        public final boolean isAutoRevokeDisabled() {
             return false;
         }
         
@@ -174,8 +179,12 @@ public final class DashboardViewModel extends androidx.lifecycle.ViewModel {
             return false;
         }
         
+        public final boolean component5() {
+            return false;
+        }
+        
         @org.jetbrains.annotations.NotNull
-        public final com.eps.android.ui.viewmodel.DashboardViewModel.ProtectionStatus copy(boolean isFileGuardActive, boolean isAccessibilityActive, boolean isNotificationListenerActive, boolean isNotificationPermissionGranted) {
+        public final com.eps.android.ui.viewmodel.DashboardViewModel.ProtectionStatus copy(boolean isFileGuardActive, boolean isAccessibilityActive, boolean isNotificationListenerActive, boolean isNotificationPermissionGranted, boolean isAutoRevokeDisabled) {
             return null;
         }
         

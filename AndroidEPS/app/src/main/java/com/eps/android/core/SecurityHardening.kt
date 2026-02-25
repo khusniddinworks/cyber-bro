@@ -79,6 +79,48 @@ object SecurityHardening {
     }
 
     /**
+     * Verifies if the app's signing certificate matches the developer's key.
+     * This prevents repackaging and "fake" versions of Cyber Brother.
+     */
+    fun verifySignature(context: Context): Boolean {
+        if (RELEASE_SIGNATURE_HASH == "YOUR_REAL_RELEASE_SHA256_HASH_HERE") {
+            // Skip check in debug mode or if not configured yet
+            return true 
+        }
+        
+        val currentHash = getCertificateHash(context)
+        return currentHash == RELEASE_SIGNATURE_HASH
+    }
+
+    /**
+     * Extracts the SHA-256 fingerprint of the app's signing certificate.
+     */
+    fun getCertificateHash(context: Context): String {
+        return try {
+            val packageInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_SIGNING_CERTIFICATES)
+            } else {
+                @Suppress("DEPRECATION")
+                context.packageManager.getPackageInfo(context.packageName, PackageManager.GET_SIGNATURES)
+            }
+
+            val signatures = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                packageInfo.signingInfo.apkContentsSigners
+            } else {
+                @Suppress("DEPRECATION")
+                packageInfo.signatures
+            }
+
+            val md = MessageDigest.getInstance("SHA-256")
+            md.update(signatures[0].toByteArray())
+            val digest = md.digest()
+            digest.joinToString(":") { "%02X".format(it) }
+        } catch (e: Exception) {
+            "ERROR"
+        }
+    }
+
+    /**
      * Simple string obfuscation to hide API keys from 'strings' command analysis.
      */
     fun decryptSecret(encrypted: String): String {

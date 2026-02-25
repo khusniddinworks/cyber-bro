@@ -94,13 +94,14 @@ class AppRiskAuditor @Inject constructor(
             // System & Utilities
             "com.android.chrome", "org.mozilla.firefox", "com.opera.browser", "com.microsoft.emmx",
             "com.google.android.apps.messaging", "com.google.android.apps.photos", "com.google.android.gm",
-            "ru.hh.android", "uz.gizmo", "com.gizmo", "com.edaai.globalmove"
+            "ru.hh.android", "uz.gizmo", "com.gizmo", "com.edaai.globalmove",
+            "ge.space.app.uzbekistan"
         )
         
         val normalizedPackage = packageName.trim().lowercase()
         val isTbcOrAlif = normalizedPackage.contains("tbc") || normalizedPackage.contains("alif") || 
                           normalizedPackage.contains("click") || normalizedPackage.contains("payme") ||
-                          normalizedPackage.contains("uzum")
+                          normalizedPackage.contains("uzum") || normalizedPackage.contains("ge.space")
 
         if (safeApps.contains(normalizedPackage) || safeApps.any { normalizedPackage.startsWith("$it.") } || isTbcOrAlif) {
              val explanation = if (isTbcOrAlif) "Tasdiqlangan Milliy Ilova (Verified App)" else "Ishonchli Manba (Trusted Source)"

@@ -56,11 +56,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         
         // --- EMERGENCY SECURITY CHECK ---
-        if (!com.eps.android.core.SecurityHardening.isEnvironmentSafe(this)) {
-            Timber.e("🛑 SECURITY BREACH: Unsafe environment detected (Debugger/Root/Emulator)!")
-            // In a production app, you might want to show a warning then exit
-            // finishAffinity() 
-            // return
+        val isSafe = com.eps.android.core.SecurityHardening.isEnvironmentSafe(this)
+        val isAuthentic = com.eps.android.core.SecurityHardening.verifySignature(this)
+        
+        if (!isSafe || !isAuthentic) {
+            Timber.e("🛑 SECURITY BREACH: Environment Safe: $isSafe, Signature Authentic: $isAuthentic")
+            // In case of attack, we disable core logic
+            if (!isSafe) {
+                // Warning for Root/Debugger
+            }
+            if (!isAuthentic) {
+                // Critical: App was repackaged (Fake version)
+                finishAffinity()
+                return
+            }
         }
         
         applySavedLocale()

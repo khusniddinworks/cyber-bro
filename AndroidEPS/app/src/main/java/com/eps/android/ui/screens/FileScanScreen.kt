@@ -194,10 +194,13 @@ fun FileResultCard(
                 }
             }
 
-            if (isMalicious || isSuspicious) {
-                IconButton(onClick = onDelete) {
-                    Icon(Icons.Default.DeleteForever, contentDescription = null, tint = Color.Red.copy(alpha=0.6f))
-                }
+            IconButton(onClick = onDelete) {
+                Icon(
+                    Icons.Default.DeleteForever, 
+                    contentDescription = "Delete", 
+                    tint = if (isMalicious || isSuspicious) Color.Red else Color.Gray.copy(alpha=0.6f),
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
 

@@ -95,17 +95,8 @@ fun SystemStatusCard(status: DashboardViewModel.ProtectionStatus) {
             if (isRestricted) {
                 WizardStep(
                     step = "!",
-                    title = "1-QADAM: Tizimni 'uyg'otish'",
-                    desc = "Avval pastdagi 2-qadamni bosing va 'Xatolik' chiqishini kuting. Keyin bu yerga qayting.",
-                    isDone = false
-                ) {
-                    showUnblockGuide = true
-                }
-
-                WizardStep(
-                    step = "2",
-                    title = "2-QADAM: Ruxsatni ochish",
-                    desc = "Sozlamalarda tepada 3ta nuqta (⋮) chiqishi uchun avval ushbu tugmani bosing.",
+                    title = "1-QADAM: Ta'qiqni yechish",
+                    desc = "Android 13+ da 'Restricted settings' cheklovini olib tashlash uchun bosing.",
                     isDone = false
                 ) {
                     val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
@@ -116,11 +107,11 @@ fun SystemStatusCard(status: DashboardViewModel.ProtectionStatus) {
                 }
             }
 
-            // STEP 2: FISHING PROTECTION (Now maps to Step 3 if restricted)
+            // STEP 2: FISHING PROTECTION
             WizardStep(
-                step = if (isRestricted) "3" else "1",
+                step = if (isRestricted) "2" else "1",
                 title = "Fishingdan himoya",
-                desc = if (status.isAccessibilityActive) "✅ Himoya yoqilgan" else "⚠️ Yoqish uchun bosing (Xatolikni chiqarish)",
+                desc = if (status.isAccessibilityActive) "✅ Himoya yoqilgan" else "⚠️ Yoqish uchun bosing (Cheklovni yechish)",
                 isDone = status.isAccessibilityActive,
                 isEnabled = true,
                 onHow = { showStepGuide = "accessibility" }
@@ -139,23 +130,57 @@ fun SystemStatusCard(status: DashboardViewModel.ProtectionStatus) {
             ) {
                 context.startActivity(Intent(android.provider.Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
             }
+
+            // EXTRA: Battery Optimization (To prevent random "bans")
+            val pm = context.getSystemService(Context.POWER_SERVICE) as android.os.PowerManager
+            val isIgnoringBattery = pm.isIgnoringBatteryOptimizations(context.packageName)
+            if (!isIgnoringBattery) {
+                WizardStep(
+                    step = "?",
+                    title = "Tizim barqarorligi",
+                    desc = "Ilova o'chib qolmasligi uchun cheklovni olib tashlang.",
+                    isDone = false
+                ) {
+                    val intent = Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                        data = Uri.parse("package:${context.packageName}")
+                    }
+                    context.startActivity(intent)
+                }
+            }
+
+            // NEW: Auto-Revoke (The reason why permissions vanish)
+            if (!status.isAutoRevokeDisabled && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                WizardStep(
+                    step = "!",
+                    title = "Doimiy himoyani saqlash",
+                    desc = "Tizim ruhsatlarni o'chirib yubormasligi uchun buni sozlang.",
+                    isDone = false
+                ) {
+                    val intent = Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                        data = Uri.parse("package:${context.packageName}")
+                    }
+                    context.startActivity(intent)
+                    showUnblockGuide = true
+                }
+            }
         }
     }
 
     if (showUnblockGuide) {
         AlertDialog(
             onDismissRequest = { showUnblockGuide = false },
-            title = { Text("Tugmani topa olmadingizmi?", color = Color.White, fontWeight = FontWeight.Bold) },
+            title = { Text("Ruhsatlar uchib ketmasligi uchun", color = Color.White, fontWeight = FontWeight.Bold) },
             text = {
                 Column {
                     Text(
-                        "1. Agar tepada ⋮ (3ta nuqta) bo'lmasa, sahifani ENG PASTIGA tushiring.\n\n" +
-                                "2. U yerda 'Cheklangan sozlamalarga ruxsat berish' yoki 'Allow restricted settings' yozuvini ko'rasiz.\n\n" +
-                                "3. Uni bosing va barmoq izingiz yoki parolingizni tasdiqlang.",
+                        "Android tizimi uzoq vaqt ishlatilmagan ilovalarning ruhsatlarini o'zi o'chirib yuboradi.\n\n" +
+                                "1. Sahifani pastiga tushiring.\n" +
+                                "2. 'Ishlatilmaganda ruxsatlarni o'chirish' (Remove permissions if app is unused) tugmasini O'CHIRIB qo'ying.\n\n" +
+                                "3. Shuningdek, 'Avtomatik ishga tushirish' (Auto-start) yozuvini ko'rsangiz, uni YOQIB qo'ying.",
                         color = Color.LightGray
                     )
                     Spacer(modifier = Modifier.height(12.dp))
-                    Text("💡 Bu muhim: Shundan keyingina biz Fishing va Telegram himoyasini yoqa olamiz.", color = GoldPremium, fontSize = 12.sp)
+                    Text("💡 Bu Cyber Brother doimiy ishlashi uchun juda muhim.", color = GoldPremium, fontSize = 12.sp)
                 }
             },
             confirmButton = {

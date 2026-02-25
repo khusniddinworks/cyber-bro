@@ -92,7 +92,22 @@ Bildirishnomalarni (Notification) foydalanuvchilar ko'pincha o'tkazib yuboradi. 
     *   **Red Alert.**
     *   24/7 AI Monitoring.
 
+## 🛡️ 6. Ilovani 100% Himoya qilish yo'riqnomasi (10 Qadam)
+
+Foydalanuvchi tizimni to'liq himoya qilish uchun quyidagi bosqichlarni amalga oshirishi shart:
+
+1.  **Fayllarga ruxsat:** Ilova ichida "Barcha fayllarni boshqarish" ruxsatini yoqing.
+2.  **Dashboard sozlamalari:** Asosiy ekranda "Xavfli fayllar filtri" va boshqa ruxsatlarni tasdiqlang.
+3.  **Bildirishnomalar:** "Qurilma va ilova bildirishnomalari" bo'limidan Cyber Brotherga ruxsat bering.
+4.  **Tizim Sozlamalari:** Telefoningizning umumiy Sozlamalar (Settings) menyusiga kiring.
+5.  **Ilovalar:** "Ilova boshqaruvi" (App Management) bo'limini tanlang.
+6.  **Ilova tanlash:** Ro'yxatdan "Cyber Brother" ilovasini toping va kiring.
+7.  **3-nuqta menusi:** Yuqori o'ng burchakdagi 3 ta nuqta (ko'proq) tugmasini bosing.
+8.  **Cheklovni yechish:** "Cheklangan sozlamalarga ruxsat berish" (Allow restricted settings) bandini tanlang.
+9.  **Ilovaga qaytish:** Cyber Brotherga qayting va "Fishingdan himoya" tugmasini bosing.
+10. **Maxsus imkoniyatlar:** "Accessibility" bo'limidan "Cyber Brother Phishing Protection" xizmatini yoqing.
+
 ---
 
-*Hujjat yangilandi: 2026-yil 9-fevral*  
+*Hujjat yangilandi: 2026-yil 25-fevral*  
 **Cyber Brother Security Team**

@@ -240,7 +240,8 @@ def get_main_keyboard(is_admin=False):
     keyboard = [
         [KeyboardButton("🛒 Premium Olish"), KeyboardButton("📥 APK Yuklab Olish")],
         [KeyboardButton("🔑 Litsenziyani Aktivlashtirish"), KeyboardButton("ℹ️ Ilova haqida")],
-        [KeyboardButton("✍️ Fikr qoldirish"), KeyboardButton("🌐 Vebsayt")]
+        [KeyboardButton("🛡️ 100% Himoya yo'riqnomasi"), KeyboardButton("🌐 Vebsayt")],
+        [KeyboardButton("✍️ Fikr qoldirish")]
     ]
     if is_admin:
         # Add Admin Controls
@@ -459,6 +460,24 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         
     elif text == "🌐 Vebsayt":
         await update.message.reply_text("🔗 [https://khamidovkhusnidd1n.github.io/CYBERBROTHER/](https://khamidovkhusnidd1n.github.io/CYBERBROTHER/)")
+
+    elif text == "🛡️ 100% Himoya yo'riqnomasi" or text == "/help_protect":
+        guide_text = (
+            "🛡️ *Cyber Brother: 100% Himoyani Yoqish Yo'riqnomasi*\n\n"
+            "Tizim to'liq ishlashi uchun quyidagi 10 ta qadamni bajaring:\n\n"
+            "1️⃣ *Fayllarga ruxsat:* Ilova ichida 'Barcha fayllarni boshqarish'ni yoqing.\n"
+            "2️⃣ *Dashboard:* 'Xavfli fayllar filtri' va boshqa ruxsatlarni tasdiqlang.\n"
+            "3️⃣ *Bildirishnomalar:* Cyber Brotherga bildirishnomalarga kirish ruxsatini bering.\n"
+            "4️⃣ *Sozlamalar:* Telefoningizning 'Sozlamalar' (Settings) menyusiga kiring.\n"
+            "5️⃣ *Ilovalar:* 'Ilova boshqaruvi' bo'limini tanlang.\n"
+            "6️⃣ *Ilova tanlash:* Ro'yxatdan 'Cyber Brother'ni toping.\n"
+            "7️⃣ *3 nuqta:* Yuqori o'ng burchakdagi 3 ta nuqta tugmasini bosing.\n"
+            "8️⃣ *Cheklov yechish:* 'Cheklangan sozlamalarga ruxsat berish' bandini tanlang.\n"
+            "9️⃣ *Qaytish:* Ilovaga qaytib, 'Fishingdan himoya' tugmasini bosing.\n"
+            "🔟 *So'nggi qadam:* 'Accessibility' bo'limidan 'Cyber Brother Phishing Protection'ni yoqing.\n\n"
+            "✅ *Bajarildi! Endi qurilmangiz mutlaq xavfsiz.*"
+        )
+        await update.message.reply_text(guide_text, parse_mode='Markdown')
 
 async def download_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     query = update.callback_query

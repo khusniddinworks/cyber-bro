@@ -39,7 +39,8 @@ class DashboardViewModel @Inject constructor(
         val isFileGuardActive: Boolean = false,
         val isAccessibilityActive: Boolean = false,
         val isNotificationListenerActive: Boolean = false,
-        val isNotificationPermissionGranted: Boolean = true
+        val isNotificationPermissionGranted: Boolean = true,
+        val isAutoRevokeDisabled: Boolean = true // Whitelisted from auto-revoke
     )
 
     private val _protectionStatus = kotlinx.coroutines.flow.MutableStateFlow(ProtectionStatus())
@@ -53,10 +54,11 @@ class DashboardViewModel @Inject constructor(
         )
 
     val securityScore: StateFlow<Int> = protectionStatus.map { status ->
-        var score = 45 // Base score for running Cyber Brother
-        if (status.isAccessibilityActive) score += 15
-        if (status.isNotificationListenerActive) score += 15
-        if (status.isFileGuardActive) score += 12
+        var score = 40 // Base score for running Cyber Brother
+        if (status.isAccessibilityActive) score += 20
+        if (status.isNotificationListenerActive) score += 20
+        if (status.isFileGuardActive) score += 15
+        if (status.isNotificationPermissionGranted) score += 5
         score.coerceAtMost(100)
     }.stateIn(
         scope = viewModelScope,
@@ -117,11 +119,18 @@ class DashboardViewModel @Inject constructor(
                 ) == android.content.pm.PackageManager.PERMISSION_GRANTED
             } else true
 
+            val autoRevokeDisabled = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                try {
+                    context.packageManager.isAutoRevokeWhitelisted
+                } catch (e: Exception) { true }
+            } else true
+
             _protectionStatus.value = ProtectionStatus(
                 isFileGuardActive = fileGuard,
                 isAccessibilityActive = accessibility,
                 isNotificationListenerActive = notificationListener,
-                isNotificationPermissionGranted = notificationPermission
+                isNotificationPermissionGranted = notificationPermission,
+                isAutoRevokeDisabled = autoRevokeDisabled
             )
         }
     }

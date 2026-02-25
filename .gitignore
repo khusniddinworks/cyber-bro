@@ -1,6 +1,27 @@
+# Sensitive and Database files
 .env
+*.json
+!package.json
+!composer.json
+
+# Python
 __pycache__/
 *.pyc
-bot_config.json
-users.json
-*.apk
+
+# Android
+AndroidEPS/build/
+AndroidEPS/.gradle/
+AndroidEPS/local.properties
+AndroidEPS/*.apk
+AndroidEPS/.idea/
+AndroidEPS/*.iml
+
+# Miscellaneous
+TEST/
+GreedyTestApp/
+.vscode/
+*.log
+node_modules/
+dist/
+build/
+.DS_Store
