@@ -198,7 +198,8 @@ async def notify_admin(context: ContextTypes.DEFAULT_TYPE, message: str):
             elif app_instance:
                 await app_instance.bot.send_message(chat_id=admin_id, text=message, parse_mode='Markdown')
         except Exception as e:
-            print(f"Failed to notify admin {admin_id}: {e}")
+            print(f"❌ Failed to notify admin {admin_id}: {e}")
+            # Log the error to console for debugging
 
 # --- LICENSE LOGIC ---
 def generate_license_key(device_id):
@@ -211,7 +212,7 @@ APK_FILES = {
     'v1.7.0': {
         'label': '🦅 v1.7.0 SUPER ULTRA',
         'caption': (
-            "🛡️ *Cyber Brother v1.7.0 SUPER*\n\n"
+            "🛡️ *Cyber Brother v1.7.9 SUPER*\n\n"
             "🔥 *MAXIMAL HIMOYA:* \n"
             "• 🛑 *Real-Time Wizard:* Yoshi kattalar uchun oson sozlash.\n"
             "• 🎯 *Phishing Whitelist:* Xavfsiz saytlarga ruxsat berish imkoniyati.\n"
@@ -710,6 +711,7 @@ class UniversalServer(BaseHTTPRequestHandler):
                         
                         msg = f"🔐 *Admin Panel Login*\n\nTasdiqlash kodi: `{otp}`\n(2 daqiqa amal qiladi)"
                         if loop_instance and app_instance:
+                             print(f"🔐 Generating 2FA for admin. Code: {otp}")
                              asyncio.run_coroutine_threadsafe(notify_admin(None, msg), loop_instance)
 
                         self._set_headers(200)
