@@ -31,9 +31,9 @@ else:
     ADMIN_IDS = [8332161047] # Default Admin ID
 
 # Admin Password (for Website Admin Panel)
-ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin123')
-CARD_NUMBER = os.getenv('CARD_NUMBER', 'Bog\'laning')
-CARD_NAME = os.getenv('CARD_NAME', '')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'cyberadmin2026')
+CARD_NUMBER = "4916990303864737"
+CARD_NAME = "Khamidov Khusniddin"
 
 # Files Configuration
 CONFIG_FILE = 'bot_config.json'
