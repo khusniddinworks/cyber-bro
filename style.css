@@ -1411,3 +1411,73 @@ body {
         font-size: 0.8rem;
     }
 }
+
+/* ===== FEEDBACK SECTION ===== */
+.feedback-sec {
+    padding: 120px 0;
+    background: var(--bg-card);
+}
+
+.feedback-container {
+    background: var(--bg-main);
+    border: 1px solid var(--border);
+    border-radius: 44px;
+    padding: 60px;
+    max-width: 800px;
+    margin: 0 auto;
+    box-shadow: var(--shadow-soft);
+}
+
+.feedback-form {
+    margin-top: 40px;
+}
+
+.input-group {
+    margin-bottom: 24px;
+}
+
+.feedback-form input,
+.feedback-form textarea {
+    width: 100%;
+    padding: 18px 24px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    color: var(--text-main);
+    font-family: inherit;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+.feedback-form textarea {
+    height: 160px;
+    resize: none;
+}
+
+.feedback-form input:focus,
+.feedback-form textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 20px var(--primary-glow);
+}
+
+.fb-success-msg {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.fb-success-msg .icon {
+    font-size: 56px;
+    margin-bottom: 20px;
+}
+
+.fb-success-msg p {
+    font-size: 20px;
+    font-weight: 800;
+}
+
+@media (max-width: 768px) {
+    .feedback-container {
+        padding: 40px 24px;
+    }
+}
