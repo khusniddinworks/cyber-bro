@@ -277,10 +277,10 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         welcome_text = (
             "🦅 *Cyber Brother: Raqamli Dunyodagi Shaxsiy Tansoqchingiz*\n\n"
             "Hush kelibsiz! Jamoamiz sizga *\"Sizning hayotingiz faqat sizga tegishli!\"* degan kafolatni beradi.\n\n"
-            "🛡️ *Nega aynan biz?*\n"
-            "✅ **100% Offline** — Ma'lumotlaringiz telefondan chiqmaydi.\n"
-            "✅ **Mahalliy AI** — O'zbek tilini va firibgarlarni taniydi.\n"
-            "✅ **Tezkor va Yengil** — Batareyangizni asraydi.\n\n"
+            "🛡️ *Nega aynan Cyber Brother?*\n"
+            "✅ *Offline AI* — Hech qanday serverlarsiz, 100% maxfiylik.\n"
+            "✅ *Link Scanner* — Havolalarni real vaqtda tekshirish.\n"
+            "✅ *Multi-language AI* — UZ, RU, EN tillaridagi firibgarlikni tushunadi.\n\n"
             "👇 *Imkoniyatlardan foydalanish uchun menyuni tanlang:*"
         )
     
