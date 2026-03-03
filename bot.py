@@ -334,10 +334,10 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
         premium_text = (
             "💎 *Cyber Brother PREMIUM — Cheklovsiz Himoya*\n\n"
             "Siz oddiy foydalanuvchi emassiz. Sizga eng yaxshisi kerak.\n\n"
-            "✅ *Anti-Sideloading Shield* (APK o'rnatishni bloklash)\n"
+            "✅ *Link Scanner* (Havolalarni real vaqtda tekshirish)\n"
             "✅ *AI Deep Scan* (200% DEX tahlili)\n"
-            "✅ *Red Alert Protocol* (Xavfli ilovalarni majburiy o'chirish)\n"
-            "✅ *Offline AI Engine* (Maxfiylik kafolati)\n\n"
+            "✅ *Secret Vault* (Harbiy darajadagi fayl shifrlash)\n"
+            "✅ *Multi-language AI* (UZ, RU, EN tillarida himoya)\n\n"
             "💰 *Narxi: 10,000 so'm / oy* (14 kunlik bepul sinov)\n"
             "Muddat: Cheksiz yangilanishlar."
         )
@@ -365,8 +365,8 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             "6️⃣ *Ilova tanlash:* Ro'yxatdan 'Cyber Brother'ni toping.\n"
             "7️⃣ *3 nuqta:* Yuqori o'ng burchakdagi 3 ta nuqta tugmasini bosing.\n"
             "8️⃣ *Cheklov yechish:* 'Cheklangan sozlamalarga ruxsat berish' bandini tanlang.\n"
-            "9️⃣ *Qaytish:* Ilovaga qaytib, 'Fishingdan himoya' tugmasini bosing.\n"
-            "🔟 *So'nggi qadam:* 'Accessibility' bo'limidan 'Cyber Brother Phishing Protection'ni yoqing.\n\n"
+            "9️⃣ *Qaytish:* Ilovaga qaytib, 'Dashboard' bo'limini oching.\n"
+            "🔟 *Link Scan:* Havolalarni 'Cyber Brother' orqali ochib, xavfsizligini ta'minlang.\n\n"
             "✅ *Bajarildi! Endi qurilmangiz mutlaq xavfsiz.*"
         )
         await update.message.reply_text(guide_text, parse_mode='Markdown')
@@ -379,10 +379,14 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     if text == "ℹ️ Ilova haqida":
         about_text = (
             "ℹ️ *Cyber Brother PRO Haqida*\n\n"
-            "Biz jahon gigantlariga (Kaspersky, Bitdefender) qarshi yangi muqobilmiz.\n\n"
-            "1️⃣ *100% Offline Maxfiylik:* Server yo'q. Bizda sizning ma'lumotlaringizni ko'rish imkoni yo'q.\n"
-            "2️⃣ *Mahalliy AI:* O'zbek tilida so'zlashuvchi va mahalliy muammolarni tushunuvchi yagona kiber-aql.\n"
-            "3️⃣ *Resurs Tejamkorligi:* Telefoningizni qizdirmaydi va quvvatini yemaydi.\n\n"
+            "O'zbekistondagi birinchi neyron-asosli kiber-qalqon.\n\n"
+            "🛡️ *Asosiy Imkoniyatlar:*\n"
+            "✅ *Offline AI Engine* — 100% qurilma ichida tahlil, serverga hech narsa yuborilmaydi.\n"
+            "✅ *Anti-Vishing* — Telefon firibgarligini real vaqtda aniqlaydi.\n"
+            "✅ *Smart App Audit* — O'rnatilgan ilovalar xavfsizligini tahlil qiladi.\n"
+            "✅ *Link Scanner* — Shubhali havolalarni ochishdan oldin tekshiradi.\n"
+            "✅ *Secret Vault* — Fayllarni AES shifrlash bilan himoyalaydi.\n"
+            "✅ *Multi-language AI* — O'zbek, Rus, Ingliz tillarini tushunadi.\n\n"
             "🦅 *Bizning shior:* Sizning xavfsizligingiz — bizning obro'yimiz!"
         )
         await update.message.reply_text(about_text, parse_mode='Markdown')
