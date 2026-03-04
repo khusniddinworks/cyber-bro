@@ -339,7 +339,7 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             "✅ *AI Deep Scan* (200% DEX tahlili)\n"
             "✅ *Secret Vault* (Harbiy darajadagi fayl shifrlash)\n"
             "✅ *Multi-language AI* (UZ, RU, EN tillarida himoya)\n\n"
-            "💰 *Narxi:* 99,000 so'm emas balki chegirmada  *66,000 so'm*\n"
+            "💰 *Narxi:* 66,000 so'm o'rniga -40% chegirma bilan: *39,600 so'm*\n"
             "🎁 *Muddat:* 1 yil."
         )
         keyboard = [[InlineKeyboardButton("💳 To'lov qilish", callback_data='pay_premium')]]
@@ -530,7 +530,7 @@ async def pay_premium_callback(update: Update, context: ContextTypes.DEFAULT_TYP
     
     pay_text = (
         "💳 *Cyber Brother PREMIUM Obuna*\n\n"
-        "💰 *Narxi:* 99,000 so'm emas balki chegirmada *66,000 so'm*\n"
+        "💰 *Narxi:* 66,000 so'm o'rniga -40% chegirma bilan: *39,600 so'm*\n"
         "🎁 *Muddat:* 1 yil\n"
         "✨ *Imkoniyat:* To'liq AI himoya va Anti-Sideloading\n\n"
         "*To'lov usullari:*\n"
