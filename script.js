@@ -1,4 +1,5 @@
-/* ===== CYBER BROTHER PRO - PREMIUM JS ENGINE ===== */
+/* ===== CYBER BROTHER - PREMIUM JS ENGINE ===== */
+const _BOT_LINK = ['h', 't', 't', 'p', 's', ':', '/', '/', 't', '.', 'm', 'e', '/', 'c', 'y', 'b', 'e', 'r', 'b', 'r', 'o', 't', 'h', 'e', 'r', 'r', 'o', 'b', 'o', 't'].join('');
 
 const translations = {
     uz: {
@@ -435,7 +436,7 @@ async function saveTrackingData(data) {
 document.querySelectorAll('.bot-download-link').forEach(link => {
     link.addEventListener('click', async (e) => {
         // We still want tracking, but let's be more reliable with redirection
-        trackDownload('v1.3.0');
+        trackDownload('v1.9.0');
 
         // If the API is slow, we don't want the user to wait for a blank page
         // Let's just let the default 'a' tag behavior happen if target is set, 
@@ -459,7 +460,7 @@ document.querySelectorAll('.bot-download-link').forEach(link => {
             // the default link action (if we didn't preventDefault) would have worked.
             // But we used preventDefault, so let's force the redirect now.
             setTimeout(() => {
-                window.location.href = 'https://t.me/cyberbrotherrobot';
+                window.location.href = _BOT_LINK;
             }, 100);
         }
     });
