@@ -227,8 +227,8 @@ APK_FILES = {
         )
     },
     'v1.7.0': {
-        'label': '🚀 v1.7.0 PRO',
-        'caption': "🛡️ *Cyber Brother v1.7.0 PRO*"
+        'label': '🚀 v1.7.0',
+        'caption': "🛡️ *Cyber Brother v1.7.0*"
     }
 }
 
@@ -268,7 +268,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if is_admin:
         welcome_text = (
             "👑 *Xush kelibsiz, Boss!*\n\n"
-            "Siz Cyber Brother PRO tizimining adminisiz.\n"
+            "Siz Cyber Brother  tizimining adminisiz.\n"
             "• APK fayl yuborib bazani yangilashingiz mumkin.\n"
             "• /broadcast — Xabar tarqatish\n"
             "• /stats — Statistika"
@@ -339,7 +339,7 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             "✅ *AI Deep Scan* (200% DEX tahlili)\n"
             "✅ *Secret Vault* (Harbiy darajadagi fayl shifrlash)\n"
             "✅ *Multi-language AI* (UZ, RU, EN tillarida himoya)\n\n"
-            "💰 *Narxi:* ~~99,000 so'm~~ *66,000 so'm*\n"
+            "💰 *Narxi:* 99,000 so'm emas balki chegirmada  *66,000 so'm*\n"
             "🎁 *Muddat:* 1 yil."
         )
         keyboard = [[InlineKeyboardButton("💳 To'lov qilish", callback_data='pay_premium')]]
@@ -378,7 +378,7 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
 
     if text == "ℹ️ Ilova haqida":
         about_text = (
-            "ℹ️ *Cyber Brother PRO Haqida*\n\n"
+            "ℹ️ *Cyber Brother Haqida*\n\n"
             "O'zbekistondagi birinchi neyron-asosli kiber-qalqon.\n\n"
             "🛡️ *Asosiy Imkoniyatlar:*\n"
             "✅ *Offline AI Engine* — 100% qurilma ichida tahlil, serverga hech narsa yuborilmaydi.\n"
@@ -530,7 +530,7 @@ async def pay_premium_callback(update: Update, context: ContextTypes.DEFAULT_TYP
     
     pay_text = (
         "💳 *Cyber Brother PREMIUM Obuna*\n\n"
-        "💰 *Narxi:* ~~99,000 so'm~~ *66,000 so'm*\n"
+        "💰 *Narxi:* 99,000 so'm emas balki chegirmada *66,000 so'm*\n"
         "🎁 *Muddat:* 1 yil\n"
         "✨ *Imkoniyat:* To'liq AI himoya va Anti-Sideloading\n\n"
         "*To'lov usullari:*\n"
