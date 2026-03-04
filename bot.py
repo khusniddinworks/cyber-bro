@@ -279,6 +279,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
             "Hush kelibsiz! Jamoamiz sizga *\"Sizning hayotingiz faqat sizga tegishli!\"* degan kafolatni beradi.\n\n"
             "🛡️ *Nega aynan Cyber Brother?*\n"
             "✅ *Offline AI* — Hech qanday serverlarsiz, 100% maxfiylik.\n"
+            "✅ *AI Chat* — Akang bilan jonli (oflayn) muloqot.\n"
             "✅ *Link Scanner* — Havolalarni real vaqtda tekshirish.\n"
             "✅ *Multi-language AI* — UZ, RU, EN tillaridagi firibgarlikni tushunadi.\n\n"
             "👇 *Imkoniyatlardan foydalanish uchun menyuni tanlang:*"
@@ -356,18 +357,17 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     if text == "🛡️ 100% Himoya yo'riqnomasi" or text == "/help_protect":
         guide_text = (
             "🛡️ *Cyber Brother: 100% Himoyani Yoqish Yo'riqnomasi*\n\n"
-            "Tizim to'liq ishlashi uchun quyidagi 10 ta qadamni bajaring:\n\n"
-            "1️⃣ *Fayllarga ruxsat:* Ilova ichida 'Barcha fayllarni boshqarish'ni yoqing.\n"
-            "2️⃣ *Dashboard:* 'Xavfli fayllar filtri' va boshqa ruxsatlarni tasdiqlang.\n"
-            "3️⃣ *Bildirishnomalar:* Cyber Brotherga bildirishnomalarga kirish ruxsatini bering.\n"
-            "4️⃣ *Sozlamalar:* Telefoningizning 'Sozlamalar' (Settings) menyusiga kiring.\n"
-            "5️⃣ *Ilovalar:* 'Ilova boshqaruvi' bo'limini tanlang.\n"
-            "6️⃣ *Ilova tanlash:* Ro'yxatdan 'Cyber Brother'ni toping.\n"
-            "7️⃣ *3 nuqta:* Yuqori o'ng burchakdagi 3 ta nuqta tugmasini bosing.\n"
-            "8️⃣ *Cheklov yechish:* 'Cheklangan sozlamalarga ruxsat berish' bandini tanlang.\n"
-            "9️⃣ *Qaytish:* Ilovaga qaytib, 'Dashboard' bo'limini oching.\n"
-            "🔟 *Link Scan:* Havolalarni 'Cyber Brother' orqali ochib, xavfsizligini ta'minlang.\n\n"
-            "✅ *Bajarildi! Endi qurilmangiz mutlaq xavfsiz.*"
+            "Yangi Android tizimlarida (Android 13+) xavfsizlik juda kuchli. Ilovamiz sizni to'liq himoya qilishi uchun quyidagi qadamlarni bir marta bajarib qo'yishingiz shart:\n\n"
+            "ℹ️ *Nega bu kerak?* Android 'Sideload' (tashqaridan) o'rnatilgan ilovalarga bildirishnomalarni o'qishni taqiqlab qo'yadi. Biz esa firibgar xabarlarni aynan shu orqali ushlaymiz.\n\n"
+            "✅ *Qadamlar:* \n"
+            "1️⃣ Telefoningiz *Sozlamalar (Settings)* menyusiga kiring.\n"
+            "2️⃣ *Ilovalar (Apps)* -> *Ilovalarni boshqarish (Manage Apps)* bo'limini tanlang.\n"
+            "3️⃣ Ro'yxatdan *Cyber Brother* ilovasini toping.\n"
+            "4️⃣ Yuqori o'ng burchakdagi *3 ta nuqta (┇)* tugmasini bosing.\n"
+            "5️⃣ *Cheklangan sozlamalarga ruxsat berish (Allow restricted settings)* bandini tanlang.\n"
+            "6️⃣ Barmoq izingiz yoki parolingiz bilan tasdiqlang.\n"
+            "7️⃣ Endi ilovaga qayting va *SMS Guard* yoki *Dashboard* dagi ruxsatlarni yoqing.\n\n"
+            "� *Natija:* Endi Cyber Brother nafaqat fayllarni, balki kelayotgan barcha shubhali SMS va havolalarni ham 'Offline AI' orqali nazorat qiladi!"
         )
         await update.message.reply_text(guide_text, parse_mode='Markdown')
         return
