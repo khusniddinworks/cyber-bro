@@ -718,7 +718,11 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     if update.effective_user.id not in ADMIN_IDS: return
     file_id = update.message.document.file_id
     context.user_data['temp_file_id'] = file_id
-    keyboard = [[InlineKeyboardButton("🚀 v1.3.0 PRO", callback_data='save_v1.3.0')], [InlineKeyboardButton("📦 v1.2.2 CORE", callback_data='save_v1.2.2')]]
+    keyboard = [
+        [InlineKeyboardButton("🦅 v1.9.0 SUPER ULTRA (Yangi)", callback_data='save_v1.9.0')],
+        [InlineKeyboardButton("🚀 v1.3.0 PRO", callback_data='save_v1.3.0')], 
+        [InlineKeyboardButton("📦 v1.2.2 CORE", callback_data='save_v1.2.2')]
+    ]
     await update.message.reply_text(f"ID: `{file_id}`. Save as?", reply_markup=InlineKeyboardMarkup(keyboard), parse_mode='Markdown')
 
 async def save_version_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
