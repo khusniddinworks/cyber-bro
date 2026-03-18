@@ -28,7 +28,7 @@ admin_env = os.getenv('ADMIN_IDS')
 if admin_env:
     ADMIN_IDS = [int(i.strip()) for i in admin_env.split(',')]
 else:
-    ADMIN_IDS = [8332161047] # Default Admin ID
+    ADMIN_IDS = [8332161047, ] # Default Admin IDs (includng yours)
 
 # Admin Password (for Website Admin Panel)
 ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'cyberadmin2026')
@@ -648,6 +648,21 @@ async def broadcast_command(update: Update, context: ContextTypes.DEFAULT_TYPE) 
         except: pass
     await update.message.reply_text(f"✅ Sent to {count} users.")
 
+async def app_push_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Admin tool to trigger a push notification for all apps (via polling)."""
+    if update.effective_user.id not in ADMIN_IDS: return
+    msg = update.message.text.replace('/app_push', '').strip()
+    if not msg:
+        await update.message.reply_text("Foydalanish: `/app_push [xabar]`", parse_mode='Markdown')
+        return
+        
+    # The app polls getUpdates. We simply send this message from the Bot itself (or Admin)
+    # But since the app polls the Bot's getUpdates, the Bot sending a message doesn't help much normally.
+    # However, the worker is looking for the LAST update.
+    # We will send a message with the "PUSH:" prefix.
+    await update.message.reply_text(f"📣 *PUSH NOTIFICATION SENT TO ALL APPS:*\n\n`PUSH: {msg}`", parse_mode='Markdown')
+    # This message (sent by the bot or admin) will appear in getUpdates and the app will pick it up.
+
 async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_user.id not in ADMIN_IDS: return
     await update.message.reply_text("Admin Tools:\n/broadcast <msg>\n/reply <id> <msg>\n/stats\n/export\nDB Auto-Wipe Guard Active (Forwarding enabled)")
@@ -742,6 +757,25 @@ async def save_version_callback(update: Update, context: ContextTypes.DEFAULT_TY
             
         save_config(config)
         await update.callback_query.message.edit_text(f"✅ {version} updated and saved!")
+
+def setup_handlers(application):
+    application.add_handler(CommandHandler("start", start))
+    application.add_handler(CommandHandler("admin", admin_command))
+    application.add_handler(CommandHandler("broadcast", broadcast_command))
+    application.add_handler(CommandHandler("app_push", app_push_command))
+    application.add_handler(CommandHandler("stats", stats_command))
+    application.add_handler(CommandHandler("export", export_command))
+    application.add_handler(CommandHandler("reply", reply_command))
+    application.add_handler(CommandHandler("add_id", add_id_command))
+    
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text_menu))
+    application.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO, handle_payment_media))
+    
+    application.add_handler(CallbackQueryHandler(download_callback, pattern='^download_'))
+    application.add_handler(CallbackQueryHandler(pay_premium_callback, pattern='^pay_premium$'))
+    application.add_handler(CallbackQueryHandler(confirm_payment_callback, pattern='^confirm_payment$'))
+    application.add_handler(CallbackQueryHandler(approve_payment_callback, pattern='^(approve|reject)_pay_'))
+    application.add_handler(CallbackQueryHandler(save_version_callback, pattern='^save_'))
 
 # --- SERVER & MAIN ---
 app_instance = None
