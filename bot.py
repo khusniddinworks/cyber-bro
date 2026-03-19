@@ -1040,20 +1040,7 @@ def main():
     app_instance = application
 
     # Handlers
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("broadcast", broadcast_command))
-    application.add_handler(CommandHandler("reply", reply_command))
-    application.add_handler(CommandHandler("admin", admin_command))
-    application.add_handler(CommandHandler("stats", stats_command))
-    application.add_handler(CommandHandler("export", export_command))
-    application.add_handler(CommandHandler("add_id", add_id_command))
-    application.add_handler(CallbackQueryHandler(download_callback, pattern='^download_v'))
-    application.add_handler(CallbackQueryHandler(save_version_callback, pattern='^save_v'))
-    application.add_handler(CallbackQueryHandler(pay_premium_callback, pattern='^pay_premium'))
-    application.add_handler(CallbackQueryHandler(confirm_payment_callback, pattern='^confirm_payment'))
-    application.add_handler(CallbackQueryHandler(approve_payment_callback, pattern='^(approve|reject)_pay_'))
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text_menu))
-    application.add_handler(MessageHandler(filters.PHOTO | filters.Document.ALL, handle_payment_media))
+    setup_handlers(application)
 
     RENDER_URL = os.getenv('RENDER_EXTERNAL_URL')
     PORT = int(os.environ.get("PORT", 8080))
