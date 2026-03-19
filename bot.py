@@ -42,7 +42,6 @@ FEEDBACKS_FILE = 'feedbacks.json'
 SUBSCRIPTIONS_FILE = 'subscriptions.json'
 STATS_FILE = 'stats.json'
 WEBSITE_EVENTS_FILE = 'website_events.json'
-VERIFIED_DEVICES_FILE = 'verified_devices.json'
 
 # --- DATA LOADING HELPERS ---
 def load_config():
@@ -112,37 +111,13 @@ def load_website_events():
     return []
 
 # Default slots are now loaded from slots.json to keep code clean
-SLOTS_FILE = 'slots.json'
+# VERIFIED DEVICES logic removed - now directly handling via Subscriptions
 
-def load_default_slots():
-    if os.path.exists(SLOTS_FILE):
-        with open(SLOTS_FILE, 'r', encoding='utf-8') as f:
+def load_website_events():
+    if os.path.exists(WEBSITE_EVENTS_FILE):
+         with open(WEBSITE_EVENTS_FILE, 'r', encoding='utf-8') as f:
             return json.load(f)
     return []
-
-def load_verified_devices():
-    devices = {}
-    if os.path.exists(VERIFIED_DEVICES_FILE):
-        with open(VERIFIED_DEVICES_FILE, 'r', encoding='utf-8') as f:
-            devices = json.load(f)
-    
-    # Auto-Initialization: Ensure all default slots exist
-    updated = False
-    default_slots = load_default_slots()
-    for slot in default_slots:
-        if slot not in devices:
-            devices[slot] = {"status": "available", "assigned_to": None}
-            updated = True
-    
-    if updated:
-        save_verified_devices(devices)
-        
-    return devices
-
-def save_verified_devices(devices):
-    with open(VERIFIED_DEVICES_FILE, 'w', encoding='utf-8') as f:
-        json.dump(devices, f, indent=4)
-    push_to_github([VERIFIED_DEVICES_FILE])
 
 def save_website_event(event):
     events = load_website_events()
@@ -204,14 +179,19 @@ async def notify_admin(context: ContextTypes.DEFAULT_TYPE, message: str):
             # Log the error to console for debugging
 
 # --- LICENSE LOGIC ---
-def generate_license_key(device_id):
+def generate_license_key(device_id, duration_months=0):
     # SYNCED WITH IdentityManager.kt (Android App)
-    salt = "CYBER_BROTHER_PRIVACY_PROTECT"
+    salt_suffix = f"_{duration_months}" if duration_months > 0 else ""
+    salt = "CYBER_BROTHER_PRIVACY_PROTECT" + salt_suffix
     secret_alpha = "CB_SHIELD_V2_2026"
     raw = device_id + salt + secret_alpha
-    # Take substring [5:21] as defined in IdentityManager.kt
     full_hash = hashlib.sha256(raw.encode()).hexdigest().upper()
-    return full_hash[5:21]
+    
+    if duration_months > 0:
+        prefix = "CB3-" if duration_months <= 3 else "CB1-"
+        return prefix + full_hash[5:17]
+    else:
+        return full_hash[5:21]
 
 # --- CONTENT CONSTANTS ---
 APK_FILES = {
@@ -242,6 +222,7 @@ def get_main_keyboard(is_admin=False):
     if is_admin:
         # Add Admin Controls
         keyboard.insert(2, [KeyboardButton("📊 Statistika"), KeyboardButton("📂 Baza Yuklash")])
+        keyboard.insert(3, [KeyboardButton("🚀 App Push")])
         
     return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
 
@@ -262,6 +243,28 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         save_users(users)
         # NOTIFY ADMIN IMMEDIATELY
         await notify_admin(context, f"🆕 *Yangi Foydalanuvchi!*\n👤 @{user.username}\n🆔 `{user.id}`")
+        
+    # Check Deep Link from Android App
+    if context.args:
+        arg = context.args[0]
+        if arg == "premium_3month":
+            premium_text = (
+                "🛡️ *Cyber Brother PREMIUM - 3 oylik*\n\n"
+                "• Barcha Premium xizmatlar ochiq.\n"
+                "• 💰 *Narxi:* 25,000 so'm\n"
+            )
+            keyboard = [[InlineKeyboardButton("💳 To'lov qilish (3 Oy)", callback_data='pay_premium_3')]]
+            await update.message.reply_text(premium_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
+            return
+        elif arg in ["premium_1year", "premium"]:
+            premium_text = (
+                "🛡️ *Cyber Brother ULTRA - 1 Yillik*\n\n"
+                "• Barcha Premium xizmatlar ochiq.\n"
+                "• 💰 *Narxi:* 85,000 so'm (Chegirma bilan)\n"
+            )
+            keyboard = [[InlineKeyboardButton("💳 To'lov qilish (1 Yil)", callback_data='pay_premium_12')]]
+            await update.message.reply_text(premium_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
+            return
 
     is_admin = user.id in ADMIN_IDS
     
@@ -329,6 +332,12 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             if not found:
                  await update.message.reply_text("⚠️ Hozircha baza bo'sh.")
             return
+        elif text == "🚀 App Push":
+            context.user_data['state'] = 'waiting_push'
+            await update.message.reply_text("📣 *Push xabar mazmunini yozing:*\n\n(Bu xabar barcha ilova foydalanuvchilariga boradi)", 
+                                           parse_mode='Markdown', 
+                                           reply_markup=ReplyKeyboardMarkup([[KeyboardButton("🚫 Bekor qilish")]], resize_keyboard=True))
+            return
 
     # --- 1. PRIORITY BUTTONS (Always work) ---
     if text == "🛒 Premium Olish":
@@ -339,10 +348,14 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             "✅ *AI Deep Scan* (200% DEX tahlili)\n"
             "✅ *Secret Vault* (Harbiy darajadagi fayl shifrlash)\n"
             "✅ *Multi-language AI* (UZ, RU, EN tillarida himoya)\n\n"
-            "💰 *Narxi:* 66,000 so'm o'rniga -40% chegirma bilan: *39,600 so'm*\n"
-            "🎁 *Muddat:* 1 yil."
+            "💰 *Tariflar:*\n"
+            "1️⃣ *3 Oylik:* 25,000 so'm\n"
+            "2️⃣ *1 Yillik:* 85,000 so'm (-15% chegirma)\n"
         )
-        keyboard = [[InlineKeyboardButton("💳 To'lov qilish", callback_data='pay_premium')]]
+        keyboard = [
+            [InlineKeyboardButton("💳 3 Oylik to'lov", callback_data='pay_premium_3')],
+            [InlineKeyboardButton("💳 1 Yillik to'lov", callback_data='pay_premium_12')]
+        ]
         await update.message.reply_text(premium_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
         return
 
@@ -407,42 +420,51 @@ async def handle_text_menu(update: Update, context: ContextTypes.DEFAULT_TYPE) -
             return
             
         device_id = text.strip().upper()
-        verified_devices = load_verified_devices()
+        subs = load_subscriptions()
         
-        # PROFESSIONAL DYNAMIC ACTIVATION:
-        # If the user is in 'waiting_device_id' state (approved by admin), 
-        # we allow the ID even if it's not in the pre-defined slots.
-        if device_id not in verified_devices:
-            # Create a new entry for this newly approved device
-            verified_devices[device_id] = {"status": "available", "assigned_to": None}
-
-        if verified_devices[device_id].get('status') == 'active':
+        # Check if already active
+        if device_id in subs and subs[device_id].get('status') == 'active':
              await update.message.reply_text(
-                f"✅ *Sizning kalitingiz allaqachon mavjud:*\n\n`{verified_devices[device_id]['key']}`",
+                f"✅ *Sizning qurilmangiz uchun kalit allaqachon mavjud:*\n\n`{subs[device_id]['key']}`",
                 parse_mode='Markdown',
                 reply_markup=get_main_keyboard(is_admin)
             )
              context.user_data.clear()
              return
 
-        license_key = generate_license_key(device_id)
-        verified_devices[device_id]['status'] = 'active'
-        verified_devices[device_id]['assigned_to'] = user.id
-        verified_devices[device_id]['key'] = license_key
-        verified_devices[device_id]['activated_at'] = datetime.now().isoformat()
-        save_verified_devices(verified_devices)
-        
-        subs = load_subscriptions()
-        subs[device_id] = {'user_id': user.id, 'status': 'active', 'key': license_key}
+        # Generate new license and save directly to subscriptions
+        duration = PENDING_ACTIVATIONS.get(user.id, 12)
+        license_key = generate_license_key(device_id, duration)
+        subs[device_id] = {
+            'user_id': user.id, 
+            'status': 'active', 
+            'key': license_key,
+            'duration_months': duration,
+            'activated_at': datetime.now().isoformat()
+        }
         save_subscriptions(subs)
         
-        await notify_admin(context, f"💰 *Yangi Aktivatsiya!*\nUser: @{user.username}\nID: `{device_id}`")
+        await notify_admin(context, f"💰 *Yangi Aktivatsiya!*\nUser: @{user.username}\nID: `{device_id}`\nMuddat: {duration} oy")
         context.user_data.clear()
         await update.message.reply_text(
-            f"✅ *Tabriklaymiz!*\n\n🔑 Kalitingiz: `{license_key}`\n\nIlovaga kiriting.", 
+            f"✅ *Tabriklaymiz!*\n\n🔑 Kalitingiz: `{license_key}`\n\nIlovada `Premium` bo'limiga kiriting.", 
             parse_mode='Markdown', 
             reply_markup=get_main_keyboard(is_admin)
         )
+        return
+
+    if state == 'waiting_push':
+        if text == "🚫 Bekor qilish":
+            context.user_data.clear()
+            await update.message.reply_text("❌ Bekor qilindi.", reply_markup=get_main_keyboard(is_admin))
+            return
+        
+        # We send the message back with PUSH: prefix - the worker polls getUpdates and sees this
+        await update.message.reply_text(f"PUSH: {text}")
+        await update.message.reply_text(f"✅ Push-xabarnoma navbatga quyildi.\n\nXabar: *{text}*", 
+                                       parse_mode='Markdown',
+                                       reply_markup=get_main_keyboard(is_admin))
+        context.user_data.clear()
         return
 
     if state == 'waiting_feedback':
@@ -528,15 +550,21 @@ async def pay_premium_callback(update: Update, context: ContextTypes.DEFAULT_TYP
     query = update.callback_query
     await query.answer()
     
+    # Aniqlaymiz: 3 oy yoki 12 oy
+    duration = 3 if 'pay_premium_3' in query.data else 12
+    context.user_data['pending_duration'] = duration
+    
+    price = "25,000" if duration == 3 else "85,000"
+    plan_name = "3 OY" if duration == 3 else "1 YIL"
+
     pay_text = (
-        "💳 *Cyber Brother PREMIUM Obuna*\n\n"
-        "💰 *Narxi:* 66,000 so'm o'rniga -40% chegirma bilan: *39,600 so'm*\n"
-        "🎁 *Muddat:* 1 yil\n"
-        "✨ *Imkoniyat:* To'liq AI himoya va Anti-Sideloading\n\n"
+        f"💳 *Cyber Brother PREMIUM - {plan_name}*\n\n"
+        f"💰 *Narxi:* {price} so'm\n"
+        f"✨ *Imkoniyat:* To'liq AI himoya, Vishing bloker va boshqalar\n\n"
         "*To'lov usullari:*\n"
         f"💳 Karta: `{CARD_NUMBER}`\n"
         f"👤 Ega: {CARD_NAME}\n\n"
-        "⚠️ *Diqqat:* To'lov qilgach, quyidagi 'To'lovni Tasdiqlash' tugmasini bosing."
+        "⚠️ *Diqqat:* To'lov qilgach, pastdagi 'To'lovni Tasdiqlash' tugmasini bosing."
     )
     keyboard = [[InlineKeyboardButton("✅ To'lovni Tasdiqlash", callback_data='confirm_payment')]]
     await query.message.reply_text(pay_text, parse_mode='Markdown', reply_markup=InlineKeyboardMarkup(keyboard))
@@ -552,15 +580,18 @@ async def confirm_payment_callback(update: Update, context: ContextTypes.DEFAULT
     )
     context.user_data['state'] = 'waiting_payment_receipt'
 
+PENDING_ACTIVATIONS = {} # Stores duration waiting for device id
+
 async def handle_payment_media(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = update.effective_user
     state = context.user_data.get('state')
     
     if state == 'waiting_payment_receipt':
-        # Admin Approval Buttons
+        duration = context.user_data.get('pending_duration', 12)
+        # Admin Approval Buttons with duration included
         keyboard = [
             [
-                InlineKeyboardButton("✅ Tasdiqlash", callback_data=f"approve_pay_{user.id}"),
+                InlineKeyboardButton("✅ Tasdiqlash", callback_data=f"approve_pay_{user.id}_{duration}"),
                 InlineKeyboardButton("❌ Rad etish", callback_data=f"reject_pay_{user.id}")
             ]
         ]
@@ -572,7 +603,8 @@ async def handle_payment_media(update: Update, context: ContextTypes.DEFAULT_TYP
                 caption = (
                     f"🧾 *YANGI TO'LOV CHEKI*\n\n"
                     f"👤 Foydalanuvchi: @{user.username}\n"
-                    f"🆔 ID: `{user.id}`\n\n"
+                    f"🆔 ID: `{user.id}`\n"
+                    f"⏳ Muddat: {duration} OY\n\n"
                     f"Tasdiqlash tugmasini bossangiz, foydalanuvchidan Device ID so'raladi."
                 )
                 if update.message.photo:
@@ -600,11 +632,15 @@ async def approve_payment_callback(update: Update, context: ContextTypes.DEFAULT
     if admin_id not in ADMIN_IDS: return
     
     data = query.data
-    target_user_id = int(data.split('_')[-1])
+    parts = data.split('_')
+    target_user_id = int(parts[2])
     
     await query.answer()
     
     if data.startswith('approve_pay_'):
+        duration = int(parts[3])
+        PENDING_ACTIVATIONS[target_user_id] = duration
+        
         # 1. Set user state remotely
         if target_user_id not in context.application.user_data:
             context.application.user_data[target_user_id] = {}
@@ -613,8 +649,8 @@ async def approve_payment_callback(update: Update, context: ContextTypes.DEFAULT
         # 2. Notify User
         try:
             msg = (
-                "🎉 *To'lovingiz tasdiqlandi!*\n\n"
-                "Endi ilovangizdagi **Device ID**ni yuboring. Biz sizga aktivatsiya kalitini generatsiya qilib beramiz."
+                f"🎉 *To'lovingiz tasdiqlandi!* ({duration} Oylik Tarif)\n\n"
+                "Endi ilovangizdagi **Device ID** ni yozib yuboring. Biz sizga aktivatsiya kalitini generatsiya qilib beramiz."
             )
             await context.bot.send_message(chat_id=target_user_id, text=msg, parse_mode='Markdown')
         except: pass
@@ -660,8 +696,11 @@ async def app_push_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -
     # But since the app polls the Bot's getUpdates, the Bot sending a message doesn't help much normally.
     # However, the worker is looking for the LAST update.
     # We will send a message with the "PUSH:" prefix.
-    await update.message.reply_text(f"📣 *PUSH NOTIFICATION SENT TO ALL APPS:*\n\n`PUSH: {msg}`", parse_mode='Markdown')
-    # This message (sent by the bot or admin) will appear in getUpdates and the app will pick it up.
+    await update.message.reply_text(f"PUSH: {msg}")
+    await update.message.reply_text(f"📣 *PUSH NOTIFICATION SENT TO ALL APPS:*\n\n`{msg}`", parse_mode='Markdown')
+
+async def id_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(f"🆔 Sizning ID: `{update.effective_user.id}`", parse_mode='Markdown')
 
 async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_user.id not in ADMIN_IDS: return
@@ -670,33 +709,17 @@ async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
 async def stats_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_user.id not in ADMIN_IDS: return
     users = load_users()
-    verified = load_verified_devices()
-    active_premium = sum(1 for d in verified.values() if d.get('status') == 'active')
+    subs = load_subscriptions()
+    active_premium = sum(1 for d in subs.values() if d.get('status') == 'active')
     
     msg = (
         "📊 *Cyber Brother Statistika*\n\n"
         f"👥 Foydalanuvchilar: {len(users)}\n"
-        f"💎 Premium (Faol): {active_premium}\n"
-        f"🎫 Baza slotlari: {len(verified)}\n"
+        f"💎 Premium Faol Obunalar: {active_premium}\n"
     )
     await update.message.reply_text(msg, parse_mode='Markdown')
 
-async def add_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    """Admin tool to register a physical ID."""
-    if update.effective_user.id not in ADMIN_IDS: return
-    if not context.args:
-        await update.message.reply_text("Foydalanish: `/add_id XXXX-XXXX-XXXX`", parse_mode='Markdown')
-        return
-    
-    new_id = context.args[0].upper()
-    verified = load_verified_devices()
-    if new_id in verified:
-        await update.message.reply_text("⚠️ Bu ID bazada bor.")
-        return
-        
-    verified[new_id] = {"status": "available", "assigned_to": None}
-    save_verified_devices(verified)
-    await update.message.reply_text(f"✅ ID bazaga qo'shildi: `{new_id}`")
+# add_id command completely removed since we dynamically generate subscriptions.
 
 async def export_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     if update.effective_user.id not in ADMIN_IDS: return
@@ -766,13 +789,14 @@ def setup_handlers(application):
     application.add_handler(CommandHandler("stats", stats_command))
     application.add_handler(CommandHandler("export", export_command))
     application.add_handler(CommandHandler("reply", reply_command))
-    application.add_handler(CommandHandler("add_id", add_id_command))
+    application.add_handler(CommandHandler("id", id_command))
+    application.add_handler(CommandHandler("whoami", id_command))
     
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text_menu))
     application.add_handler(MessageHandler(filters.Document.ALL | filters.PHOTO, handle_payment_media))
     
     application.add_handler(CallbackQueryHandler(download_callback, pattern='^download_'))
-    application.add_handler(CallbackQueryHandler(pay_premium_callback, pattern='^pay_premium$'))
+    application.add_handler(CallbackQueryHandler(pay_premium_callback, pattern='^pay_premium'))
     application.add_handler(CallbackQueryHandler(confirm_payment_callback, pattern='^confirm_payment$'))
     application.add_handler(CallbackQueryHandler(approve_payment_callback, pattern='^(approve|reject)_pay_'))
     application.add_handler(CallbackQueryHandler(save_version_callback, pattern='^save_'))
