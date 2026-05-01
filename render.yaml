@@ -1,0 +1,2 @@
+publishDirectory: .
+startCommand: python bot.py
